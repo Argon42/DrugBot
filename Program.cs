@@ -108,7 +108,7 @@ namespace BananvaBot
 
             #region Биба
 
-            if (sentence[0] == "/биба" || sentence[0] == "/biba" || sentence[0] == "биба")
+            if (sentence[0] == "/биба" || sentence[0] == "/biba" || (sentence.Length >= 2 && sentence[1] == "/биба"))
             {
                 try
                 {
@@ -119,7 +119,7 @@ namespace BananvaBot
                     }
                 }
                 catch (Exception) { }
-                var rnd = new Random(message.FromId.Value.GetHashCode() + DateTime.Now.ToShortDateString().GetHashCode());
+                var rnd = new Random(GetDayUserSeed(message.FromId));
                 var resultLenght = rnd.Next(-10, 40) + Math.Round(rnd.NextDouble(), 2);
                 var resultDiametr = rnd.Next(20, 100);
                 var resultDiametrMeasures = rnd.Next();
@@ -130,11 +130,13 @@ namespace BananvaBot
 
             #region Тотем
 
-            if (sentence[0] == "/тотем")
+            if (sentence[0] == "/тотем" || (sentence.Length >= 2 && sentence[1] == "/тотем"))
             {
-                var rnd = new Random(message.FromId.Value.GetHashCode() + DateTime.Now.ToShortDateString().GetHashCode());
-                var result = rnd.Next(0, 100000);
-                SendMessage(api, message.PeerId, $"Сегодня ваш тотем &#{result};");
+                var rnd = new Random(GetDayUserSeed(message.FromId));
+                StringBuilder str = new StringBuilder("Сегодня вас ждет ");
+                for (int i = 0; i < 5; i++)
+                    str.Append($"&#{rnd.Next(127822, 129000)}; ");
+                SendMessage(api, message.PeerId, str.ToString());
             }
 
             #endregion
@@ -152,7 +154,7 @@ namespace BananvaBot
                     }
                 }
                 catch (Exception) { }
-                var rnd = new Random(message.FromId.Value.GetHashCode() + DateTime.Now.ToShortDateString().GetHashCode());
+                var rnd = new Random(GetDayUserSeed(message.FromId));
                 var result = rnd.Next(20, 150);
                 SendMessage(api, message.PeerId, $"Сегодня ваши бибасики {result} см в обхвате");
             }
@@ -197,13 +199,23 @@ namespace BananvaBot
 
             #region Zargo
 
-            if (sentence[0] == "/zargo")
+            if (sentence[0] == "/zargo" || (sentence.Length >= 2 && sentence[1] == "/zargo"))
             {
-                
+
+
             }
 
             #endregion
 
+        }
+
+        private static int GetDayUserSeed(long? fromId)
+        {
+            var idHash = fromId.Value.GetHashCode();
+            var dateHash = (DateTime.Now.Day.GetHashCode()
+                + DateTime.Now.Month.GetHashCode()
+                + DateTime.Now.Year.GetHashCode());
+            return idHash + dateHash;
         }
 
         private static void SendMessage(VkApi api, long? peerId, string message)
