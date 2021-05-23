@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
@@ -17,13 +18,14 @@ namespace BananvaBot
     {
         private static DateTime? lastData;
         private static VkApi api = new VkApi();
+        private static bool _botEnabled = true;
 
         static void Main(string[] args)
         {
             var configs = Configs.GetConfig();
-            api.Authorize(new ApiAuthParams() { AccessToken = configs.Token });
+            api.Authorize(new ApiAuthParams() {AccessToken = configs.Token});
             var s = api.Groups.GetLongPollServer(configs.Id);
-            while (true)
+            while (_botEnabled)
             {
                 try
                 {
@@ -55,7 +57,6 @@ namespace BananvaBot
                             MessageProcessing(message);
                         }
                     }
-
                 }
                 catch (LongPollException exception)
                 {
@@ -73,11 +74,22 @@ namespace BananvaBot
 
         private static void MessageProcessing(Message message)
         {
-            if (String.IsNullOrEmpty(message.Text) || message.Text.Length < 3)
+            if (message.Text.ToLower() == "да")
+            {
+                SendMessage(api, message.PeerId, $"Пизда");
+            }
+
+            if (String.IsNullOrEmpty(message.Text) || message.Text.Length < 2)
                 return;
 
             if (!message.Text.Contains('/'))
                 return;
+
+            if (message.FromId == 175815456 && message.Text == "/BotStop")
+            {
+                _botEnabled = false;
+                SendMessage(api, message.PeerId, "Император сказал спать");
+            }
 
             Console.WriteLine($"{message.FromId}: {message.Text}");
 
@@ -99,7 +111,11 @@ namespace BananvaBot
                     int.TryParse(sentence[2], out modificator);
 
                 var rnd = new Random();
-                var result = rnd.Next(diceCount, diceCount * diceValue + 1);
+
+                var result = 0;
+                for (var i = 0; i < diceCount; i++)
+                    result += rnd.Next(0, diceValue) + 1;
+
                 result += modificator;
                 SendMessage(api, message.PeerId, $"В сумме выпало {result}");
             }
@@ -112,18 +128,23 @@ namespace BananvaBot
             {
                 try
                 {
-                    if (api.Users.Get(new long[] { message.FromId.Value }, ProfileFields.Sex)[0].Sex == VkNet.Enums.Sex.Female)
+                    if (api.Users.Get(new long[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
+                        VkNet.Enums.Sex.Female)
                     {
                         SendMessage(api, message.PeerId, $"У вас нет бибы у вас бибасики");
                         return;
                     }
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
+
                 var rnd = new Random(GetDayUserSeed(message.FromId));
                 var resultLenght = rnd.Next(-10, 40) + Math.Round(rnd.NextDouble(), 2);
                 var resultDiametr = rnd.Next(20, 100);
                 var resultDiametrMeasures = rnd.Next();
-                SendMessage(api, message.PeerId, $"Сегодня ваша биба длиной {resultLenght} см и диаметром {resultDiametr} мм");
+                SendMessage(api, message.PeerId,
+                    $"Сегодня ваша биба длиной {resultLenght} см и диаметром {resultDiametr} мм");
             }
 
             #endregion
@@ -147,13 +168,17 @@ namespace BananvaBot
             {
                 try
                 {
-                    if (api.Users.Get(new long[] { message.FromId.Value }, ProfileFields.Sex)[0].Sex == VkNet.Enums.Sex.Male)
+                    if (api.Users.Get(new long[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
+                        VkNet.Enums.Sex.Male)
                     {
                         SendMessage(api, message.PeerId, $"У вас нет бибасиков у вас биба");
                         return;
                     }
                 }
-                catch (Exception) { }
+                catch (Exception)
+                {
+                }
+
                 var rnd = new Random(GetDayUserSeed(message.FromId));
                 var result = rnd.Next(20, 150);
                 SendMessage(api, message.PeerId, $"Сегодня ваши бибасики {result} см в обхвате");
@@ -168,17 +193,19 @@ namespace BananvaBot
                 List<String> statuses;
                 try
                 {
-                    statuses = api.Messages.GetConversationMembers(message.PeerId.Value, new String[] { "status" })
-                    .Profiles
-                    .Where(p => !String.IsNullOrEmpty(p.Status))
-                    .Select(p => p.Status)
-                    .ToList();
+                    statuses = api.Messages.GetConversationMembers(message.PeerId.Value, new String[] {"status"})
+                        .Profiles
+                        .Where(p => !String.IsNullOrEmpty(p.Status))
+                        .Select(p => p.Status)
+                        .ToList();
                 }
                 catch (VkNet.Exception.ConversationAccessDeniedException)
                 {
-                    SendMessage(api, message.PeerId, "Для вывода случайного статуса участника, боту необходимы права администратора");
+                    SendMessage(api, message.PeerId,
+                        "Для вывода случайного статуса участника, боту необходимы права администратора");
                     return;
                 }
+
                 var rnd = new Random();
                 var result = rnd.Next(0, statuses.Count());
                 SendMessage(api, message.PeerId, statuses[result]);
@@ -201,20 +228,63 @@ namespace BananvaBot
 
             if (sentence[0] == "/zargo" || (sentence.Length >= 2 && sentence[1] == "/zargo"))
             {
+            }
 
+            if (sentence.Any(s => s == "/диплом"))
+            {
+                var rnd = new Random(GetDayUserSeed(message.FromId));
+                var pages = rnd.Next(-3, 130);
+                var originality = rnd.Next(0, 100) + Math.Round(rnd.NextDouble(), 2);
+                var chanceOfSurrender = rnd.Next(0, 100) + Math.Round(rnd.NextDouble(), 2);
+                var prediction = GetPrediction(rnd);
 
+                var result = $"[id{message.FromId}|Ваш] диплом состоит из {pages} страниц(ы) , \n" +
+                             $"текущая оригинальность {originality}%, \n" +
+                             $"шанс сдать = {chanceOfSurrender}%\n" +
+                             $"Предсказание к диплому: {prediction}";
+                SendMessage(api, message.PeerId, result);
+            }
+
+            if (sentence[0] == "!8" || sentence[0] == "/8")
+            {
+                var path = "Local/8.txt";
+                
+                var seed = new Random().Next(Int32.MinValue, Int32.MaxValue);
+                if (sentence.Length > 1)
+                    seed = GetDayUserSeed(message.PeerId) + message.Text.GetHashCode();
+                
+                SendMessage(api, message.PeerId, GetRandomLineFromFile(new Random(seed), path));
             }
 
             #endregion
+        }
 
+        private static string GetPrediction(Random rnd)
+        {
+            try
+            {
+                string path = "Local/predictions.txt";
+                return GetRandomLineFromFile(rnd, path);
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        private static string GetRandomLineFromFile(Random rnd, string path)
+        {
+            var predictions = File.ReadLines(path).ToList();
+            var prediction = predictions[rnd.Next(0, predictions.Count)];
+            return prediction;
         }
 
         private static int GetDayUserSeed(long? fromId)
         {
             var idHash = fromId.Value.GetHashCode();
             var dateHash = (DateTime.Now.Day.GetHashCode()
-                + DateTime.Now.Month.GetHashCode()
-                + DateTime.Now.Year.GetHashCode());
+                            + DateTime.Now.Month.GetHashCode()
+                            + DateTime.Now.Year.GetHashCode());
             return idHash + dateHash;
         }
 
