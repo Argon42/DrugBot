@@ -2,27 +2,36 @@
 using System.Collections.Generic;
 using System.Linq;
 using VkNet;
+using VkNet.Exception;
 using VkNet.Model;
 
 namespace BananvaBot
 {
     public class ProcessorStatus : AbstractProcessor
     {
-        public override bool HasTrigger(Message message, string[] sentence) =>
-            sentence.Length > 0 && string.Equals(sentence[0], "/статус", StringComparison.CurrentCultureIgnoreCase);
+        private List<string> keys = new List<string>
+        {
+            "/статус"
+        };
+
+        public override string Name => "Случайный статус";
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Description =>
+            $"Хочешь получить случайный статус участника, для вызова используйте {string.Join(' ', keys)}";
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
-            List<String> statuses;
+            List<string> statuses;
             try
             {
-                statuses = vkApi.Messages.GetConversationMembers(message.PeerId.Value, new String[] {"status"})
+                statuses = vkApi.Messages.GetConversationMembers(message.PeerId.Value, new[] {"status"})
                     .Profiles
                     .Where(p => !string.IsNullOrEmpty(p.Status))
                     .Select(p => p.Status)
                     .ToList();
             }
-            catch (VkNet.Exception.ConversationAccessDeniedException)
+            catch (ConversationAccessDeniedException)
             {
                 BotHandler.SendMessage(vkApi, message.PeerId,
                     "Для вывода случайного статуса участника, боту необходимы права администратора");
@@ -30,7 +39,7 @@ namespace BananvaBot
             }
 
             var rnd = new Random();
-            var result = rnd.Next(0, statuses.Count());
+            int result = rnd.Next(0, statuses.Count());
             BotHandler.SendMessage(vkApi, message.PeerId, statuses[result]);
         }
     }

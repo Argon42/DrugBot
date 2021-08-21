@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using VkNet;
+using VkNet.Enums;
 using VkNet.Enums.Filters;
 using VkNet.Model;
 
@@ -7,8 +9,16 @@ namespace BananvaBot
 {
     public class ProcessorBibasiks : AbstractProcessor
     {
-        public override bool HasTrigger(Message message, string[] sentence) =>
-            string.Equals(sentence[0], "/бибасики", StringComparison.CurrentCultureIgnoreCase);
+        private List<string> keys = new List<string>
+        {
+            "/бибасики"
+        };
+
+        public override string Name => "Бибасикометр";
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Description =>
+            $"Узнай размеры своих бибасиков, для вызова используйте {string.Join(' ', keys)}";
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
@@ -16,9 +26,9 @@ namespace BananvaBot
             {
                 if (message.FromId != null &&
                     vkApi.Users.Get(new[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
-                    VkNet.Enums.Sex.Male)
+                    Sex.Male)
                 {
-                    BotHandler.SendMessage(vkApi, message.PeerId, $"У вас нет бибасиков у вас биба");
+                    BotHandler.SendMessage(vkApi, message.PeerId, "У вас нет бибасиков у вас биба");
                     return;
                 }
             }
@@ -28,7 +38,7 @@ namespace BananvaBot
             }
 
             var rnd = new Random(BotHandler.GetDayUserSeed(message.FromId));
-            var result = rnd.Next(20, 150);
+            int result = rnd.Next(20, 150);
             BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {result} см в обхвате");
         }
     }

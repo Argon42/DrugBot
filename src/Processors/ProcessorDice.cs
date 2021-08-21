@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using VkNet;
 using VkNet.Model;
 
@@ -6,16 +8,35 @@ namespace BananvaBot
 {
     public class ProcessorDice : AbstractProcessor
     {
+        private List<string> keys = new List<string>
+        {
+            "/dice",
+            "/d",
+            "/кости",
+            "/кость",
+            "/к"
+        };
+
+        public override string Name => "Кости";
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Description =>
+            "Узнай размеры своей бибы, для вызова используйте:\n" +
+            $"{string.Join('\n', keys.Select(k => $"{k} XdY Z"))}\n" +
+            "где X число костей\n" +
+            "Y колличество граней\n" +
+            "Z модификатор который будет добавлен к числу, например: -2 | 6 (по стандарту 0)";
+
         public override bool HasTrigger(Message message, string[] sentence) =>
             sentence.Length >= 2 &&
-            (sentence[0] == "/dice" || sentence[0] == "/d") &&
+            keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
             sentence[1].Split('d').Length == 2;
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
-            var dices = sentence[1].Split('d');
-            if (!int.TryParse(dices[0], out var diceCount)) return;
-            if (!int.TryParse(dices[1], out var diceValue)) return;
+            string[] dices = sentence[1].Split('d');
+            if (!int.TryParse(dices[0], out int diceCount)) return;
+            if (!int.TryParse(dices[1], out int diceValue)) return;
             if (diceValue < 0 || diceCount < 0) return;
 
             var modificator = 0;
