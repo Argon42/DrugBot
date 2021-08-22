@@ -28,7 +28,7 @@ namespace BananvaBot
 
             var length = (float) rnd.NextDouble();
             double resultLenght = maleBiba
-                ? 15 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * length - 1, 3))
+                ? 15 + Math.Tan(0.5 * Math.PI * (2 * length - 1))
                 : -4 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
 
             var diameter = (float) rnd.NextDouble();
