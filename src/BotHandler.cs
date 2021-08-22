@@ -29,7 +29,8 @@ namespace BananvaBot
                 new ProcessorBiba(),
                 new ProcessorDice(),
                 new ProcessorWho(),
-                new ProcessorWisdom()
+                new ProcessorWisdom(),
+                new ProcessorQuote()
             };
             _processors.Add(new ProcessorHelp(_processors));
         }
