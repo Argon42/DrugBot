@@ -23,26 +23,19 @@ namespace BananvaBot
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
-            try
-            {
-                if (vkApi.Users.Get(new[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
-                    Sex.Female)
-                {
-                    BotHandler.SendMessage(vkApi, message.PeerId, "У вас нет бибы у вас бибасики");
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
             var rnd = new Random(BotHandler.GetDayUserSeed(message.FromId));
+            bool maleBiba = rnd.NextDouble() < 0.46f;
 
-            double resultLenght = rnd.Next(-10, 40) + Math.Round(rnd.NextDouble(), 2);
-            int resultDiameter = rnd.Next(20, 100);
+            var length = (float) rnd.NextDouble();
+            double resultLenght = maleBiba
+                ? 15 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * length - 1, 3))
+                : -4 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
+
+            var diameter = (float) rnd.NextDouble();
+            double resultDiameter = 30 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * diameter - 1, 1));
+            
             BotHandler.SendMessage(vkApi, message.PeerId,
-                $"Сегодня ваша биба длиной {resultLenght} см и диаметром {resultDiameter} мм");
+                $"Сегодня ваша биба длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм");
         }
     }
 }
