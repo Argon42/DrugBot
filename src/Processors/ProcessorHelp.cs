@@ -30,7 +30,9 @@ namespace BananvaBot
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
             string answer = string.Join('\n',
-                _processors.Select(processor => $"{processor.Name}\n{processor.Description}\n"));
+                _processors.Where(processor => processor.VisiblyDescription)
+                    .Select(processor => $"{processor.Name}\n{processor.Description}\n")
+            );
             BotHandler.SendMessage(vkApi, message.PeerId, answer);
         }
     }

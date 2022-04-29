@@ -49,8 +49,7 @@ namespace BananvaBot
             for (var i = 0; i < diceCount; i++)
                 result += rnd.Next(0, diceValue) + 1;
 
-            result += modificator;
-            BotHandler.SendMessage(vkApi, message.PeerId, $"В сумме выпало {result}");
+            BotHandler.SendMessage(vkApi, message.PeerId, $"Выпало {result} + {modificator} = {result + modificator}");
         }
     }
 }

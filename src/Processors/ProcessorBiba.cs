@@ -12,7 +12,9 @@ namespace BananvaBot
         private List<string> keys = new List<string>
         {
             "/биба",
-            "/biba"
+            "/biba",
+            "/bebra",
+            "/бебра"
         };
 
         public override string Name => "Бибометр";
@@ -35,7 +37,7 @@ namespace BananvaBot
             double resultDiameter = 30 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * diameter - 1, 1));
             
             BotHandler.SendMessage(vkApi, message.PeerId,
-                $"Сегодня ваша биба длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм");
+                $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм");
         }
     }
 }

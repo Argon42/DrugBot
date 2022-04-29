@@ -30,7 +30,8 @@ namespace BananvaBot
                 new ProcessorDice(),
                 new ProcessorWho(),
                 new ProcessorWisdom(),
-                new ProcessorQuote()
+                new ProcessorQuote(),
+                new ProcessorDeadChinese()
             };
             _processors.Add(new ProcessorHelp(_processors));
         }
@@ -62,9 +63,13 @@ namespace BananvaBot
             if (fromId == null) return 0;
 
             int idHash = fromId.Value.GetHashCode();
-            int dateHash = DateTime.Now.Day.GetHashCode()
-                           + DateTime.Now.Month.GetHashCode()
-                           + DateTime.Now.Year.GetHashCode();
+            for (var i = 0; i < Math.Abs(DateTime.Today.GetHashCode()) % 10; i++)
+                idHash = idHash.GetHashCode();
+
+            int dateHash = DateTime.Today.GetHashCode();
+            for (var i = 0; i < Math.Abs(DateTime.Today.GetHashCode()) % 10; i++)
+                dateHash = dateHash.GetHashCode();
+
             return idHash + dateHash;
         }
 

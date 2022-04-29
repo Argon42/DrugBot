@@ -28,7 +28,10 @@ namespace BananvaBot
                     vkApi.Users.Get(new[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
                     Sex.Male)
                 {
-                    BotHandler.SendMessage(vkApi, message.PeerId, "У вас нет бибасиков у вас биба");
+                    BotHandler.SendMessage(vkApi, message.PeerId,
+                        new Random().NextDouble() > 0.5
+                            ? "У вас нет бибасиков у только вас биба"
+                            : "Бибасики только для девушек, у вас только биба");
                     return;
                 }
             }
@@ -36,10 +39,13 @@ namespace BananvaBot
             {
                 // ignored
             }
-
+            
             var rnd = new Random(BotHandler.GetDayUserSeed(message.FromId));
-            int result = rnd.Next(20, 150);
-            BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {result} см в обхвате");
+            
+            var length = (float) rnd.NextDouble();
+            double resultLenght = 80 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
+
+            BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате");
         }
     }
 }

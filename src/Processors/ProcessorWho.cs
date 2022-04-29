@@ -15,7 +15,7 @@ namespace BananvaBot
             "/кто"
         };
 
-        public override string Name => "Бибометр";
+        public override string Name => "Кто?";
         public override IReadOnlyList<string> Keys => keys;
 
         public override string Description =>
