@@ -5,7 +5,7 @@ using VkNet;
 using VkNet.Exception;
 using VkNet.Model;
 
-namespace BananvaBot
+namespace DrugBot.Processors
 {
     public class ProcessorStatus : AbstractProcessor
     {

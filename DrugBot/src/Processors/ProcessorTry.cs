@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using VkNet;
 using VkNet.Model;
 
-namespace BananvaBot
+namespace DrugBot.Processors
 {
     public class ProcessorTry : AbstractProcessor
     {

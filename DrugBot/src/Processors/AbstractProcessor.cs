@@ -4,7 +4,7 @@ using System.Linq;
 using VkNet;
 using VkNet.Model;
 
-namespace BananvaBot
+namespace DrugBot.Processors
 {
     public abstract class AbstractProcessor
     {

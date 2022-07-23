@@ -5,7 +5,7 @@ using VkNet.Enums;
 using VkNet.Enums.Filters;
 using VkNet.Model;
 
-namespace BananvaBot
+namespace DrugBot.Processors
 {
     public class ProcessorBibasiks : AbstractProcessor
     {

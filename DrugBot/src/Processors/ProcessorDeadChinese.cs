@@ -6,7 +6,7 @@ using System.Text;
 using VkNet;
 using VkNet.Model;
 
-namespace BananvaBot
+namespace DrugBot.Processors
 {
     public class ProcessorDeadChinese : AbstractProcessor
     {

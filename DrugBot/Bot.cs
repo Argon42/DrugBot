@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BananvaBot;
 using VkNet;
 using VkNet.Exception;
 using VkNet.Model;

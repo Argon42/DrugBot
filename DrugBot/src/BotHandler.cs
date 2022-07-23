@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DrugBot.Processors;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BananvaBot
+namespace DrugBot
 {
     public class BotHandler
     {

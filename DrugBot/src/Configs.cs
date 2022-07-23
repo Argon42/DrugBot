@@ -2,22 +2,25 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 
-public class Configs
+namespace DrugBot
 {
-    public uint Id { get; set; }
-
-    public string Token { get; set; }
-
-    private Configs()
+    public class Configs
     {
-    }
+        public uint Id { get; set; }
 
-    public static Configs GetConfig(string fileName = "Config")
-    {
-        var path = Path.Combine(Environment.CurrentDirectory, $"Local/{fileName}.json");
-        var json = File.ReadAllText(path);
-        var configs = JsonConvert.DeserializeObject<Configs>(json);
+        public string Token { get; set; }
 
-        return configs;
+        private Configs()
+        {
+        }
+
+        public static Configs GetConfig(string fileName = "Config")
+        {
+            var path = Path.Combine(Environment.CurrentDirectory, $"Local/{fileName}.json");
+            var json = File.ReadAllText(path);
+            var configs = JsonConvert.DeserializeObject<Configs>(json);
+
+            return configs;
+        }
     }
 }
