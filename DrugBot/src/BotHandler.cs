@@ -20,7 +20,6 @@ namespace BananvaBot
             {
                 new ProcessorTry(),
                 new ProcessorDa(),
-                new ProcessorShutdown(),
                 new ProcessorPrediction(),
                 new ProcessorDiploma(),
                 new ProcessorStatus(),
@@ -31,46 +30,51 @@ namespace BananvaBot
                 new ProcessorWho(),
                 new ProcessorWisdom(),
                 new ProcessorQuote(),
-                new ProcessorDeadChinese()
+                new ProcessorDeadChinese(),
             };
             _processors.Add(new ProcessorHelp(_processors));
-        }
-
-        public void MessageProcessing(Message message)
-        {
-            if (string.IsNullOrEmpty(message.Text)) return;
-
-            string[] sentence = message.Text.ToLower().Split();
-            AbstractProcessor processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
-            processor?.TryProcessMessage(_api, message, sentence);
-        }
-
-        public static string GetRandomLineFromFile(Random rnd, string path)
-        {
-            List<string> predictions = File.ReadLines(path).ToList();
-            string prediction = predictions[rnd.Next(0, predictions.Count)];
-            return prediction;
-        }
-
-        public static List<string> GetRandomLineFromFile(Random rnd, string path, int count)
-        {
-            List<string> predictions = File.ReadLines(path).ToList();
-            return predictions.OrderBy(s => rnd.NextDouble()).Take(count).ToList();
         }
 
         public static int GetDayUserSeed(long? fromId)
         {
             if (fromId == null) return 0;
 
-            int idHash = fromId.Value.GetHashCode();
+            var idHash = fromId.Value.GetHashCode();
             for (var i = 0; i < Math.Abs(DateTime.Today.GetHashCode()) % 10; i++)
                 idHash = idHash.GetHashCode();
 
-            int dateHash = DateTime.Today.GetHashCode();
+            var dateHash = DateTime.Today.GetHashCode();
             for (var i = 0; i < Math.Abs(DateTime.Today.GetHashCode()) % 10; i++)
                 dateHash = dateHash.GetHashCode();
 
             return idHash + dateHash;
+        }
+
+        public static string GetRandomLineFromFile(Random rnd, string path)
+        {
+            var predictions = File.ReadLines(path).ToList();
+            var prediction = predictions[rnd.Next(0, predictions.Count)];
+            return prediction;
+        }
+
+        public static List<string> GetRandomLineFromFile(Random rnd, string path, int count)
+        {
+            var predictions = File.ReadLines(path).ToList();
+            return predictions.OrderBy(s => rnd.NextDouble()).Take(count).ToList();
+        }
+
+        public static bool IsBotTrigger(string s)
+        {
+            return "@drugbot42," == s;
+        }
+
+        public void MessageProcessing(Message message)
+        {
+            if (string.IsNullOrEmpty(message.Text)) return;
+
+            var sentence = message.Text.ToLower().Split();
+            var processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
+            processor?.TryProcessMessage(_api, message, sentence);
         }
 
         public static void SendMessage(VkApi api, long? peerId, string message)
@@ -82,7 +86,5 @@ namespace BananvaBot
                 RandomId = new Random().Next()
             });
         }
-
-        public static bool IsBotTrigger(string s) => "@drugbot42," == s;
     }
 }

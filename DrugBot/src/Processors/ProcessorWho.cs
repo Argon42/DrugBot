@@ -9,28 +9,31 @@ namespace BananvaBot
 {
     public class ProcessorWho : AbstractProcessor
     {
-        private List<string> keys = new List<string>
+        private readonly List<string> keys = new List<string>
         {
             "/who",
             "/кто"
         };
 
-        public override string Name => "Кто?";
-        public override IReadOnlyList<string> Keys => keys;
-
         public override string Description =>
             $"Бот знает все обо всех, для вызова используйте {string.Join(' ', keys)} вопрос";
 
-        public override bool HasTrigger(Message message, string[] sentence) =>
-            sentence.Length > 0 &&
-            keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Name => "Кто?";
+
+        public override bool HasTrigger(Message message, string[] sentence)
+        {
+            return sentence.Length > 0 &&
+                   keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
+        }
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
             List<string> names;
             try
             {
-                names = vkApi.Messages.GetConversationMembers(message.PeerId.Value, new[] {""})
+                names = vkApi.Messages.GetConversationMembers(message.PeerId.Value, new[] { "" })
                     .Profiles
                     .Select(user => $"{user.FirstName} {user.LastName}")
                     .ToList();
@@ -42,10 +45,10 @@ namespace BananvaBot
                 return;
             }
 
-            string question = message.Text.Substring(sentence[0].Length).TrimStart().TrimEnd("?!".ToCharArray());
+            var question = message.Text.Substring(sentence[0].Length).TrimStart().TrimEnd("?!".ToCharArray());
             var rnd = new Random(question.ToLower().GetHashCode());
-            int result = rnd.Next(0, names.Count());
-            double chanceOfNothing = rnd.NextDouble();
+            var result = rnd.Next(0, names.Count());
+            var chanceOfNothing = rnd.NextDouble();
             var answer = $"{(chanceOfNothing > 0.9 ? "Никто не" : names[result])} {question}";
             BotHandler.SendMessage(vkApi, message.PeerId, answer);
         }

@@ -7,16 +7,17 @@ namespace BananvaBot
 {
     public class ProcessorQuote : AbstractProcessor
     {
-        private List<string> keys = new List<string>
+        private readonly List<string> keys = new List<string>
         {
             "/фраза"
         };
 
-        public override string Name => "Рандомная цитата/фраза";
-        public override IReadOnlyList<string> Keys => keys;
-
         public override string Description =>
             $"Спроси у бота посредственную фразу, для вызова используйте {string.Join(' ', keys)}";
+
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Name => "Рандомная цитата/фраза";
 
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)

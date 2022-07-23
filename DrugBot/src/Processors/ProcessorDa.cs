@@ -7,18 +7,20 @@ namespace BananvaBot
 {
     public class ProcessorDa : AbstractProcessor
     {
-        private List<string> keys = new List<string>
+        private readonly List<string> keys = new List<string>
         {
             "да"
         };
 
-        public override string Name => "Да";
+        public override string Description => "Напиши \"Да\"";
         public override IReadOnlyList<string> Keys => keys;
 
-        public override string Description => "Напиши \"Да\"";
+        public override string Name => "Да";
 
-        public override bool HasTrigger(Message message, string[] sentence) =>
-            string.Equals(message.Text.TrimEnd(), "да", StringComparison.CurrentCultureIgnoreCase);
+        public override bool HasTrigger(Message message, string[] sentence)
+        {
+            return string.Equals(message.Text.TrimEnd(), "да", StringComparison.CurrentCultureIgnoreCase);
+        }
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {

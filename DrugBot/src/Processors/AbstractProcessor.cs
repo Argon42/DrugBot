@@ -8,13 +8,10 @@ namespace BananvaBot
 {
     public abstract class AbstractProcessor
     {
-        public virtual bool VisiblyDescription => true;
-        public abstract string Name { get; }
-        public abstract IReadOnlyList<string> Keys { get; }
         public abstract string Description { get; }
-
-        private bool CheckTrigger(string sentence) =>
-            Keys.Any(s => sentence.Equals(s, StringComparison.CurrentCultureIgnoreCase));
+        public abstract IReadOnlyList<string> Keys { get; }
+        public abstract string Name { get; }
+        public virtual bool VisiblyDescription => true;
 
         public virtual bool HasTrigger(Message message, string[] sentence)
         {
@@ -49,6 +46,11 @@ namespace BananvaBot
         protected virtual void OnProcessMessageError(VkApi vkApi, Message message, string[] sentence,
             Exception exception)
         {
+        }
+
+        private bool CheckTrigger(string sentence)
+        {
+            return Keys.Any(s => sentence.Equals(s, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

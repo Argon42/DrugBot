@@ -8,16 +8,17 @@ namespace BananvaBot
 {
     public class ProcessorTotem : AbstractProcessor
     {
-        private List<string> keys = new List<string>
+        private readonly List<string> keys = new List<string>
         {
             "/тотем"
         };
 
-        public override string Name => "Тотем дня";
-        public override IReadOnlyList<string> Keys => keys;
-
         public override string Description =>
             $"Посмотреть за ширму вселенной и узнать что тебя сегодня ждет, для вызова используйте {string.Join(' ', keys)}";
+
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Name => "Тотем дня";
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {

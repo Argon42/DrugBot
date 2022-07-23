@@ -9,23 +9,24 @@ namespace BananvaBot
 {
     public class ProcessorBibasiks : AbstractProcessor
     {
-        private List<string> keys = new List<string>
+        private readonly List<string> keys = new List<string>
         {
             "/бибасики"
         };
 
-        public override string Name => "Бибасикометр";
-        public override IReadOnlyList<string> Keys => keys;
-
         public override string Description =>
             $"Узнай размеры своих бибасиков, для вызова используйте {string.Join(' ', keys)}";
+
+        public override IReadOnlyList<string> Keys => keys;
+
+        public override string Name => "Бибасикометр";
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
             try
             {
                 if (message.FromId != null &&
-                    vkApi.Users.Get(new[] {message.FromId.Value}, ProfileFields.Sex)[0].Sex ==
+                    vkApi.Users.Get(new[] { message.FromId.Value }, ProfileFields.Sex)[0].Sex ==
                     Sex.Male)
                 {
                     BotHandler.SendMessage(vkApi, message.PeerId,
@@ -39,11 +40,11 @@ namespace BananvaBot
             {
                 // ignored
             }
-            
+
             var rnd = new Random(BotHandler.GetDayUserSeed(message.FromId));
-            
-            var length = (float) rnd.NextDouble();
-            double resultLenght = 80 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
+
+            var length = (float)rnd.NextDouble();
+            var resultLenght = 80 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
 
             BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате");
         }
