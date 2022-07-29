@@ -32,6 +32,7 @@ namespace DrugBot
                 new ProcessorWisdom(),
                 new ProcessorQuote(),
                 new ProcessorDeadChinese(),
+                new AnecdoteProcessor(),
             };
             _processors.Add(new ProcessorHelp(_processors));
         }

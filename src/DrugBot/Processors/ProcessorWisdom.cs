@@ -8,7 +8,7 @@ namespace DrugBot.Processors
 {
     public class ProcessorWisdom : AbstractProcessor
     {
-        private readonly List<string> keys = new List<string>
+        private readonly List<string> _keys = new List<string>
         {
             "/мудрость",
             "/цитата",
@@ -17,24 +17,24 @@ namespace DrugBot.Processors
         };
 
         public override string Description =>
-            $"Спроси у бота великую мудрость, для вызова используйте {string.Join(' ', keys)}";
+            $"Спроси у бота великую мудрость, для вызова используйте {string.Join(' ', _keys)}";
 
-        public override IReadOnlyList<string> Keys => keys;
+        public override IReadOnlyList<string> Keys => _keys;
 
         public override string Name => "Великие мудрости";
 
 
         protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
         {
-            var path = "Local/wisdom.txt";
-            var random = sentence.Length > 1 ? new Random(message.Text.GetHashCode()) : new Random();
-            var lines = BotHandler.GetRandomLineFromFile(random, path, random.Next(2, 5));
-            var line = string.Join(" ", lines);
-            var words = line.Split(' ').OrderBy(s => random.Next()).ToList();
+            string path = "Local/wisdom.txt";
+            Random random = sentence.Length > 1 ? new Random(message.Text.GetHashCode()) : new Random();
+            List<string> lines = BotHandler.GetRandomLineFromFile(random, path, random.Next(2, 5));
+            string line = string.Join(" ", lines);
+            List<string> words = line.Split(' ').OrderBy(s => random.Next()).ToList();
 
-            var randomWordCount = random.Next(3, words.Count);
-            var clampedCount = Math.Clamp(randomWordCount, 0, words.Count);
-            var answer = string.Join(' ', words.Take(clampedCount).ToArray());
+            int randomWordCount = random.Next(3, words.Count);
+            int clampedCount = Math.Clamp(randomWordCount, 0, words.Count);
+            string answer = string.Join(' ', words.Take(clampedCount).ToArray());
             BotHandler.SendMessage(vkApi, message.PeerId, answer);
         }
     }
