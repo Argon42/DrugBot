@@ -16,9 +16,8 @@ namespace DrugBot
         private string _currentTs;
 
 
-        public async Task Start(CancellationToken token)
+        public async Task Start(Configs configs, CancellationToken token)
         {
-            var configs = Configs.GetConfig();
             var longPollServer = Auth(configs);
             var botHandler = new BotHandler(_api);
             _currentTs = longPollServer.Ts;

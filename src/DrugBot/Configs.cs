@@ -21,13 +21,13 @@ namespace DrugBot
             set => _token = value;
         }
 
-        private Configs()
+        public Configs()
         {
         }
 
-        public static Configs GetConfig(string fileName = "Config")
+        public static Configs GetConfig(string file = "Local/Config.json")
         {
-            var path = Path.Combine(Environment.CurrentDirectory, $"Local/{fileName}.json");
+            var path = Path.Combine(Environment.CurrentDirectory, file);
             var json = File.ReadAllText(path);
             var configs = JsonConvert.DeserializeObject<Configs>(json);
 
