@@ -14,6 +14,10 @@ FROM build AS publish
 RUN dotnet publish "ConsoleApp.csproj" -c Release -o /app/publish
 
 FROM base AS final
+ARG VK_GROUP_TOKEN="default"
+ENV VK_GROUP_TOKEN=${VK_GROUP_TOKEN}
+ARG VK_APP_ID="default"
+ENV VK_APP_ID=${VK_APP_ID}
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DrugBotApp.dll"]

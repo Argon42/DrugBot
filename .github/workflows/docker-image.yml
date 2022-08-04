@@ -28,9 +28,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./src/
-          file: ConsoleApp/Dockerfile
+          file: ./src/ConsoleApp/Dockerfile
+          build-args: | 
+            VK_GROUP_TOKEN=${{ secrets.VK_GROUP_TOKEN }}
+            VK_APP_ID=${{ secrets.VK_APP_ID }}
           push: true
-          env: |
-            VK_APP_ID: ${{ secrets.VK_APP_ID }}
-            VK_GROUP_TOKEN: ${{ secrets.VK_GROUP_TOKEN }}
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/drugbot:latest

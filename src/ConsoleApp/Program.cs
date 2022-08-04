@@ -1,13 +1,20 @@
 ﻿using DrugBot;
 
 Console.WriteLine("StartBot");
+const string appId = "VK_APP_ID";
+const string groupToken = "VK_GROUP_TOKEN";
 
-string? token = Environment.GetEnvironmentVariable("VK_GROUP_TOKEN");
-string? id = Environment.GetEnvironmentVariable("VK_APP_ID");
-bool isEnvironmentSettings = token != null && id != null;
+string? token = Environment.GetEnvironmentVariable(groupToken);
+string? id = Environment.GetEnvironmentVariable(appId);
 
-Configs environmentConfig = new() { Token = token ?? "", Id = uint.Parse(id ?? "0") };
-Configs configs = isEnvironmentSettings ? environmentConfig : Configs.GetConfig();
+if (token == null || id == null)
+    throw new Exception($"Environment variables {appId} and {groupToken} not exist");
+
+if (uint.TryParse(id, out uint parsedId) == false)
+    throw new Exception($"Environment variable {appId} is incorrect");
+
+Configs environmentConfig = new() { Token = token ?? "", Id = parsedId };
+
 
 CancellationTokenSource tokenSource = new();
-await new Bot().Start(configs, tokenSource.Token);
+await new Bot().Start(environmentConfig, tokenSource.Token);
