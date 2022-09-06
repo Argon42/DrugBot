@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,8 @@ using DrugBot.Processors;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
+using System.Net;
+using VkNet.Model.Attachments;
 
 namespace DrugBot
 {
@@ -33,6 +36,7 @@ namespace DrugBot
                 new ProcessorQuote(),
                 new ProcessorDeadChinese(),
                 new AnecdoteProcessor(),
+                new MemesProssessor(),
             };
             _processors.Add(new ProcessorHelp(_processors));
         }
@@ -86,6 +90,24 @@ namespace DrugBot
                 PeerId = peerId,
                 Message = message,
                 RandomId = new Random().Next()
+            });
+        }
+
+        public static void SendMessage(VkApi api, long? peerId, string message, byte[] image)
+        {
+            var uploadServer = api.Photo.GetMessagesUploadServer(peerId.Value);
+            var wc = new WebClient();
+            var result = Encoding.ASCII.GetString(wc.UploadData(uploadServer.UploadUrl, image));
+            var photo = api.Photo.SaveMessagesPhoto(result);
+            api.Messages.Send(new MessagesSendParams()
+            {
+                UserId = peerId,
+                Message = message,
+                RandomId = new Random().Next(),
+                Attachments = new List<MediaAttachment>
+    {
+        photo.FirstOrDefault()
+    }
             });
         }
     }

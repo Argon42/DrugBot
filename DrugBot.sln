@@ -1,12 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "src\ConsoleApp\ConsoleApp.csproj", "{A32D1281-18EF-4866-AD08-AA5C98A09BB9}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "src\ConsoleApp\ConsoleApp.csproj", "{A32D1281-18EF-4866-AD08-AA5C98A09BB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugBot", "src\DrugBot\DrugBot.csproj", "{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrugBot", "src\DrugBot\DrugBot.csproj", "{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8} = {FA938209-6B77-4414-97DE-7FF176A1D9D8}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DECA80E1-284B-4A80-8E34-DFE10108D778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Anecdotes", "src\Anecdotes\Anecdotes.csproj", "{2702EFBD-F269-440B-867E-E30A61D11DD8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Anecdotes", "src\Anecdotes\Anecdotes.csproj", "{2702EFBD-F269-440B-867E-E30A61D11DD8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Memes", "src\Memes\Memes\Memes.csproj", "{FA938209-6B77-4414-97DE-7FF176A1D9D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,19 +30,25 @@ Global
 		{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A407C428-6E60-49E7-B95A-680F147D3106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A407C428-6E60-49E7-B95A-680F147D3106}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A407C428-6E60-49E7-B95A-680F147D3106}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A407C428-6E60-49E7-B95A-680F147D3106}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2702EFBD-F269-440B-867E-E30A61D11DD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2702EFBD-F269-440B-867E-E30A61D11DD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2702EFBD-F269-440B-867E-E30A61D11DD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2702EFBD-F269-440B-867E-E30A61D11DD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A32D1281-18EF-4866-AD08-AA5C98A09BB9} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{C5BEBCE7-F55E-40F4-853B-6B7585AACB9E} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
-		{A407C428-6E60-49E7-B95A-680F147D3106} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{2702EFBD-F269-440B-867E-E30A61D11DD8} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
+		{FA938209-6B77-4414-97DE-7FF176A1D9D8} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C51964D-8896-451C-A8C7-3A7B66C187FF}
 	EndGlobalSection
 EndGlobal
