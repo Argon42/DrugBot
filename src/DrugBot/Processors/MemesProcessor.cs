@@ -1,7 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Memes;
+using DrugBot.Processors;
+using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using VkNet;
 using VkNet.Model;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace DrugBot.Processors;
 

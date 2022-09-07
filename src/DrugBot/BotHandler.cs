@@ -126,7 +126,7 @@ namespace DrugBot
         private static async Task<string> UploadPhoto(VkApi api, long? peerId, byte[] image)
         {
             MultipartFormDataContent content = new();
-            UploadServerInfo? uploadServer = api.Photo.GetMessagesUploadServer(peerId.GetValueOrDefault());
+            UploadServerInfo? uploadServer = api.Photo.GetMessagesUploadServer(api.UserId.GetValueOrDefault());
             content.Add(new ByteArrayContent(image), "file", "photo.jpg");
             HttpResponseMessage responseMessage = await Client.PostAsync(uploadServer.UploadUrl, content);
             byte[] responseRaw = await responseMessage.Content.ReadAsByteArrayAsync();
