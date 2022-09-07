@@ -31,7 +31,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Anecdotes\Anecdotes.csproj" />
-      <ProjectReference Include="..\Memes\Memes\Memes.csproj" />
+      <ProjectReference Include="..\Memes\Memes.csproj" />
     </ItemGroup>
 
 </Project>
