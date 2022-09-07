@@ -2,9 +2,9 @@
   "profiles": {
     "DrugBot": {
       "commandName": "Project",
-      "environmentVariables": {
-        "VK_GROUPTOKEN": "7b5e3f5a6f394372b4bba34d890dd64b835975ab822a3a3fe6c849506728366275d5d7b9373ac19e19a14;VK_APPID=51393083"
-      },
+        "environmentVariables": {
+            "VK_GROUPTOKEN": ""
+        },
       "hotReloadEnabled": true
     }
   }

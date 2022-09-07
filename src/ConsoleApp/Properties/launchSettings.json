@@ -1,11 +1,7 @@
 {
   "profiles": {
     "ConsoleApp": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "VK_GROUP_TOKEN": "vk1.a.uXyCZA8YDEavuSC3LD86UHejYyD1LaQByH2EWLRHDt6yRzkwdDhTOLH2fneFAH1F_cCMT3ZI8o3Fn-uJQ8BFy-hY6-zsG4u8VSHZsHpI0BqKC_JZlBRjU-sixMncC2Sv1Koa9OjoPUX4LxsLElbvJG2reh-uEqKhvuEn8wUYmVXMZj4HqUZNCLvnZRqcKQ1A",
-        "VK_APP_ID": "214884677"
-      }
+      "commandName": "Project"
     }
   }
 }
