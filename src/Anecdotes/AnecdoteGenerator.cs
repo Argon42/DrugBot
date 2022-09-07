@@ -21,12 +21,6 @@ public class AnecdoteGenerator
     {
         _random = new Random(seed);
     }
-
-    static AnecdoteGenerator()
-    {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-    }
-
     public AnecdoteData GenerateAnecdote()
     {
         string randomPage;

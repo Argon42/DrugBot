@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using DrugBot.Processors;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 using System.Net;
 using VkNet.Model.Attachments;
@@ -16,6 +22,8 @@ namespace DrugBot
     {
         private readonly VkApi _api;
         private readonly List<AbstractProcessor> _processors;
+
+        private static HttpClient Client { get; } = new();
 
         public BotHandler(VkApi api)
         {
@@ -39,6 +47,11 @@ namespace DrugBot
                 new MemesProssessor(),
             };
             _processors.Add(new ProcessorHelp(_processors));
+        }
+
+        static BotHandler()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         public static int GetDayUserSeed(long? fromId)
@@ -93,22 +106,31 @@ namespace DrugBot
             });
         }
 
-        public static void SendMessage(VkApi api, long? peerId, string message, byte[] image)
+        public static async void SendMessage(VkApi api, long? peerId, string message, byte[] image)
         {
-            var uploadServer = api.Photo.GetMessagesUploadServer(peerId.Value);
-            var wc = new WebClient();
-            var result = Encoding.ASCII.GetString(wc.UploadData(uploadServer.UploadUrl, image));
-            var photo = api.Photo.SaveMessagesPhoto(result);
-            api.Messages.Send(new MessagesSendParams()
+            string response = await UploadPhoto(api, peerId, image);
+            ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
+
+            api.Messages.Send(new MessagesSendParams
             {
-                UserId = peerId,
+                PeerId = peerId,
                 Message = message,
                 RandomId = new Random().Next(),
-                Attachments = new List<MediaAttachment>
-    {
-        photo.FirstOrDefault()
-    }
+                Attachments = new List<MediaAttachment?>()
+                {
+                    messagesPhoto.FirstOrDefault()
+                }
             });
+        }
+
+        private static async Task<string> UploadPhoto(VkApi api, long? peerId, byte[] image)
+        {
+            MultipartFormDataContent content = new();
+            UploadServerInfo? uploadServer = api.Photo.GetMessagesUploadServer(peerId.GetValueOrDefault());
+            content.Add(new ByteArrayContent(image), "file", "photo.jpg");
+            HttpResponseMessage responseMessage = await Client.PostAsync(uploadServer.UploadUrl, content);
+            byte[] responseRaw = await responseMessage.Content.ReadAsByteArrayAsync();
+            return Encoding.GetEncoding(1251).GetString(responseRaw);
         }
     }
 }
