@@ -102,46 +102,43 @@ public class BotHandler
     }
 
     public static void SendMessage(VkApi api, long? peerId, string message, Message triggerMessage,
-        bool needForward = true)
+        bool needForward = false)
     {
-        MessageForward forward = new()
-        {
-            IsReply = true,
-            MessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
-            PeerId = triggerMessage.PeerId,
-        };
         api.Messages.Send(new MessagesSendParams
         {
             PeerId = peerId,
             Message = message,
             RandomId = new Random().Next(),
-            Forward = needForward ? forward : default,
+            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
         });
     }
 
     public static void SendMessage(VkApi api, long? peerId, string message, byte[] image, Message triggerMessage,
-        bool needForward = true)
+        bool needForward = false)
     {
         string response = UploadPhoto(api, image);
         ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
 
-        MessageForward forward = new()
-        {
-            IsReply = true,
-            MessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
-            PeerId = triggerMessage.PeerId,
-        };
         api.Messages.Send(new MessagesSendParams
         {
             PeerId = peerId,
             Message = message,
             RandomId = new Random().Next(),
-            Forward = needForward ? forward : default,
+            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
             Attachments = new List<MediaAttachment?>
             {
                 messagesPhoto.FirstOrDefault()
             }
         });
+    }
+
+    private static MessageForward CreateMessageForward(Message triggerMessage)
+    {
+        return new MessageForward
+        {
+            IsReply = true,
+            ConversationMessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
+        };
     }
 
     private static string UploadPhoto(VkApi api, byte[] image)
