@@ -35,6 +35,7 @@ public abstract class AbstractProcessor
         catch (Exception e)
         {
             OnProcessMessageError(vkApi, message, sentence, e);
+            Console.WriteLine(e);
             return false;
         }
 
