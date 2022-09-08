@@ -1,106 +1,97 @@
-﻿using System.Data;
-using System.Net;
+﻿using System.Net;
 using System.Text.RegularExpressions;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Advanced;
+using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
+namespace Memes;
 
-namespace Memes
+public class MemesGenerator
 {
-    public class MemesGenerator
+    private const string Url = "https://joyreactor.cc/tag/%23Приколы+для+даунов/{0}";
+    private const int MaxAttempts = 100;
+    private const string MemePatternText = "//img2.joyreactor.cc/pics/post/(?!full).{0,300}-[0-9]{7}.jpeg";
+    private readonly Random _random;
+
+    public MemesGenerator()
     {
-        private const string Url = "https://joyreactor.cc/tag/%23Приколы+для+даунов/{0}";
-        public const int maxAttempts = 100;
-        private const string MemePatternText = "//img2.joyreactor.cc/pics/post/(?!full).{0,300}-[0-9]{7}.jpeg";
-        private readonly Random _random;
+        _random = new Random();
+    }
 
-        public MemesGenerator()
+    public MemesGenerator(int seed)
+    {
+        _random = new Random(seed);
+    }
+
+    public MemesData GetMeme()
+    {
+        int pageNumber;
+        string[]? memesArray;
+        int attempts = 0;
+
+        do
         {
-            _random = new Random();
-        }
+            pageNumber = GetRandomPage();
+            string htmlText = GetHtmlPage(string.Format(Url, pageNumber));
+            memesArray = ParsHtmlEhd(htmlText);
+            if (attempts++ > MaxAttempts)
+                throw new Exception($"Meme not founded for {MaxAttempts} attempts");
+        } while (memesArray == null || memesArray.Length == 0);
 
-        public MemesGenerator(int seed)
-        {
-            _random = new Random(seed);
-        }
+        string? memeUrl = memesArray[RandomImg(memesArray)];
+        Image rawMeme = Image.Load(GetImgStream(memeUrl));
+        Image meme = CropImage(rawMeme);
+        byte[] byteMeme = ImageToByte(meme);
+        return new MemesData(byteMeme, pageNumber, memeUrl);
+    }
 
-        public MemesData GetMeme()
-        {
-            int pageNumber;
-            string htmlText;
-            string[]? memesArray;
-            int attempts = 0;
+    private Image CropImage(Image img)
+    {
+        int imageHeight = img.Size().Height;
+        int imageWidth = img.Size().Width;
+        img.Mutate(
+            i => i.Crop(new Rectangle(0, 0, imageWidth, imageHeight - 14)));
+        return img;
+    }
 
-            do
-            {
-                pageNumber = GetRandomPage();
-                htmlText = GetHtmlPage(string.Format(Url, pageNumber));
-                memesArray = ParsHtmlEhd(htmlText);
-                if (attempts++ > maxAttempts)
-                    throw new Exception($"Meme not founded for {maxAttempts} attempts");
-            } while (memesArray == null || memesArray.Length == 0);
-            string? memeUrl = memesArray[RandomImg(memesArray)];
-            Image rawMeme = Image.Load(GetImgStream(memeUrl));
-            Image meme = CropImage(rawMeme);
-            byte[] byteMeme = ImageToByte(meme);
-            return new MemesData(byteMeme, pageNumber, memeUrl);
-        }
+    private static string GetHtmlPage(string url)
+    {
+        HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+        HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse();
+        return new StreamReader(response.GetResponseStream()).ReadToEnd();
+    }
 
-        public string GetHtmlPage(string url)
-        {
-            string HtmlText = string.Empty;
-            HttpWebRequest myHttwebrequest = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse myHttpWebresponse = (HttpWebResponse)myHttwebrequest.GetResponse();
-            StreamReader strm = new StreamReader(myHttpWebresponse.GetResponseStream());
-            return strm.ReadToEnd();
-        }
+    private static Stream GetImgStream(string url)
+    {
+        HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
+        HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse();
+        return response.GetResponseStream();
+    }
 
-        public Stream GetImgStream(string url)
-        {
-            HttpWebRequest myHttwebrequest = (HttpWebRequest)WebRequest.Create(url);
-            HttpWebResponse myHttpWebresponse = (HttpWebResponse)myHttwebrequest.GetResponse();
-            Stream strm = myHttpWebresponse.GetResponseStream();
-            return strm;
-        }
+    private int GetRandomPage()
+    {
+        int page = _random.Next(1388);
+        return page;
+    }
 
-        public static string[]? ParsHtmlEhd(string htmlText)
-        {
-            string htmlImg = htmlText;
-            MatchCollection matchesImg = Regex.Matches(htmlImg, MemePatternText, RegexOptions.IgnoreCase);
-            return matchesImg.Count == 0 ? null : matchesImg.Select(matchesImg => $"https:{matchesImg.Groups[0].Value}").ToArray();
-        }
+    private byte[] ImageToByte(Image image)
+    {
+        using MemoryStream memoryStream = new();
+        IImageEncoder? imageEncoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(JpegFormat.Instance);
+        image.Save(memoryStream, imageEncoder);
+        return memoryStream.ToArray();
+    }
 
-        public int GetRandomPage()
-        {
-            Random randomPage = new Random();
-            int page = randomPage.Next(1388);
-            return page;
-        }
+    private static string[]? ParsHtmlEhd(string htmlText)
+    {
+        MatchCollection matchesImg = Regex.Matches(htmlText, MemePatternText, RegexOptions.IgnoreCase);
+        return matchesImg.Count == 0 ? null : matchesImg.Select(match => $"https:{match.Groups[0].Value}").ToArray();
+    }
 
-        public int RandomImg(string[] memesArray)
-        {
-            return _random.Next(memesArray.Length);
-        }
-
-        private Image CropImage(Image img)
-        {
-            var imageHeight = img.Size().Height;
-            var imageWidth = img.Size().Width;
-            img.Mutate(
-        i => i.Crop(new Rectangle(0, 0, imageWidth, imageHeight - 14)));
-            return img;
-        }
-
-        public byte[] ImageToByte(Image image)
-        {
-            using (var memoryStream = new MemoryStream())
-            {
-                var imageEncoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(JpegFormat.Instance);
-                image.Save(memoryStream, imageEncoder);
-                return memoryStream.ToArray();
-            }
-        }
+    private int RandomImg(string[] memesArray)
+    {
+        return _random.Next(memesArray.Length);
     }
 }

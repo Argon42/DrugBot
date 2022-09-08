@@ -21,6 +21,7 @@ public class AnecdoteGenerator
     {
         _random = new Random(seed);
     }
+
     public AnecdoteData GenerateAnecdote()
     {
         string randomPage;

@@ -5,7 +5,7 @@ using VkNet.Model;
 
 namespace DrugBot.Processors;
 
-public class AnecdoteProcessor : AbstractProcessor
+public class ProcessorAnecdote : AbstractProcessor
 {
     private readonly List<string> _keys = new()
     {
