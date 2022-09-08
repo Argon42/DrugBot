@@ -39,7 +39,8 @@ public class BotHandler
             new ProcessorQuote(),
             new ProcessorDeadChinese(),
             new ProcessorAnecdote(),
-            new ProssessorMemes()
+            new ProssessorMemes(),
+            new ProcessorNet(),
         };
         _processors.Add(new ProcessorHelp(_processors));
     }
