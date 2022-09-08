@@ -35,12 +35,12 @@ public class ProcessorStatus : AbstractProcessor
         catch (ConversationAccessDeniedException)
         {
             BotHandler.SendMessage(vkApi, message.PeerId,
-                "Для вывода случайного статуса участника, боту необходимы права администратора");
+                "Для вывода случайного статуса участника, боту необходимы права администратора", message);
             return;
         }
 
         Random rnd = new();
         int result = rnd.Next(0, statuses.Count());
-        BotHandler.SendMessage(vkApi, message.PeerId, statuses[result]);
+        BotHandler.SendMessage(vkApi, message.PeerId, statuses[result], message);
     }
 }

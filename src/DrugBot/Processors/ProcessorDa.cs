@@ -24,6 +24,6 @@ public class ProcessorDa : AbstractProcessor
 
     protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
     {
-        BotHandler.SendMessage(vkApi, message.PeerId, "Пизда");
+        BotHandler.SendMessage(vkApi, message.PeerId, "Пизда", message);
     }
 }

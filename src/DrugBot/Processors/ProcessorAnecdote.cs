@@ -26,6 +26,6 @@ public class ProcessorAnecdote : AbstractProcessor
             ? new AnecdoteGenerator(message.Text.GetHashCode())
             : new AnecdoteGenerator();
 
-        BotHandler.SendMessage(vkApi, message.PeerId, generator.GenerateAnecdote().Anecdote);
+        BotHandler.SendMessage(vkApi, message.PeerId, generator.GenerateAnecdote().Anecdote, message);
     }
 }

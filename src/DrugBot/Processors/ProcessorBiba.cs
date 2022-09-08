@@ -36,6 +36,6 @@ public class ProcessorBiba : AbstractProcessor
         double resultDiameter = 30 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * diameter - 1, 1));
 
         BotHandler.SendMessage(vkApi, message.PeerId,
-            $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм");
+            $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм", message);
     }
 }

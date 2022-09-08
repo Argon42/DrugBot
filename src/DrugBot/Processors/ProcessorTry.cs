@@ -25,6 +25,6 @@ public class ProcessorTry : AbstractProcessor
     {
         Random rnd = new();
         int result = rnd.Next();
-        BotHandler.SendMessage(vkApi, message.PeerId, result % 2 == 0 ? "Успех" : "Провал");
+        BotHandler.SendMessage(vkApi, message.PeerId, result % 2 == 0 ? "Успех" : "Провал", message);
     }
 }

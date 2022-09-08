@@ -41,7 +41,7 @@ public class ProcessorWho : AbstractProcessor
         catch (ConversationAccessDeniedException)
         {
             BotHandler.SendMessage(vkApi, message.PeerId,
-                "Для вывода случайного статуса участника, боту необходимы права администратора");
+                "Для вывода случайного статуса участника, боту необходимы права администратора", message);
             return;
         }
 
@@ -50,6 +50,6 @@ public class ProcessorWho : AbstractProcessor
         int result = rnd.Next(0, names.Count());
         double chanceOfNothing = rnd.NextDouble();
         string answer = $"{(chanceOfNothing > 0.9 ? "Никто не" : names[result])} {question}";
-        BotHandler.SendMessage(vkApi, message.PeerId, answer);
+        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
     }
 }

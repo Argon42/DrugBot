@@ -27,7 +27,7 @@ public class ProcessorTotem : AbstractProcessor
 
         StringBuilder stringBuilder = new($"Сегодня вас ждет {GetPrediction(rnd, rnd.Next(3, 6))}");
 
-        BotHandler.SendMessage(vkApi, message.PeerId, stringBuilder.ToString());
+        BotHandler.SendMessage(vkApi, message.PeerId, stringBuilder.ToString(), message);
     }
 
     private static string GetPrediction(Random rnd, int count)

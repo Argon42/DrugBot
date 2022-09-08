@@ -30,7 +30,7 @@ public class ProcessorDeadChinese : AbstractProcessor
         int predictionLength = (int)Math.Abs(15 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * rnd.NextDouble() - 1, 5)));
         StringBuilder stringBuilder = new($"Мудрец видит что в будущем будет {GetPrediction(rnd, predictionLength)}");
 
-        BotHandler.SendMessage(vkApi, message.PeerId, stringBuilder.ToString());
+        BotHandler.SendMessage(vkApi, message.PeerId, stringBuilder.ToString(), message);
     }
 
     private static string GetPrediction(Random rnd, int count)

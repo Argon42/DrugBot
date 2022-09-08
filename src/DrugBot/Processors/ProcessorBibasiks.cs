@@ -32,7 +32,7 @@ public class ProcessorBibasiks : AbstractProcessor
                 BotHandler.SendMessage(vkApi, message.PeerId,
                     new Random().NextDouble() > 0.5
                         ? "У вас нет бибасиков у только вас биба"
-                        : "Бибасики только для девушек, у вас только биба");
+                        : "Бибасики только для девушек, у вас только биба", message);
                 return;
             }
         }
@@ -46,6 +46,6 @@ public class ProcessorBibasiks : AbstractProcessor
         float length = (float)rnd.NextDouble();
         double resultLenght = 80 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
 
-        BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате");
+        BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате", message);
     }
 }

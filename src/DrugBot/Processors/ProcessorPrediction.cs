@@ -28,6 +28,6 @@ public class ProcessorPrediction : AbstractProcessor
         if (sentence.Length > 1)
             seed = BotHandler.GetDayUserSeed(message.PeerId) + message.Text.GetHashCode();
 
-        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(new Random(seed), path));
+        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(new Random(seed), path), message);
     }
 }

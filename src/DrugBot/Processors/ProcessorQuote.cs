@@ -23,6 +23,6 @@ public class ProcessorQuote : AbstractProcessor
     {
         string path = "Local/wisdom.txt";
         Random random = new();
-        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(random, path));
+        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(random, path), message);
     }
 }

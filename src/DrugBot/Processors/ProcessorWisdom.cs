@@ -34,6 +34,6 @@ public class ProcessorWisdom : AbstractProcessor
         int randomWordCount = random.Next(3, words.Count);
         int clampedCount = Math.Clamp(randomWordCount, 0, words.Count);
         string answer = string.Join(' ', words.Take(clampedCount).ToArray());
-        BotHandler.SendMessage(vkApi, message.PeerId, answer);
+        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
     }
 }

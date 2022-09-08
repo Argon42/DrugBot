@@ -52,6 +52,6 @@ public class ProcessorDice : AbstractProcessor
         for (int i = 0; i < diceCount; i++)
             result += rnd.Next(0, diceValue) + 1;
 
-        BotHandler.SendMessage(vkApi, message.PeerId, $"Выпало {result} + {modificator} = {result + modificator}");
+        BotHandler.SendMessage(vkApi, message.PeerId, $"Выпало {result} + {modificator} = {result + modificator}", message);
     }
 }

@@ -34,6 +34,6 @@ public class ProcessorHelp : AbstractProcessor
             _processors.Where(processor => processor.VisiblyDescription)
                 .Select(processor => $"{processor.Name}\n{processor.Description}\n")
         );
-        BotHandler.SendMessage(vkApi, message.PeerId, answer);
+        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
     }
 }

@@ -101,26 +101,42 @@ public class BotHandler
         }
     }
 
-    public static void SendMessage(VkApi api, long? peerId, string message)
+    public static void SendMessage(VkApi api, long? peerId, string message, Message triggerMessage,
+        bool needForward = true)
     {
-        api.Messages.Send(new MessagesSendParams
+        MessageForward forward = new()
         {
-            PeerId = peerId,
-            Message = message,
-            RandomId = new Random().Next()
-        });
-    }
-
-    public static void SendMessage(VkApi api, long? peerId, string message, byte[] image)
-    {
-        string response = UploadPhoto(api, image);
-        ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
-
+            IsReply = true,
+            MessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
+            PeerId = triggerMessage.PeerId,
+        };
         api.Messages.Send(new MessagesSendParams
         {
             PeerId = peerId,
             Message = message,
             RandomId = new Random().Next(),
+            Forward = needForward ? forward : default,
+        });
+    }
+
+    public static void SendMessage(VkApi api, long? peerId, string message, byte[] image, Message triggerMessage,
+        bool needForward = true)
+    {
+        string response = UploadPhoto(api, image);
+        ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
+
+        MessageForward forward = new()
+        {
+            IsReply = true,
+            MessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
+            PeerId = triggerMessage.PeerId,
+        };
+        api.Messages.Send(new MessagesSendParams
+        {
+            PeerId = peerId,
+            Message = message,
+            RandomId = new Random().Next(),
+            Forward = needForward ? forward : default,
             Attachments = new List<MediaAttachment?>
             {
                 messagesPhoto.FirstOrDefault()

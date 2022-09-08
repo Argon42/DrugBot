@@ -26,6 +26,6 @@ public class ProssessorMemes : AbstractProcessor
             ? new MemesGenerator(message.Text.GetHashCode())
             : new MemesGenerator();
 
-        BotHandler.SendMessage(vkApi, message.PeerId, "", generator.GetMeme().Meme);
+        BotHandler.SendMessage(vkApi, message.PeerId, "", generator.GetMeme().Meme, message);
     }
 }

@@ -31,7 +31,7 @@ public class ProcessorDiploma : AbstractProcessor
                         $"текущая оригинальность {originality}%, \n" +
                         $"шанс сдать = {chanceOfSurrender}%\n" +
                         $"Предсказание к диплому: {prediction}";
-        BotHandler.SendMessage(vkApi, message.PeerId, result);
+        BotHandler.SendMessage(vkApi, message.PeerId, result, message, false);
     }
 
     private static string GetPrediction(Random rnd)
