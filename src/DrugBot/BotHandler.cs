@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using DrugBot.Processors;
 using VkNet;
 using VkNet.Model;
@@ -83,13 +84,21 @@ public class BotHandler
         return "@drugbot42," == s;
     }
 
-    public void MessageProcessing(Message message)
+    public async Task MessageProcessing(Message message)
     {
         if (string.IsNullOrEmpty(message.Text)) return;
 
-        string[] sentence = message.Text.ToLower().Split();
-        AbstractProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
-        processor?.TryProcessMessage(_api, message, sentence);
+        await Task.Yield();
+        try
+        {
+            string[] sentence = message.Text.ToLower().Split();
+            AbstractProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
+            processor?.TryProcessMessage(_api, message, sentence);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     public static void SendMessage(VkApi api, long? peerId, string message)
