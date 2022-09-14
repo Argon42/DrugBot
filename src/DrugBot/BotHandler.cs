@@ -102,19 +102,19 @@ public class BotHandler
     }
 
     public static void SendMessage(VkApi api, long? peerId, string message, Message triggerMessage,
-        bool needForward = false)
+        bool needForward = true)
     {
         api.Messages.Send(new MessagesSendParams
         {
             PeerId = peerId,
             Message = message,
             RandomId = new Random().Next(),
-            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
+            ReplyTo = needForward ? triggerMessage.ConversationMessageId.GetValueOrDefault() : default
         });
     }
 
     public static void SendMessage(VkApi api, long? peerId, string message, byte[] image, Message triggerMessage,
-        bool needForward = false)
+        bool needForward = true)
     {
         string response = UploadPhoto(api, image);
         ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
@@ -124,23 +124,14 @@ public class BotHandler
             PeerId = peerId,
             Message = message,
             RandomId = new Random().Next(),
-            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
+            ReplyTo = needForward ? triggerMessage.ConversationMessageId.GetValueOrDefault() : default,
             Attachments = new List<MediaAttachment?>
             {
                 messagesPhoto.FirstOrDefault()
             }
         });
     }
-
-    private static MessageForward CreateMessageForward(Message triggerMessage)
-    {
-        return new MessageForward
-        {
-            IsReply = true,
-            ConversationMessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
-        };
-    }
-
+    
     private static string UploadPhoto(VkApi api, byte[] image)
     {
         MultipartFormDataContent content = new();
