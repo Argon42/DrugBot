@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorDiploma : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -19,19 +19,19 @@ public class ProcessorDiploma : AbstractProcessor
 
     public override string Name => "дИПЛОМОЗИТОР";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        Random rnd = new(BotHandler.GetDayUserSeed(message.FromId));
+        Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
         int pages = rnd.Next(-3, 130);
         double originality = rnd.Next(0, 100) + Math.Round(rnd.NextDouble(), 2);
         double chanceOfSurrender = rnd.Next(0, 100) + Math.Round(rnd.NextDouble(), 2);
         string prediction = GetPrediction(rnd);
 
-        string result = $"[id{message.FromId}|Ваш] диплом состоит из {pages} страниц(ы) , \n" +
+        string result = $"[id{message.User}|Ваш] диплом состоит из {pages} страниц(ы) , \n" +
                         $"текущая оригинальность {originality}%, \n" +
                         $"шанс сдать = {chanceOfSurrender}%\n" +
                         $"Предсказание к диплому: {prediction}";
-        BotHandler.SendMessage(vkApi, message.PeerId, result, message, false);
+        bot.SendMessage(message.CreateResponse(result));
     }
 
     private static string GetPrediction(Random rnd)

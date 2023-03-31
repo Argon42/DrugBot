@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorDice : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -28,15 +28,9 @@ public class ProcessorDice : AbstractProcessor
 
     public override string Name => "Кости";
 
-    public override bool HasTrigger(Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        return sentence.Length >= 2 &&
-               keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
-               sentence[1].Split('d').Length == 2;
-    }
-
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
-    {
+        string[] sentence = message.Text.Split();
         string[] dices = sentence[1].Split('d');
         if (!int.TryParse(dices[0], out int diceCount)) return;
         if (!int.TryParse(dices[1], out int diceValue)) return;
@@ -52,6 +46,13 @@ public class ProcessorDice : AbstractProcessor
         for (int i = 0; i < diceCount; i++)
             result += rnd.Next(0, diceValue) + 1;
 
-        BotHandler.SendMessage(vkApi, message.PeerId, $"Выпало {result} + {modificator} = {result + modificator}", message);
+        bot.SendMessage(message.CreateResponse($"Выпало {result} + {modificator} = {result + modificator}"));
+    }
+
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
+    {
+        return sentence.Length >= 2 &&
+               keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
+               sentence[1].Split('d').Length == 2;
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorWisdom : AbstractProcessor
 {
     private readonly List<string> _keys = new()
@@ -23,10 +23,10 @@ public class ProcessorWisdom : AbstractProcessor
 
     public override string Name => "Великие мудрости";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         string path = "Local/wisdom.txt";
-        Random random = sentence.Length > 1 ? new Random(message.Text.GetHashCode()) : new Random();
+        Random random = message.Text.Split().Length > 1 ? new Random(message.Text.GetHashCode()) : new Random();
         List<string> lines = BotHandler.GetRandomLineFromFile(random, path, random.Next(2, 5));
         string line = string.Join(" ", lines);
         List<string> words = line.Split(' ').OrderBy(s => random.Next()).ToList();
@@ -34,6 +34,7 @@ public class ProcessorWisdom : AbstractProcessor
         int randomWordCount = random.Next(3, words.Count);
         int clampedCount = Math.Clamp(randomWordCount, 0, words.Count);
         string answer = string.Join(' ', words.Take(clampedCount).ToArray());
-        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
+        
+        bot.SendMessage(message.CreateResponse(answer));
     }
 }

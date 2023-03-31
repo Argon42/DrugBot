@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
-using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorTry : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -20,11 +19,12 @@ public class ProcessorTry : AbstractProcessor
     public override IReadOnlyList<string> Keys => keys;
 
     public override string Name => "Пробователь";
-
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         Random rnd = new();
         int result = rnd.Next();
-        BotHandler.SendMessage(vkApi, message.PeerId, result % 2 == 0 ? "Успех" : "Провал", message);
+        string s = result % 2 == 0 ? "Успех" : "Провал";
+        
+        bot.SendMessage(message.CreateResponse(s));
     }
 }

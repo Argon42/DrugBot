@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
-using VkNet.Enums;
-using VkNet.Enums.Filters;
-using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorBibasiks : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -21,31 +18,14 @@ public class ProcessorBibasiks : AbstractProcessor
 
     public override string Name => "Бибасикометр";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        try
-        {
-            if (message.FromId != null &&
-                vkApi.Users.Get(new[] { message.FromId.Value }, ProfileFields.Sex)[0].Sex ==
-                Sex.Male)
-            {
-                BotHandler.SendMessage(vkApi, message.PeerId,
-                    new Random().NextDouble() > 0.5
-                        ? "У вас нет бибасиков у только вас биба"
-                        : "Бибасики только для девушек, у вас только биба", message);
-                return;
-            }
-        }
-        catch (Exception)
-        {
-            // ignored
-        }
-
-        Random rnd = new(BotHandler.GetDayUserSeed(message.FromId));
+        Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
 
         float length = (float)rnd.NextDouble();
         double resultLenght = 80 + Math.Tan(0.5 * Math.PI * (2 * length - 1));
 
-        BotHandler.SendMessage(vkApi, message.PeerId, $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате", message);
+        string s = $"Сегодня ваши бибасики {resultLenght:F1} см в обхвате";
+        bot.SendMessage(message.CreateResponse(s));
     }
 }

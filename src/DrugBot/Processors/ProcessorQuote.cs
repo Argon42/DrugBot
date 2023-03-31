@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorQuote : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -19,10 +19,11 @@ public class ProcessorQuote : AbstractProcessor
 
     public override string Name => "Рандомная цитата/фраза";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         string path = "Local/wisdom.txt";
         Random random = new();
-        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(random, path), message);
+        string randomLineFromFile = BotHandler.GetRandomLineFromFile(random, path);
+        bot.SendMessage(message.CreateResponse(randomLineFromFile));
     }
 }

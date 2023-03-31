@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorBiba : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -22,9 +22,9 @@ public class ProcessorBiba : AbstractProcessor
 
     public override string Name => "Бибометр";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        Random rnd = new(BotHandler.GetDayUserSeed(message.FromId));
+        Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
         bool maleBiba = rnd.NextDouble() < 0.46f;
 
         float length = (float)rnd.NextDouble();
@@ -35,7 +35,7 @@ public class ProcessorBiba : AbstractProcessor
         float diameter = (float)rnd.NextDouble();
         double resultDiameter = 30 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * diameter - 1, 1));
 
-        BotHandler.SendMessage(vkApi, message.PeerId,
-            $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм", message);
+        string s = $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм";
+        bot.SendMessage(message.CreateResponse(s));
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorPrediction : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -20,14 +20,15 @@ public class ProcessorPrediction : AbstractProcessor
 
     public override string Name => "Волшебный шар";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         string path = "Local/8.txt";
 
         int seed = new Random().Next(int.MinValue, int.MaxValue);
-        if (sentence.Length > 1)
-            seed = BotHandler.GetDayUserSeed(message.PeerId) + message.Text.GetHashCode();
+        if (message.Text.Split().Length > 1)
+            seed = BotHandler.GetDayUserSeed(message.User.GetHashCode()) + message.Text.GetHashCode();
 
-        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(new Random(seed), path), message);
+        string fromFile = BotHandler.GetRandomLineFromFile(new Random(seed), path);
+        bot.SendMessage(message.CreateResponse(fromFile));
     }
 }

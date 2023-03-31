@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace DrugBot;
 
 [Serializable]
-public class Configs
+public class VkConfigs
 {
     private const ushort SecretKey = 0x42;
     private string? _token;
@@ -21,11 +21,11 @@ public class Configs
         set => _token = value;
     }
 
-    public static Configs GetConfig(string file = "Local/Config.json")
+    public static VkConfigs GetConfig(string file = "Local/Config.json")
     {
         string path = Path.Combine(Environment.CurrentDirectory, file);
         string json = File.ReadAllText(path);
-        Configs? configs = JsonConvert.DeserializeObject<Configs>(json);
+        VkConfigs? configs = JsonConvert.DeserializeObject<VkConfigs>(json);
 
         return configs;
     }

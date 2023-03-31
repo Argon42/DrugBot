@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using VkNet;
+using VkNet.Abstractions;
 using VkNet.Exception;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorWho : AbstractProcessor
 {
     private readonly List<string> keys = new()
@@ -15,6 +17,13 @@ public class ProcessorWho : AbstractProcessor
         "/кто"
     };
 
+    private IFactory<IVkApi> _factory;
+
+    public ProcessorWho(IFactory<IVkApi> factory)
+    {
+        _factory = factory;
+    }
+
     public override string Description =>
         $"Бот знает все обо всех, для вызова используйте {string.Join(' ', keys)} вопрос";
 
@@ -22,34 +31,35 @@ public class ProcessorWho : AbstractProcessor
 
     public override string Name => "Кто?";
 
-    public override bool HasTrigger(Message message, string[] sentence)
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
         return sentence.Length > 0 &&
                keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         List<string> names;
         try
         {
-            names = vkApi.Messages.GetConversationMembers(message.PeerId.Value, new[] { "" })
+            names = _factory.Create().Messages.GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "" })
                 .Profiles
                 .Select(user => $"{user.FirstName} {user.LastName}")
                 .ToList();
         }
         catch (ConversationAccessDeniedException)
         {
-            BotHandler.SendMessage(vkApi, message.PeerId,
-                "Для вывода случайного статуса участника, боту необходимы права администратора", message);
+            bot.SendMessage(message.CreateResponse());
+            string s = "Для вывода случайного статуса участника, боту необходимы права администратора";
+            bot.SendMessage(message.CreateResponse(s));
             return;
         }
 
-        string question = message.Text.Substring(sentence[0].Length).TrimStart().TrimEnd("?!".ToCharArray());
+        string question = message.Text.Substring(message.Text.Split()[0].Length).TrimStart().TrimEnd("?!".ToCharArray());
         Random rnd = new(question.ToLower().GetHashCode());
         int result = rnd.Next(0, names.Count());
         double chanceOfNothing = rnd.NextDouble();
         string answer = $"{(chanceOfNothing > 0.9 ? "Никто не" : names[result])} {question}";
-        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
+        bot.SendMessage(message.CreateResponse(answer));
     }
 }

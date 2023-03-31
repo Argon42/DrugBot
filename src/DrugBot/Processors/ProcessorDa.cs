@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
 using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorDa : AbstractProcessor
 {
     private readonly List<string> _keys = new()
     {
-        "да"
+        "да",
     };
 
     public override string Description => "Напиши \"Да\"";
@@ -17,13 +17,13 @@ public class ProcessorDa : AbstractProcessor
 
     public override string Name => "Да";
 
-    public override bool HasTrigger(Message message, string[] sentence)
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
         return string.Equals(message.Text.TrimEnd(), "да", StringComparison.CurrentCultureIgnoreCase);
     }
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        BotHandler.SendMessage(vkApi, message.PeerId, "Пизда", message);
+        bot.SendMessage(message.CreateResponse(message: "Пизда"));
     }
 }

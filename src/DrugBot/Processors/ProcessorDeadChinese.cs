@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using VkNet;
-using VkNet.Model;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorDeadChinese : AbstractProcessor
 {
     private readonly List<string> keys = new()
     {
-        "/мудрец"
+        "/мудрец",
     };
 
     public override string Description =>
@@ -22,15 +21,14 @@ public class ProcessorDeadChinese : AbstractProcessor
 
     public override string Name => "Мертвый китаец";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        Random rnd = new(BotHandler.GetDayUserSeed(message.FromId));
-
+        Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
 
         int predictionLength = (int)Math.Abs(15 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * rnd.NextDouble() - 1, 5)));
         StringBuilder stringBuilder = new($"Мудрец видит что в будущем будет {GetPrediction(rnd, predictionLength)}");
 
-        BotHandler.SendMessage(vkApi, message.PeerId, stringBuilder.ToString(), message);
+        bot.SendMessage(message.CreateResponse(stringBuilder.ToString()));
     }
 
     private static string GetPrediction(Random rnd, int count)
