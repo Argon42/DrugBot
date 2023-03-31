@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -12,7 +13,7 @@ public class ProcessorBiba : AbstractProcessor
         "/биба",
         "/biba",
         "/bebra",
-        "/бебра"
+        "/бебра",
     };
 
     public override string Description =>
@@ -35,7 +36,8 @@ public class ProcessorBiba : AbstractProcessor
         float diameter = (float)rnd.NextDouble();
         double resultDiameter = 30 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * diameter - 1, 1));
 
-        string s = $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм";
+        string s =
+            $"Сегодня ваша биба ({(maleBiba ? "male" : "female")}) длиной {resultLenght:F2} см и диаметром {resultDiameter:F2} мм";
         bot.SendMessage(message.CreateResponse(s));
     }
 }

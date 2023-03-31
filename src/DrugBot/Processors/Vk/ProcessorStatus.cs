@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DrugBot.Bot;
+using DrugBot.Bot.Vk;
+using DrugBot.Common;
 using VkNet.Abstractions;
 using VkNet.Exception;
 
-namespace DrugBot.Processors;
+namespace DrugBot.Processors.Vk;
 
 [Processor]
 public class ProcessorStatus : AbstractProcessor
 {
     private readonly List<string> keys = new()
     {
-        "/статус"
+        "/статус",
     };
 
     private readonly IFactory<IVkApi> _vkApi;
-
-    public ProcessorStatus(IFactory<IVkApi> vkApi)
-    {
-        _vkApi = vkApi;
-    }
 
     public override string Description =>
         $"Хочешь получить случайный статус участника, для вызова используйте {string.Join(' ', keys)}";
@@ -28,12 +26,15 @@ public class ProcessorStatus : AbstractProcessor
 
     public override string Name => "Случайный статус";
 
+    public ProcessorStatus(IFactory<IVkApi> vkApi) => _vkApi = vkApi;
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         List<string> statuses;
         try
         {
-            statuses = _vkApi.Create().Messages.GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "status" })
+            statuses = _vkApi.Create().Messages
+                .GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "status" })
                 .Profiles
                 .Where(p => !string.IsNullOrEmpty(p.Status))
                 .Select(p => p.Status)

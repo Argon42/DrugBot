@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -10,7 +12,7 @@ public class ProcessorTry : AbstractProcessor
     {
         "/try",
         "/попробовать",
-        "/монетка"
+        "/монетка",
     };
 
     public override string Description =>
@@ -19,12 +21,13 @@ public class ProcessorTry : AbstractProcessor
     public override IReadOnlyList<string> Keys => keys;
 
     public override string Name => "Пробователь";
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         Random rnd = new();
         int result = rnd.Next();
         string s = result % 2 == 0 ? "Успех" : "Провал";
-        
+
         bot.SendMessage(message.CreateResponse(s));
     }
 }

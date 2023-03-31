@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -10,7 +11,7 @@ public class ProcessorPrediction : AbstractProcessor
     private readonly List<string> keys = new()
     {
         "/8",
-        "!8"
+        "!8",
     };
 
     public override string Description =>

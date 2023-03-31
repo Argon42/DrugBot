@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Anecdotes;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -13,12 +14,13 @@ public class ProcessorAnecdote : AbstractProcessor
         "/анекдот",
         "/юмор",
         "/anek",
-        "/хех"
+        "/хех",
     };
 
     public override string Description => $"Выдать случайный анекдот, для вызова используйте {string.Join(' ', _keys)}";
     public override IReadOnlyList<string> Keys => _keys;
     public override string Name => "Сборник баянов";
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         AnecdoteGenerator generator = message.Text.Split().Length > 1

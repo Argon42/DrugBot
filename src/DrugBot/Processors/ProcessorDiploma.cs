@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -9,7 +10,7 @@ public class ProcessorDiploma : AbstractProcessor
 {
     private readonly List<string> keys = new()
     {
-        "/диплом"
+        "/диплом",
     };
 
     public override string Description =>

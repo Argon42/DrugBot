@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using DrugBot.Bot;
+using DrugBot.Common;
 using Memes;
 
 namespace DrugBot.Processors;
@@ -12,7 +14,7 @@ public class ProcessorMemes : AbstractProcessor
         "/mem",
         "/memes",
         "/мемы",
-        "/кек"
+        "/кек",
     };
 
     public override string Description => $"Выдать случайный мем, для вызова используйте {string.Join(' ', _keys)}";
@@ -25,6 +27,6 @@ public class ProcessorMemes : AbstractProcessor
             ? new MemesGenerator(message.Text.GetHashCode())
             : new MemesGenerator();
 
-        bot.SendMessage(message.CreateResponse(images:new List<byte[]>(){generator.GetMeme().Meme}));
+        bot.SendMessage(message.CreateResponse(images: new List<byte[]> { generator.GetMeme().Meme }));
     }
 }

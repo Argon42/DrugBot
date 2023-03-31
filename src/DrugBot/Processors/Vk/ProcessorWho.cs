@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet;
+using DrugBot.Bot;
+using DrugBot.Bot.Vk;
+using DrugBot.Common;
 using VkNet.Abstractions;
 using VkNet.Exception;
-using VkNet.Model;
 
-namespace DrugBot.Processors;
+namespace DrugBot.Processors.Vk;
 
 [Processor]
 public class ProcessorWho : AbstractProcessor
@@ -14,15 +15,10 @@ public class ProcessorWho : AbstractProcessor
     private readonly List<string> keys = new()
     {
         "/who",
-        "/кто"
+        "/кто",
     };
 
-    private IFactory<IVkApi> _factory;
-
-    public ProcessorWho(IFactory<IVkApi> factory)
-    {
-        _factory = factory;
-    }
+    private readonly IFactory<IVkApi> _factory;
 
     public override string Description =>
         $"Бот знает все обо всех, для вызова используйте {string.Join(' ', keys)} вопрос";
@@ -30,6 +26,8 @@ public class ProcessorWho : AbstractProcessor
     public override IReadOnlyList<string> Keys => keys;
 
     public override string Name => "Кто?";
+
+    public ProcessorWho(IFactory<IVkApi> factory) => _factory = factory;
 
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
@@ -42,7 +40,8 @@ public class ProcessorWho : AbstractProcessor
         List<string> names;
         try
         {
-            names = _factory.Create().Messages.GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "" })
+            names = _factory.Create().Messages
+                .GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "" })
                 .Profiles
                 .Select(user => $"{user.FirstName} {user.LastName}")
                 .ToList();
@@ -55,7 +54,8 @@ public class ProcessorWho : AbstractProcessor
             return;
         }
 
-        string question = message.Text.Substring(message.Text.Split()[0].Length).TrimStart().TrimEnd("?!".ToCharArray());
+        string question = message.Text.Substring(message.Text.Split()[0].Length).TrimStart()
+            .TrimEnd("?!".ToCharArray());
         Random rnd = new(question.ToLower().GetHashCode());
         int result = rnd.Next(0, names.Count());
         double chanceOfNothing = rnd.NextDouble();

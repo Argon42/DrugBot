@@ -6,8 +6,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using DrugBot.Common;
 using Microsoft.Extensions.Logging;
-using VkNet;
 using VkNet.Abstractions;
 using VkNet.Exception;
 using VkNet.Model;
@@ -15,7 +15,7 @@ using VkNet.Model.Attachments;
 using VkNet.Model.GroupUpdate;
 using VkNet.Model.RequestParams;
 
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 public class VkBot : IVkBot
 {
@@ -27,12 +27,34 @@ public class VkBot : IVkBot
     private IVkApi? _api;
     private string? _currentTs;
 
-    public VkBot(ILogger<VkBot> logger, BotHandler botHandler, IFactory<IVkApi> vkApiFactory, IFactory<LongPollServerResponse> longPoolServerFactory)
+    private static HttpClient Client { get; } = new();
+
+    public VkBot(ILogger<VkBot> logger, BotHandler botHandler, IFactory<IVkApi> vkApiFactory,
+        IFactory<LongPollServerResponse> longPoolServerFactory)
     {
         _logger = logger;
         _botHandler = botHandler;
         _vkApiFactory = vkApiFactory;
         _longPoolServerFactory = longPoolServerFactory;
+    }
+
+
+    static VkBot()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
+    public void SendMessage(IVkMessage message)
+    {
+        bool needForward = false;
+        _api.Messages.Send(new MessagesSendParams
+        {
+            PeerId = message.User.PeerId,
+            Message = message.Text,
+            RandomId = new Random().Next(),
+            ReplyTo = needForward ? message.TriggerMessage.ConversationMessageId.GetValueOrDefault() : default,
+            Attachments = CreateMedia(message),
+        });
     }
 
     public async Task Start(CancellationToken token)
@@ -59,6 +81,38 @@ public class VkBot : IVkBot
         }
     }
 
+    private IEnumerable<MediaAttachment> CreateMedia(IVkMessage vkMessage)
+    {
+        foreach (byte[] messageImage in vkMessage.Images)
+        {
+            string response = UploadPhoto(_api!, messageImage);
+            ReadOnlyCollection<Photo>? messagesPhoto = _api!.Photo.SaveMessagesPhoto(response);
+            if (messagesPhoto.FirstOrDefault() != null)
+                yield return messagesPhoto.First();
+        }
+    }
+
+    private LongPollServerResponse TryUpdateLongPollServer(
+        LongPollException exception,
+        LongPollServerResponse s)
+    {
+        try
+        {
+            if (exception is LongPollOutdateException outdateException)
+                s.Ts = outdateException.Ts;
+            else
+                s = _longPoolServerFactory.Create();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "can't find LongPoolServer");
+
+            s = _longPoolServerFactory.Create();
+        }
+
+        return s;
+    }
+
     private bool Update(LongPollServerResponse longPollServer, BotHandler botHandler)
     {
         BotsLongPollHistoryResponse? poll = _api!.Groups.GetBotsLongPollHistory(new BotsLongPollHistoryParams
@@ -80,7 +134,7 @@ public class VkBot : IVkBot
             if (message.Date > _lastData || _lastData == null)
             {
                 _lastData = message.Date;
-                
+
                 botHandler.MessageProcessing(new VkMessage(message), this);
             }
         }
@@ -88,58 +142,6 @@ public class VkBot : IVkBot
         return false;
     }
 
-    private LongPollServerResponse TryUpdateLongPollServer(
-        LongPollException exception, 
-        LongPollServerResponse s)
-    {
-        try
-        {
-            if (exception is LongPollOutdateException outdateException)
-                s.Ts = outdateException.Ts;
-            else
-                s = _longPoolServerFactory.Create();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "can't find LongPoolServer");
-
-            s = _longPoolServerFactory.Create();
-        }
-
-        return s;
-    }
-
-    public void SendMessage(IVkMessage message)
-    {
-        bool needForward = false;
-        _api.Messages.Send(new MessagesSendParams()
-        {
-            PeerId = message.User.PeerId,
-            Message = message.Text,
-            RandomId = new Random().Next(),
-            ReplyTo = needForward ? message.TriggerMessage.ConversationMessageId.GetValueOrDefault() : default,
-            Attachments = CreateMedia(message),
-        });
-    }
-
-
-    static VkBot()
-    {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-    }
-
-    private IEnumerable<MediaAttachment> CreateMedia(IVkMessage vkMessage)
-    {
-        foreach (byte[] messageImage in vkMessage.Images)
-        {
-            string response = UploadPhoto(_api!, messageImage);
-            ReadOnlyCollection<Photo>? messagesPhoto = _api!.Photo.SaveMessagesPhoto(response);
-            if (messagesPhoto.FirstOrDefault() != null)
-                yield return messagesPhoto.First();
-        }
-    }
-
-    private static HttpClient Client { get; } = new();
     private static string UploadPhoto(IVkApi api, byte[] image)
     {
         MultipartFormDataContent content = new();

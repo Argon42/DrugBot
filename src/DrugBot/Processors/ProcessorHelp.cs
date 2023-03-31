@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DrugBot.Bot;
+using DrugBot.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DrugBot.Processors;
@@ -15,7 +17,7 @@ public class ProcessorHelp : AbstractProcessor
         "/help",
         "!help",
         "/помощь",
-        "!помощь"
+        "!помощь",
     };
 
     private readonly IServiceProvider _serviceProvider;
@@ -26,15 +28,12 @@ public class ProcessorHelp : AbstractProcessor
 
     public override bool VisiblyDescription => false;
 
-    public ProcessorHelp(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    public ProcessorHelp(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         _processors ??= _serviceProvider.GetServices<AbstractProcessor>().ToList();
-        
+
         string answer = string.Join('\n',
             _processors.Where(processor => processor.VisiblyDescription)
                 .Select(processor => $"{processor.Name}\n{processor.Description}\n")

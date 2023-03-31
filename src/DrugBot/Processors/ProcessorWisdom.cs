@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -13,7 +14,7 @@ public class ProcessorWisdom : AbstractProcessor
         "/мудрость",
         "/цитата",
         "/бред",
-        "!бред"
+        "!бред",
     };
 
     public override string Description =>
@@ -34,7 +35,7 @@ public class ProcessorWisdom : AbstractProcessor
         int randomWordCount = random.Next(3, words.Count);
         int clampedCount = Math.Clamp(randomWordCount, 0, words.Count);
         string answer = string.Join(' ', words.Take(clampedCount).ToArray());
-        
+
         bot.SendMessage(message.CreateResponse(answer));
     }
 }

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 [Serializable]
 public class VkConfigs
@@ -35,8 +35,5 @@ public class VkConfigs
         return str?.ToArray().Aggregate("", (current, c) => current + TopSecret(c, secretKey)) ?? "";
     }
 
-    private static char TopSecret(char character, ushort secretKey)
-    {
-        return (char)(character ^ secretKey);
-    }
+    private static char TopSecret(char character, ushort secretKey) => (char)(character ^ secretKey);
 }

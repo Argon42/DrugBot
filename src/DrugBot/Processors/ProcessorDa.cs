@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -17,13 +18,11 @@ public class ProcessorDa : AbstractProcessor
 
     public override string Name => "Да";
 
-    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
-    {
-        return string.Equals(message.Text.TrimEnd(), "да", StringComparison.CurrentCultureIgnoreCase);
-    }
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence) =>
+        string.Equals(message.Text.TrimEnd(), "да", StringComparison.CurrentCultureIgnoreCase);
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        bot.SendMessage(message.CreateResponse(message: "Пизда"));
+        bot.SendMessage(message.CreateResponse("Пизда"));
     }
 }

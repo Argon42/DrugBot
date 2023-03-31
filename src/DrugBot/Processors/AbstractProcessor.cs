@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet;
-using VkNet.Abstractions;
-using VkNet.Model;
+using DrugBot.Bot;
 
 namespace DrugBot.Processors;
 
@@ -25,7 +23,7 @@ public abstract class AbstractProcessor
     }
 
     public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
-        where TUser : IUser 
+        where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
         try
@@ -42,15 +40,15 @@ public abstract class AbstractProcessor
         return true;
     }
 
-    protected virtual void OnProcessMessageError<TUser, TMessage>(IBot<TUser,TMessage> bot, TMessage message, Exception exception) 
-        where TUser : IUser 
+    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+        where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
-        
     }
 
-    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser,TMessage> bot, TMessage message)
-        where TUser : IUser 
+    protected virtual void OnProcessMessageError<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        Exception exception)
+        where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
     }

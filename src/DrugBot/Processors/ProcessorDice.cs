@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -14,7 +15,7 @@ public class ProcessorDice : AbstractProcessor
         "/d",
         "/кости",
         "/кость",
-        "/к"
+        "/к",
     };
 
     public override string Description =>
@@ -27,6 +28,13 @@ public class ProcessorDice : AbstractProcessor
     public override IReadOnlyList<string> Keys => keys;
 
     public override string Name => "Кости";
+
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
+    {
+        return sentence.Length >= 2 &&
+               keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
+               sentence[1].Split('d').Length == 2;
+    }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
@@ -47,12 +55,5 @@ public class ProcessorDice : AbstractProcessor
             result += rnd.Next(0, diceValue) + 1;
 
         bot.SendMessage(message.CreateResponse($"Выпало {result} + {modificator} = {result + modificator}"));
-    }
-
-    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
-    {
-        return sentence.Length >= 2 &&
-               keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
-               sentence[1].Split('d').Length == 2;
     }
 }

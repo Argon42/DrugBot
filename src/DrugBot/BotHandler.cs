@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DrugBot.Bot;
 using DrugBot.Processors;
 
 namespace DrugBot;
@@ -11,10 +12,7 @@ public class BotHandler
 {
     private readonly List<AbstractProcessor> _processors;
 
-    public BotHandler(IEnumerable<AbstractProcessor> processors)
-    {
-        _processors = processors.ToList();
-    }
+    public BotHandler(IEnumerable<AbstractProcessor> processors) => _processors = processors.ToList();
 
     public static int GetDayUserSeed(long? fromId)
     {
@@ -44,13 +42,10 @@ public class BotHandler
         return predictions.OrderBy(s => rnd.NextDouble()).Take(count).ToList();
     }
 
-    public static bool IsBotTrigger(string s)
-    {
-        return "@drugbot42," == s;
-    }
+    public static bool IsBotTrigger(string s) => "@drugbot42," == s;
 
-    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot) 
-        where TUser : IUser 
+    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot)
+        where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
         if (string.IsNullOrEmpty(message.Text)) return;

@@ -1,4 +1,4 @@
-namespace DrugBot;
+namespace DrugBot.Common;
 
 public interface IFactory<out T>
 {

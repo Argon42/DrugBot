@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using VkNet.Model;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -10,7 +11,7 @@ public class ProcessorTotem : AbstractProcessor
 {
     private readonly List<string> keys = new()
     {
-        "/тотем"
+        "/тотем",
     };
 
     public override string Description =>
@@ -19,11 +20,12 @@ public class ProcessorTotem : AbstractProcessor
     public override IReadOnlyList<string> Keys => keys;
 
     public override string Name => "Тотем дня";
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
         StringBuilder stringBuilder = new($"Сегодня вас ждет {GetPrediction(rnd, rnd.Next(3, 6))}");
-        
+
         bot.SendMessage(message.CreateResponse(stringBuilder.ToString()));
     }
 

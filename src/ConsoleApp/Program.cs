@@ -1,5 +1,7 @@
 ﻿using ConsoleApp.Services;
 using DrugBot;
+using DrugBot.Bot.Vk;
+using DrugBot.Common;
 using DrugBot.Processors;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

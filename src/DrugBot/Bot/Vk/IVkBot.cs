@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 public interface IVkBot : IBot<IVkUser, IVkMessage>
 {

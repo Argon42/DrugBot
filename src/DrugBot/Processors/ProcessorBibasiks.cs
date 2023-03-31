@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DrugBot.Bot;
+using DrugBot.Common;
 
 namespace DrugBot.Processors;
 
@@ -8,7 +10,7 @@ public class ProcessorBibasiks : AbstractProcessor
 {
     private readonly List<string> keys = new()
     {
-        "/бибасики"
+        "/бибасики",
     };
 
     public override string Description =>

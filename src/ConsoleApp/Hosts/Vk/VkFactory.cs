@@ -1,3 +1,5 @@
+using DrugBot.Bot.Vk;
+using DrugBot.Common;
 using Microsoft.Extensions.Configuration;
 using VkNet;
 using VkNet.Abstractions;

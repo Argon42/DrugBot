@@ -1,4 +1,4 @@
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 internal class VkUser : IVkUser
 {
@@ -11,6 +11,7 @@ internal class VkUser : IVkUser
         PeerId = peerId;
     }
 
-    public override string ToString() => UserId?.ToString() ?? "";
     public override int GetHashCode() => UserId.GetHashCode();
+
+    public override string ToString() => UserId?.ToString() ?? "";
 }

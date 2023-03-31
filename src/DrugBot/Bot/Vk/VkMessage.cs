@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using VkNet.Model;
 
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 internal class VkMessage : IVkMessage
 {
@@ -30,9 +30,8 @@ internal class VkMessage : IVkMessage
         ConversationMessageId = message.ConversationMessageId;
     }
 
-    public IVkMessage CreateResponse(string message = "", IReadOnlyList<byte[]>? images = null)
-    {
-        return new VkMessage()
+    public IVkMessage CreateResponse(string message = "", IReadOnlyList<byte[]>? images = null) =>
+        new VkMessage
         {
             User = User,
             Text = message,
@@ -40,5 +39,4 @@ internal class VkMessage : IVkMessage
             ConversationMessageId = ConversationMessageId,
             TriggerMessage = this,
         };
-    }
 }

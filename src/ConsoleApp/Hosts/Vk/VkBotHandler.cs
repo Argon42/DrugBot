@@ -1,4 +1,5 @@
 using DrugBot;
+using DrugBot.Bot.Vk;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using VkNet;
