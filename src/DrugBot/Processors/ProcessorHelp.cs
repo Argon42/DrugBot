@@ -10,7 +10,7 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorHelp : AbstractProcessor
 {
-    private IReadOnlyList<AbstractProcessor>? _processors;
+    private IReadOnlyList<IProcessor>? _processors;
 
     private readonly List<string> keys = new()
     {
@@ -32,7 +32,7 @@ public class ProcessorHelp : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
-        _processors ??= _serviceProvider.GetServices<AbstractProcessor>().ToList();
+        _processors ??= _serviceProvider.GetServices<IProcessor>().ToList();
 
         string answer = string.Join('\n',
             _processors.Where(processor => processor.VisiblyDescription)

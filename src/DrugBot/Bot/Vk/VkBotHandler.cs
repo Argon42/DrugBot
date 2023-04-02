@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using DrugBot;
 using DrugBot.Bot.Vk;
 using Microsoft.Extensions.Configuration;

@@ -5,14 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using DrugBot.Bot;
 using DrugBot.Processors;
+using Microsoft.Extensions.Logging;
 
 namespace DrugBot;
 
 public class BotHandler
 {
-    private readonly List<AbstractProcessor> _processors;
+    private readonly List<IProcessor> _processors;
+    private Logger<BotHandler> _logger;
 
-    public BotHandler(IEnumerable<AbstractProcessor> processors) => _processors = processors.ToList();
+    public BotHandler(IEnumerable<IProcessor> processors, Logger<BotHandler> logger)
+    {
+        _logger = logger;
+        _processors = processors.ToList();
+    }
 
     public static int GetDayUserSeed(long? fromId)
     {
@@ -54,12 +60,12 @@ public class BotHandler
         try
         {
             string[] sentence = message.Text.ToLower().Split();
-            AbstractProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
+            IProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
             processor?.TryProcessMessage(bot, message);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Error on message processing");
         }
     }
 }

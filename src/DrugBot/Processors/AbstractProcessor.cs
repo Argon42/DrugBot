@@ -5,7 +5,7 @@ using DrugBot.Bot;
 
 namespace DrugBot.Processors;
 
-public abstract class AbstractProcessor
+public abstract class AbstractProcessor : IProcessor
 {
     public abstract string Description { get; }
     public abstract IReadOnlyList<string> Keys { get; }

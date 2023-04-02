@@ -28,6 +28,11 @@ public class ProcessorStatus : AbstractProcessor
 
     public ProcessorStatus(IFactory<IVkApi> vkApi) => _vkApi = vkApi;
 
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
+    {
+        return message is IVkMessage && base.HasTrigger(message, sentence);
+    }
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
         List<string> statuses;

@@ -1,3 +1,4 @@
+using System;
 using DrugBot.Bot.Vk;
 using DrugBot.Common;
 using Microsoft.Extensions.Configuration;

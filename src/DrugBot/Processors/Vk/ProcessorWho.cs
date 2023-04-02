@@ -31,8 +31,8 @@ public class ProcessorWho : AbstractProcessor
 
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
-        return sentence.Length > 0 &&
-               keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
+        return  message is IVkMessage && sentence.Length > 0 &&
+                keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
@@ -41,14 +41,13 @@ public class ProcessorWho : AbstractProcessor
         try
         {
             names = _factory.Create().Messages
-                .GetConversationMembers(((IVkMessage)message).User.PeerId.Value, new[] { "" })
+                .GetConversationMembers(((IVkMessage)message).User.PeerId ?? -1, new[] { "" })
                 .Profiles
                 .Select(user => $"{user.FirstName} {user.LastName}")
                 .ToList();
         }
         catch (ConversationAccessDeniedException)
         {
-            bot.SendMessage(message.CreateResponse());
             string s = "Для вывода случайного статуса участника, боту необходимы права администратора";
             bot.SendMessage(message.CreateResponse(s));
             return;
