@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using DrugBot.Common;
+using DrugBot.Core.Common;
 using Microsoft.Extensions.Logging;
 using VkNet.Abstractions;
 using VkNet.Exception;

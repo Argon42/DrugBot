@@ -15,15 +15,9 @@ public class MemesGenerator
     private const string MemePatternText = "//img2.joyreactor.cc/pics/post/(?!full).{0,300}-[0-9]{7}.jpeg";
     private readonly Random _random;
 
-    public MemesGenerator()
-    {
-        _random = new Random();
-    }
+    public MemesGenerator() => _random = new Random();
 
-    public MemesGenerator(int seed)
-    {
-        _random = new Random(seed);
-    }
+    public MemesGenerator(int seed) => _random = new Random(seed);
 
     public MemesData GetMeme()
     {
@@ -90,8 +84,5 @@ public class MemesGenerator
         return matchesImg.Count == 0 ? null : matchesImg.Select(match => $"https:{match.Groups[0].Value}").ToArray();
     }
 
-    private int RandomImg(string[] memesArray)
-    {
-        return _random.Next(memesArray.Length);
-    }
+    private int RandomImg(string[] memesArray) => _random.Next(memesArray.Length);
 }

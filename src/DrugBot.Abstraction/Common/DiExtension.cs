@@ -1,7 +1,6 @@
-﻿using DrugBot.Common;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace DrugBot;
+namespace DrugBot.Core.Common;
 
 public static class DiExtension
 {

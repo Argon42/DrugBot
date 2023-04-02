@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DrugBot.Bot;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
 
 namespace DrugBot.Processors;
 

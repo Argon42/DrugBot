@@ -1,4 +1,4 @@
-namespace ConsoleApp.Services;
+namespace DrugBotApp;
 
 public interface IApplication
 {

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using DrugBot.Bot;
-using DrugBot.Common;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DrugBot.Processors;

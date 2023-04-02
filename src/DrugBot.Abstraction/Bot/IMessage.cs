@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace DrugBot.Bot;
+namespace DrugBot.Core.Bot;
 
 public interface IMessage<TMessage, TUser> : IMessage where TUser : IUser
 {

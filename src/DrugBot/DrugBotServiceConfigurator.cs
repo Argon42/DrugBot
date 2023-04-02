@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using ConsoleApp.Services;
 using DrugBot.Bot.Vk;
-using DrugBot.Common;
+using DrugBot.Core;
+using DrugBot.Core.Common;
 using DrugBot.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using VkNet.Abstractions;
@@ -19,16 +19,6 @@ public static class DrugBotServiceConfigurator
         services.AddSingleton<BotHandler, BotHandler>();
     }
 
-    private static void ConfigureVk(IServiceCollection services)
-    {
-        services.AddSingleton<IVkBotHandler, VkBotHandler>();
-        services.AddSingleton<IVkBot, VkBot>();
-        services.AddSingleton<IFactory<IVkApi>, VkFactory.Api>();
-        services.AddSingleton<IFactory<LongPollServerResponse>, VkFactory.LongPollServer>();
-        services.AddSingleton<IFactory<VkConfigs>, VkFactory.Config>();
-        services.AddFromFactory<VkConfigs, IFactory<VkConfigs>>();
-    }
-    
     private static void AddProcessors(IServiceCollection services)
     {
         var typesWithMyAttribute = AppDomain.CurrentDomain.GetAssemblies()
@@ -38,10 +28,20 @@ public static class DrugBotServiceConfigurator
             .Select(pair => new { Type = pair.pair.type, Attributes = pair.attributes.Cast<ProcessorAttribute>() });
         foreach (var x1 in typesWithMyAttribute)
         {
-            var interfaceOfProcessor = x1.Type.GetInterface(nameof(IProcessor));
+            Type? interfaceOfProcessor = x1.Type.GetInterface(nameof(IProcessor));
             if (interfaceOfProcessor != default)
                 services.AddScoped(typeof(IProcessor), x1.Type);
             services.AddScoped(x1.Type);
         }
+    }
+
+    private static void ConfigureVk(IServiceCollection services)
+    {
+        services.AddSingleton<IVkBotHandler, VkBotHandler>();
+        services.AddSingleton<IVkBot, VkBot>();
+        services.AddSingleton<IFactory<IVkApi>, VkFactory.Api>();
+        services.AddSingleton<IFactory<LongPollServerResponse>, VkFactory.LongPollServer>();
+        services.AddSingleton<IFactory<VkConfigs>, VkFactory.Config>();
+        services.AddFromFactory<VkConfigs, IFactory<VkConfigs>>();
     }
 }

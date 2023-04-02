@@ -1,7 +1,7 @@
+using DrugBot.Bot.Vk;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace ConsoleApp.Services;
+namespace DrugBotApp;
 
 public class Application : IApplication
 {
@@ -22,7 +22,7 @@ public class Application : IApplication
         _logger.LogInformation("Application started");
         while (true)
         {
-            var input = Console.ReadLine();
+            string? input = Console.ReadLine();
             if (input == "quit")
             {
                 _vkBotHandler.Dispose();
@@ -47,6 +47,7 @@ public class Application : IApplication
             _logger.LogError(e, "Failed attempt to initialize vk");
             return false;
         }
+
         Task task = _vkBotHandler.Start();
         return true;
     }

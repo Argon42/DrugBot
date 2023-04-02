@@ -1,13 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
-using DrugBot;
-using DrugBot.Bot.Vk;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using VkNet;
-using VkNet.Model;
 
-namespace ConsoleApp.Services;
+namespace DrugBot.Bot.Vk;
 
 public class VkBotHandler : IVkBotHandler
 {
@@ -30,25 +26,23 @@ public class VkBotHandler : IVkBotHandler
         Stop();
     }
 
-    public void Stop()
-    {
-        _tokenSource?.Cancel();
-        Enabled = false;
-    }
-
     public void Initialize()
     {
-
     }
 
     public async Task Start()
     {
-        if(Enabled) 
+        if (Enabled)
             _tokenSource!.Cancel();
 
         _tokenSource = new CancellationTokenSource();
         Enabled = true;
         _vkBot.Start(_tokenSource.Token);
     }
-}
 
+    public void Stop()
+    {
+        _tokenSource?.Cancel();
+        Enabled = false;
+    }
+}

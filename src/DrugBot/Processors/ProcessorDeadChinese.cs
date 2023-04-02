@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using DrugBot.Bot;
-using DrugBot.Common;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 
 namespace DrugBot.Processors;
 

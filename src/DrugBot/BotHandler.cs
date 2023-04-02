@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DrugBot.Bot;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
 using DrugBot.Processors;
 using Microsoft.Extensions.Logging;
 
@@ -12,7 +14,7 @@ namespace DrugBot;
 public class BotHandler
 {
     private readonly List<IProcessor> _processors;
-    private Logger<BotHandler> _logger;
+    private readonly Logger<BotHandler> _logger;
 
     public BotHandler(IEnumerable<IProcessor> processors, Logger<BotHandler> logger)
     {

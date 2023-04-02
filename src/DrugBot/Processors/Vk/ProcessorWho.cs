@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DrugBot.Bot;
 using DrugBot.Bot.Vk;
-using DrugBot.Common;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 using VkNet.Abstractions;
 using VkNet.Exception;
 
@@ -31,8 +32,8 @@ public class ProcessorWho : AbstractProcessor
 
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
-        return  message is IVkMessage && sentence.Length > 0 &&
-                keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
+        return message is IVkMessage && sentence.Length > 0 &&
+               keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)

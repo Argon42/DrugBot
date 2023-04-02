@@ -1,4 +1,4 @@
-namespace DrugBot.Bot;
+namespace DrugBot.Core.Bot;
 
 public interface IUser
 {

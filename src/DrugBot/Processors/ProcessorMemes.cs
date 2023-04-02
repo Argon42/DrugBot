@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DrugBot.Bot;
-using DrugBot.Common;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 using Memes;
 
 namespace DrugBot.Processors;

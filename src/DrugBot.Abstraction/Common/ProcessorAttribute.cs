@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace DrugBot.Common;
+namespace DrugBot.Core.Common;
 
 [AttributeUsage(AttributeTargets.Class)]
 [MeansImplicitUse]

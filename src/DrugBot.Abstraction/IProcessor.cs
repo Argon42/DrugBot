@@ -1,6 +1,6 @@
-﻿using DrugBot.Bot;
+﻿using DrugBot.Core.Bot;
 
-namespace DrugBot.Processors;
+namespace DrugBot.Core;
 
 public interface IProcessor
 {

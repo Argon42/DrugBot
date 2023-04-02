@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using DrugBot.Bot;
-using DrugBot.Common;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 
 namespace DrugBot.Processors;
 

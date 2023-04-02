@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DrugBot.Bot;
 using DrugBot.Bot.Vk;
-using DrugBot.Common;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 using VkNet.Abstractions;
 using VkNet.Exception;
 
@@ -28,10 +29,8 @@ public class ProcessorStatus : AbstractProcessor
 
     public ProcessorStatus(IFactory<IVkApi> vkApi) => _vkApi = vkApi;
 
-    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
-    {
-        return message is IVkMessage && base.HasTrigger(message, sentence);
-    }
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence) =>
+        message is IVkMessage && base.HasTrigger(message, sentence);
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
     {
