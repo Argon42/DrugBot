@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Memes", "src\Memes\Memes.cs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugBot.Abstraction", "src\DrugBot.Abstraction\DrugBot.Abstraction.csproj", "{4B999F6F-A0E4-4A67-9CBE-FEB234416E43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomProcessors", "src\CustomProcessors\CustomProcessors.csproj", "{94616372-662D-4C2D-B210-F76AC30370C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{4B999F6F-A0E4-4A67-9CBE-FEB234416E43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B999F6F-A0E4-4A67-9CBE-FEB234416E43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B999F6F-A0E4-4A67-9CBE-FEB234416E43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94616372-662D-4C2D-B210-F76AC30370C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94616372-662D-4C2D-B210-F76AC30370C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94616372-662D-4C2D-B210-F76AC30370C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94616372-662D-4C2D-B210-F76AC30370C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{2702EFBD-F269-440B-867E-E30A61D11DD8} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{35EEF4EF-C721-464D-AF37-AE96A049165D} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{4B999F6F-A0E4-4A67-9CBE-FEB234416E43} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
+		{94616372-662D-4C2D-B210-F76AC30370C7} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C51964D-8896-451C-A8C7-3A7B66C187FF}
