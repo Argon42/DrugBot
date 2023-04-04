@@ -16,8 +16,8 @@ public class Application : IApplication
 
     public void Run()
     {
-        TryStartVk();
-        StartTelegram();
+        var vk = Task.Run(TryStartVk);
+        var telegram = Task.Run(StartTelegram);
 
         _logger.LogInformation("Application started");
         while (true)
@@ -36,7 +36,7 @@ public class Application : IApplication
         _logger.LogInformation("TelegramPlaceholder");
     }
 
-    private async Task<bool> TryStartVk()
+    private Task TryStartVk()
     {
         try
         {
@@ -45,10 +45,10 @@ public class Application : IApplication
         catch (Exception e)
         {
             _logger.LogError(e, "Failed attempt to initialize vk");
-            return false;
+            return Task.CompletedTask;
         }
 
         Task task = _vkBotHandler.Start();
-        return true;
+        return task;
     }
 }

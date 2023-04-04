@@ -3,7 +3,6 @@ using System.Linq;
 using DrugBot.Bot.Vk;
 using DrugBot.Core;
 using DrugBot.Core.Common;
-using DrugBot.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using VkNet.Abstractions;
 using VkNet.Model;
@@ -31,7 +30,6 @@ public static class DrugBotServiceConfigurator
             Type? interfaceOfProcessor = x1.Type.GetInterface(nameof(IProcessor));
             if (interfaceOfProcessor != default)
                 services.AddScoped(typeof(IProcessor), x1.Type);
-            services.AddScoped(x1.Type);
         }
     }
 
@@ -41,7 +39,8 @@ public static class DrugBotServiceConfigurator
         services.AddSingleton<IVkBot, VkBot>();
         services.AddSingleton<IFactory<IVkApi>, VkFactory.Api>();
         services.AddSingleton<IFactory<LongPollServerResponse>, VkFactory.LongPollServer>();
+        // TODO: change to Binder with services.Add(vkConfig) from configuration.Get<VkConfig>() 
         services.AddSingleton<IFactory<VkConfigs>, VkFactory.Config>();
-        services.AddFromFactory<VkConfigs, IFactory<VkConfigs>>();
+        services.AddScopeFromFactory<VkConfigs, IFactory<VkConfigs>>();
     }
 }
