@@ -14,9 +14,9 @@ namespace DrugBot;
 public class BotHandler
 {
     private readonly List<IProcessor> _processors;
-    private readonly Logger<BotHandler> _logger;
+    private readonly ILogger<BotHandler> _logger;
 
-    public BotHandler(IEnumerable<IProcessor> processors, Logger<BotHandler> logger)
+    public BotHandler(IEnumerable<IProcessor> processors, ILogger<BotHandler> logger)
     {
         _logger = logger;
         _processors = processors.ToList();

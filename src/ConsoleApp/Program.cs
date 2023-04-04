@@ -3,6 +3,7 @@ using DrugBotApp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 void ConfigureServices(IServiceCollection services)
 {
@@ -14,6 +15,7 @@ void ConfigureServices(IServiceCollection services)
             true)
         .AddEnvironmentVariables()
         .Build());
+    services.AddLogging(builder => builder.AddConsole());
     DrugBotServiceConfigurator.ConfigureServices(services);
 }
 
