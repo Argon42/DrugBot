@@ -21,15 +21,6 @@ public class VkConfigs
         set => _token = value;
     }
 
-    public static VkConfigs GetConfig(string file = "Local/Config.json")
-    {
-        string path = Path.Combine(Environment.CurrentDirectory, file);
-        string json = File.ReadAllText(path);
-        VkConfigs? configs = JsonConvert.DeserializeObject<VkConfigs>(json);
-
-        return configs;
-    }
-
     private static string EncodeDecrypt(string? str, ushort secretKey)
     {
         return str?.ToArray().Aggregate("", (current, c) => current + TopSecret(c, secretKey)) ?? "";
