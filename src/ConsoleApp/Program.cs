@@ -20,6 +20,7 @@ void ConfigureServices(IServiceCollection services)
     services.AddLogging(builder => builder.AddConsole());
     DrugBotServiceConfigurator.ConfigureServices(services);
     CustomProcessorsServiceConfigurator.ConfigureServices(services, configuration);
+    services.AddSingleton<IApplicationInput, ApplicationInput>();
 }
 
 IHost host = Host.CreateDefaultBuilder()

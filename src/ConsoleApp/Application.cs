@@ -1,4 +1,6 @@
-using DrugBot.Bot.Vk;
+using System.Collections;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 using Microsoft.Extensions.Logging;
 
 namespace DrugBotApp;
@@ -6,49 +8,68 @@ namespace DrugBotApp;
 public class Application : IApplication
 {
     private readonly ILogger<Application> _logger;
-    private readonly IVkBotHandler _vkBotHandler;
+    private readonly IEnumerable<IBotHandler> _bots;
+    private readonly IApplicationInput _input;
 
-    public Application(ILogger<Application> logger, IVkBotHandler vkBotHandler)
+    public Application(ILogger<Application> logger, IEnumerable<IBotHandler> bots, IApplicationInput input)
     {
         _logger = logger;
-        _vkBotHandler = vkBotHandler;
+        _bots = bots;
+        _input = input;
     }
 
     public void Run()
     {
-        var vk = Task.Run(TryStartVk);
-        var telegram = Task.Run(StartTelegram);
+        Initialize();
+        Start();
+        HealthCheck();
+    }
 
-        _logger.LogInformation("Application started");
+    private void HealthCheck()
+    {
+        // TODO: добавить отображение текущего состояния ботов
         while (true)
         {
-            string? input = Console.ReadLine();
-            if (input == "quit")
-            {
-                _vkBotHandler.Dispose();
-                return;
-            }
+            Task.Delay(100);
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 
-    private void StartTelegram()
+    private void Initialize()
     {
-        _logger.LogInformation("TelegramPlaceholder");
+        _logger.LogInformation("Bots initializing");
+        _bots.ForEach(InitializeHandler);
+        _logger.LogInformation("Bots initialized");
     }
 
-    private Task TryStartVk()
+    private void Start()
+    {
+        _bots.ForEach(StartHandlers);
+        _input.Start(_bots);
+        _logger.LogInformation("Application started");
+    }
+
+    private void InitializeHandler(IBotHandler handler)
     {
         try
         {
-            _vkBotHandler.Initialize();
+            handler.Initialize();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed attempt to initialize vk");
-            return Task.CompletedTask;
+            _logger.LogError(e, "Initialize handlers");
         }
+    }
 
-        Task task = _vkBotHandler.Start();
-        return task;
+    private void StartHandlers(IBotHandler handler)
+    {
+        try
+        {
+            handler.Start();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Initialize handlers");
+        }
     }
 }
