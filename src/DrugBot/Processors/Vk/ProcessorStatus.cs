@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Bot.Vk;
 using DrugBot.Core.Bot;
@@ -32,7 +33,8 @@ public class ProcessorStatus : AbstractProcessor
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence) =>
         message is IVkMessage && base.HasTrigger(message, sentence);
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         List<string> statuses;
         try

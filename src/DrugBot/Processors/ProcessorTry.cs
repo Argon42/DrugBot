@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -23,7 +24,8 @@ public class ProcessorTry : AbstractProcessor
 
     public override string Name => "Пробователь";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         Random rnd = new();
         int result = rnd.Next();

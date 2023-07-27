@@ -66,7 +66,7 @@ public class VkBot : IVkBot
         {
             try
             {
-                if (Update(longPollServer, _botHandler)) continue;
+                if (Update(longPollServer, _botHandler, token)) continue;
             }
             catch (LongPollException exception)
             {
@@ -113,7 +113,7 @@ public class VkBot : IVkBot
         return s;
     }
 
-    private bool Update(LongPollServerResponse longPollServer, BotHandler botHandler)
+    private bool Update(LongPollServerResponse longPollServer, BotHandler botHandler, CancellationToken token)
     {
         BotsLongPollHistoryResponse? poll = _api!.Groups.GetBotsLongPollHistory(new BotsLongPollHistoryParams
         {
@@ -135,7 +135,7 @@ public class VkBot : IVkBot
             {
                 _lastData = message.Date;
 
-                botHandler.MessageProcessing(new VkMessage(message), this);
+                botHandler.MessageProcessing(new VkMessage(message), this, token);
             }
         }
 

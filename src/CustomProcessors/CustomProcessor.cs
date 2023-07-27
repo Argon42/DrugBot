@@ -26,12 +26,12 @@ public class CustomProcessor : IProcessor
         return Trigger.HasTrigger(message, sentence);
     }
 
-    public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
         where TUser : IUser where TMessage : IMessage<TMessage, TUser>
     {
         try
         {
-            Response.ProcessMessage(bot, message);
+            Response.ProcessMessage(bot, message, token);
         }
         catch (Exception e)
         {

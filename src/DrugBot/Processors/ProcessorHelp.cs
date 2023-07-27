@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core;
 using DrugBot.Core.Bot;
@@ -32,7 +33,8 @@ public class ProcessorHelp : AbstractProcessor
 
     public ProcessorHelp(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         _processors ??= _serviceProvider.GetServices<IProcessor>().ToList();
 

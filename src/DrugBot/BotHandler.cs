@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using DrugBot.Bot;
 using DrugBot.Core;
 using DrugBot.Core.Bot;
-using DrugBot.Processors;
 using Microsoft.Extensions.Logging;
 
 namespace DrugBot;
@@ -52,7 +51,7 @@ public class BotHandler
 
     public static bool IsBotTrigger(string s) => "@drugbot42," == s;
 
-    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot)
+    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot, CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
@@ -63,7 +62,7 @@ public class BotHandler
         {
             string[] sentence = message.Text.ToLower().Split();
             IProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
-            processor?.TryProcessMessage(bot, message);
+            processor?.TryProcessMessage(bot, message, token);
         }
         catch (Exception e)
         {

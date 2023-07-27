@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -21,7 +22,8 @@ public class ProcessorDiploma : AbstractProcessor
 
     public override string Name => "дИПЛОМОЗИТОР";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
         int pages = rnd.Next(-3, 130);

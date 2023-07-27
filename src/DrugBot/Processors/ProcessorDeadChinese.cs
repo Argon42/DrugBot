@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -24,7 +25,8 @@ public class ProcessorDeadChinese : AbstractProcessor
 
     public override string Name => "Мертвый китаец";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
 

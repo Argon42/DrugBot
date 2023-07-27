@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Bot.Vk;
 using DrugBot.Core.Bot;
@@ -36,7 +37,8 @@ public class ProcessorWho : AbstractProcessor
                keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
     }
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         List<string> names;
         try

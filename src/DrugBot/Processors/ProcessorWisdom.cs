@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -25,7 +26,8 @@ public class ProcessorWisdom : AbstractProcessor
 
     public override string Name => "Великие мудрости";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         string path = "Local/wisdom.txt";
         Random random = message.Text.Split().Length > 1 ? new Random(message.Text.GetHashCode()) : new Random();

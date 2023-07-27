@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -22,7 +23,8 @@ public class ProcessorMemes : AbstractProcessor
     public override IReadOnlyList<string> Keys => _keys;
     public override string Name => "Сборник баянов";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         MemesGenerator generator = message.Text.Split().Length > 1
             ? new MemesGenerator(message.Text.GetHashCode())

@@ -9,7 +9,8 @@ public interface IProcessor
     bool VisiblyDescription { get; }
     bool HasTrigger<TMessage>(TMessage message, string[] sentence) where TMessage : IMessage;
 
-    bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>;
 }

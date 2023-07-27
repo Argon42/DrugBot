@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -24,7 +25,8 @@ public class ProcessorBiba : AbstractProcessor
 
     public override string Name => "Бибометр";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
         bool maleBiba = rnd.NextDouble() < 0.46f;

@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using DrugBot.Bot;
 using DrugBot.Core;
 using DrugBot.Core.Bot;
+using Microsoft.Extensions.Logging;
 
 namespace DrugBot.Processors;
 
 public abstract class AbstractProcessor : IProcessor
 {
     public abstract string Description { get; }
+
     public abstract IReadOnlyList<string> Keys { get; }
+
     public abstract string Name { get; }
+
     public virtual bool VisiblyDescription => true;
 
     public virtual bool HasTrigger<TMessage>(TMessage message, string[] sentence) where TMessage : IMessage
@@ -24,25 +29,25 @@ public abstract class AbstractProcessor : IProcessor
         return false;
     }
 
-    public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
         try
         {
-            OnProcessMessage(bot, message);
+            OnProcessMessage(bot, message, token);
         }
         catch (Exception e)
         {
+            // _logger.LogError(e, $"Error on message processing");
             OnProcessMessageError(bot, message, e);
-            Console.WriteLine(e);
             return false;
         }
 
         return true;
     }
 
-    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message)
+    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {
