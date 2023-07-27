@@ -1,33 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
-using VkNet;
-using VkNet.Model;
+using System.Threading;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorPrediction : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/8",
-        "!8"
+        "!8",
     };
 
     public override string Description =>
-        $"Хочешь получить ответ на вопрос, напиши: {string.Join(" | ", keys)} вопрос";
+        $"Хочешь получить ответ на вопрос, напиши: {string.Join(" | ", _keys)} вопрос";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Волшебный шар";
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         string path = "Local/8.txt";
 
         int seed = new Random().Next(int.MinValue, int.MaxValue);
-        if (sentence.Length > 1)
-            seed = BotHandler.GetDayUserSeed(message.PeerId) + message.Text.GetHashCode();
+        if (message.Text.Split().Length > 1)
+            seed = BotHandler.GetDayUserSeed(message.User.GetHashCode()) + message.Text.GetHashCode();
 
-        BotHandler.SendMessage(vkApi, message.PeerId, BotHandler.GetRandomLineFromFile(new Random(seed), path), message);
+        string fromFile = BotHandler.GetRandomLineFromFile(new Random(seed), path);
+        bot.SendMessage(message.CreateResponse(fromFile));
     }
 }

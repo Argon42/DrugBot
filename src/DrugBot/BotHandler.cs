@@ -1,54 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using DrugBot.Processors;
-using VkNet;
-using VkNet.Model;
-using VkNet.Model.Attachments;
-using VkNet.Model.RequestParams;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
+using Microsoft.Extensions.Logging;
 
 namespace DrugBot;
 
 public class BotHandler
 {
-    private readonly VkApi _api;
-    private readonly List<AbstractProcessor> _processors;
+    private readonly List<IProcessor> _processors;
+    private readonly ILogger<BotHandler> _logger;
 
-    private static HttpClient Client { get; } = new();
-
-    public BotHandler(VkApi api)
+    public BotHandler(IEnumerable<IProcessor> processors, ILogger<BotHandler> logger)
     {
-        _api = api;
-        _processors = new List<AbstractProcessor>
-        {
-            new ProcessorTry(),
-            new ProcessorDa(),
-            new ProcessorPrediction(),
-            new ProcessorDiploma(),
-            new ProcessorStatus(),
-            new ProcessorBibasiks(),
-            new ProcessorTotem(),
-            new ProcessorBiba(),
-            new ProcessorDice(),
-            new ProcessorWho(),
-            new ProcessorWisdom(),
-            new ProcessorQuote(),
-            new ProcessorDeadChinese(),
-            new ProcessorAnecdote(),
-            new ProssessorMemes(),
-            new ProcessorNet(),
-        };
-        _processors.Add(new ProcessorHelp(_processors));
-    }
-
-    static BotHandler()
-    {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        _logger = logger;
+        _processors = processors.ToList();
     }
 
     public static int GetDayUserSeed(long? fromId)
@@ -79,12 +49,12 @@ public class BotHandler
         return predictions.OrderBy(s => rnd.NextDouble()).Take(count).ToList();
     }
 
-    public static bool IsBotTrigger(string s)
-    {
-        return "@drugbot42," == s;
-    }
+    public static bool IsBotTrigger(string s) => "@drugbot42," == s;
 
-    public async Task MessageProcessing(Message message)
+    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot,
+        CancellationToken token)
+        where TUser : IUser
+        where TMessage : IMessage<TMessage, TUser>
     {
         if (string.IsNullOrEmpty(message.Text)) return;
 
@@ -92,63 +62,12 @@ public class BotHandler
         try
         {
             string[] sentence = message.Text.ToLower().Split();
-            AbstractProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
-            processor?.TryProcessMessage(_api, message, sentence);
+            IProcessor? processor = _processors.FirstOrDefault(p => p.HasTrigger(message, sentence));
+            processor?.TryProcessMessage(bot, message, token);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            _logger.LogError(e, "Error on message processing");
         }
-    }
-
-    public static void SendMessage(VkApi api, long? peerId, string message, Message triggerMessage,
-        bool needForward = false)
-    {
-        api.Messages.Send(new MessagesSendParams
-        {
-            PeerId = peerId,
-            Message = message,
-            RandomId = new Random().Next(),
-            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
-        });
-    }
-
-    public static void SendMessage(VkApi api, long? peerId, string message, byte[] image, Message triggerMessage,
-        bool needForward = false)
-    {
-        string response = UploadPhoto(api, image);
-        ReadOnlyCollection<Photo>? messagesPhoto = api.Photo.SaveMessagesPhoto(response);
-
-        api.Messages.Send(new MessagesSendParams
-        {
-            PeerId = peerId,
-            Message = message,
-            RandomId = new Random().Next(),
-            Forward = needForward ? CreateMessageForward(triggerMessage) : default,
-            Attachments = new List<MediaAttachment?>
-            {
-                messagesPhoto.FirstOrDefault()
-            }
-        });
-    }
-
-    private static MessageForward CreateMessageForward(Message triggerMessage)
-    {
-        return new MessageForward
-        {
-            IsReply = true,
-            ConversationMessageIds = new[] { triggerMessage.Id.GetValueOrDefault() },
-        };
-    }
-
-    private static string UploadPhoto(VkApi api, byte[] image)
-    {
-        MultipartFormDataContent content = new();
-        UploadServerInfo? uploadServer = api.Photo.GetMessagesUploadServer(api.UserId.GetValueOrDefault());
-        content.Add(new ByteArrayContent(image), "file", "photo.jpg");
-        HttpResponseMessage responseMessage =
-            Client.PostAsync(uploadServer.UploadUrl, content).GetAwaiter().GetResult();
-        byte[] responseRaw = responseMessage.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
-        return Encoding.GetEncoding(1251).GetString(responseRaw);
     }
 }

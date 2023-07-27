@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Ну давай давай",
+  "Description": "Напиши \"нет\"",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageText",
+    "Message": "нет"
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.SendResponseMessage",
+    "Message": "Пидора ответ"
+  }
+} 

@@ -1,13 +1,11 @@
 #nullable enable
 using System;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
-namespace DrugBot;
+namespace DrugBot.Bot.Vk;
 
 [Serializable]
-public class Configs
+public class VkConfigs
 {
     private const ushort SecretKey = 0x42;
     private string? _token;
@@ -21,22 +19,10 @@ public class Configs
         set => _token = value;
     }
 
-    public static Configs GetConfig(string file = "Local/Config.json")
-    {
-        string path = Path.Combine(Environment.CurrentDirectory, file);
-        string json = File.ReadAllText(path);
-        Configs? configs = JsonConvert.DeserializeObject<Configs>(json);
-
-        return configs;
-    }
-
     private static string EncodeDecrypt(string? str, ushort secretKey)
     {
         return str?.ToArray().Aggregate("", (current, c) => current + TopSecret(c, secretKey)) ?? "";
     }
 
-    private static char TopSecret(char character, ushort secretKey)
-    {
-        return (char)(character ^ secretKey);
-    }
+    private static char TopSecret(char character, ushort secretKey) => (char)(character ^ secretKey);
 }

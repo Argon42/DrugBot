@@ -12,15 +12,9 @@ public class AnecdoteGenerator
     private const string PatternErrorText = "<div id=.*>\n.*</a>";
     private readonly Random _random;
 
-    public AnecdoteGenerator()
-    {
-        _random = new Random();
-    }
+    public AnecdoteGenerator() => _random = new Random();
 
-    public AnecdoteGenerator(int seed)
-    {
-        _random = new Random(seed);
-    }
+    public AnecdoteGenerator(int seed) => _random = new Random(seed);
 
     public AnecdoteData GenerateAnecdote()
     {
@@ -60,9 +54,8 @@ public class AnecdoteGenerator
         return matches.Count == 0 ? null : matches.Select(match => match.Groups[0].Value).ToArray();
     }
 
-    private string ParsText(string rawAnecdote)
-    {
-        return rawAnecdote.Remove(rawAnecdote.Length - 6)
+    private string ParsText(string rawAnecdote) =>
+        rawAnecdote.Remove(rawAnecdote.Length - 6)
             .Replace("<div class=anekdot>", "")
             .Replace("<p> ", "")
             .Replace("<p>", "")
@@ -77,7 +70,6 @@ public class AnecdoteGenerator
             .Replace("  ", " ")
             .Replace("&#133;", "...")
             .TrimStart();
-    }
 
     private string RandomDayPage()
     {
@@ -88,10 +80,7 @@ public class AnecdoteGenerator
         return stringDate;
     }
 
-    private int RandomNumberPost(string[] array)
-    {
-        return _random.Next(array.Length);
-    }
+    private int RandomNumberPost(string[] array) => _random.Next(array.Length);
 
     private void RemoveErroneousMatches(MatchCollection matchesErrorText, ICollection<Match> matches)
     {

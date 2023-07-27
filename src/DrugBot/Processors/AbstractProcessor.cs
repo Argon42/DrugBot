@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VkNet;
-using VkNet.Model;
+using System.Threading;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
 
 namespace DrugBot.Processors;
 
-public abstract class AbstractProcessor
+public abstract class AbstractProcessor : IProcessor
 {
     public abstract string Description { get; }
+
     public abstract IReadOnlyList<string> Keys { get; }
+
     public abstract string Name { get; }
+
     public virtual bool VisiblyDescription => true;
 
-    public virtual bool HasTrigger(Message message, string[] sentence)
+    public virtual bool HasTrigger<TMessage>(TMessage message, string[] sentence) where TMessage : IMessage
     {
         if (sentence.Length > 1 && BotHandler.IsBotTrigger(sentence[0]))
             return CheckTrigger(sentence[1]);
@@ -23,29 +27,35 @@ public abstract class AbstractProcessor
         return false;
     }
 
-    public bool TryProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    public bool TryProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
+        where TUser : IUser
+        where TMessage : IMessage<TMessage, TUser>
     {
-        if (HasTrigger(message, sentence) == false)
-            return false;
-
         try
         {
-            OnProcessMessage(vkApi, message, sentence);
+            OnProcessMessage(bot, message, token);
         }
         catch (Exception e)
         {
-            OnProcessMessageError(vkApi, message, sentence, e);
-            Console.WriteLine(e);
+            // _logger.LogError(e, $"Error on message processing");
+            OnProcessMessageError(bot, message, e);
             return false;
         }
 
         return true;
     }
 
-    protected abstract void OnProcessMessage(VkApi vkApi, Message message, string[] sentence);
+    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
+        where TUser : IUser
+        where TMessage : IMessage<TMessage, TUser>
+    {
+    }
 
-    protected virtual void OnProcessMessageError(VkApi vkApi, Message message, string[] sentence,
+    protected virtual void OnProcessMessageError<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
         Exception exception)
+        where TUser : IUser
+        where TMessage : IMessage<TMessage, TUser>
     {
     }
 

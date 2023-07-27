@@ -1,0 +1,13 @@
+﻿{
+  "Name": "Киркоров",
+  "Description": "Напиши \"да\"",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageText",
+    "Message": "да"
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.SendResponseMessage",
+    "Message": "Пизда"
+  }
+} 

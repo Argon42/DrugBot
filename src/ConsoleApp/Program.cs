@@ -1,20 +1,31 @@
-﻿using DrugBot;
+﻿using CustomProcessors;
+using DrugBot;
+using DrugBotApp;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-Console.WriteLine("StartBot");
-const string appId = "VK_APP_ID";
-const string groupToken = "VK_GROUP_TOKEN";
+void ConfigureServices(IServiceCollection services)
+{
+    IConfiguration configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json",
+            true)
+        .AddEnvironmentVariables()
+        .Build();
+    services.AddSingleton<IApplication, Application>();
+    services.AddSingleton(configuration);
+    services.AddLogging(builder => builder.AddConsole());
+    DrugBotServiceConfigurator.ConfigureServices(services);
+    CustomProcessorsServiceConfigurator.ConfigureServices(services, configuration);
+    services.AddSingleton<IApplicationInput, ApplicationInput>();
+}
 
-string? token = Environment.GetEnvironmentVariable(groupToken);
-string? id = Environment.GetEnvironmentVariable(appId);
+IHost host = Host.CreateDefaultBuilder()
+    .ConfigureServices(ConfigureServices)
+    .Build();
 
-if (token == null || id == null)
-    throw new Exception($"Environment variables {appId} and {groupToken} not exist");
-
-if (uint.TryParse(id, out uint parsedId) == false)
-    throw new Exception($"Environment variable {appId} is incorrect");
-
-Configs environmentConfig = new() { Token = token ?? "", Id = parsedId };
-
-
-CancellationTokenSource tokenSource = new();
-await new Bot().Start(environmentConfig, tokenSource.Token);
+IApplication app = host.Services.GetRequiredService<IApplication>();
+app.Run();

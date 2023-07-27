@@ -1,39 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using VkNet;
-using VkNet.Model;
+using System.Threading;
+using DrugBot.Core;
+using DrugBot.Core.Bot;
+using DrugBot.Core.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DrugBot.Processors;
 
+[Processor]
 public class ProcessorHelp : AbstractProcessor
 {
-    private readonly IReadOnlyList<AbstractProcessor> _processors;
+    private IReadOnlyList<IProcessor>? _processors;
 
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/help",
         "!help",
         "/помощь",
-        "!помощь"
+        "!помощь",
     };
 
+    private readonly IServiceProvider _serviceProvider;
+
     public override string Description => "тутор со всеми командами";
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
     public override string Name => "Обучалка";
 
     public override bool VisiblyDescription => false;
 
-    public ProcessorHelp(IReadOnlyList<AbstractProcessor> processors)
-    {
-        _processors = processors;
-    }
+    public ProcessorHelp(IServiceProvider serviceProvider) => _serviceProvider = serviceProvider;
 
-    protected override void OnProcessMessage(VkApi vkApi, Message message, string[] sentence)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
+        _processors ??= _serviceProvider.GetServices<IProcessor>().ToList();
+
         string answer = string.Join('\n',
             _processors.Where(processor => processor.VisiblyDescription)
                 .Select(processor => $"{processor.Name}\n{processor.Description}\n")
         );
-        BotHandler.SendMessage(vkApi, message.PeerId, answer, message);
+        bot.SendMessage(message.CreateResponse(answer));
     }
 }
