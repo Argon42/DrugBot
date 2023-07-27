@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -11,7 +10,7 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorDice : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/dice",
         "/d",
@@ -22,19 +21,19 @@ public class ProcessorDice : AbstractProcessor
 
     public override string Description =>
         "Узнай размеры своей бибы, для вызова используйте:\n" +
-        $"{string.Join('\n', keys.Select(k => $"{k} XdY Z"))}\n" +
+        $"{string.Join('\n', _keys.Select(k => $"{k} XdY Z"))}\n" +
         "где X число костей\n" +
         "Y колличество граней\n" +
         "Z модификатор который будет добавлен к числу, например: -2 | 6 (по стандарту 0)";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Кости";
 
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
         return sentence.Length >= 2 &&
-               keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
+               _keys.Any(s => s.Equals(sentence[0], StringComparison.CurrentCultureIgnoreCase)) &&
                sentence[1].Split('d').Length == 2;
     }
 

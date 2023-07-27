@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿namespace CustomProcessors.Behaviours;
 
-namespace CustomProcessors.Behaviours;
-
-public abstract class BaseBehaviour { }
+public abstract class BaseBehaviour
+{
+}

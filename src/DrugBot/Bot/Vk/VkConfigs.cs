@@ -1,8 +1,6 @@
 #nullable enable
 using System;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace DrugBot.Bot.Vk;
 

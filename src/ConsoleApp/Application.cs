@@ -1,4 +1,3 @@
-using System.Collections;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 using Microsoft.Extensions.Logging;
@@ -28,10 +27,7 @@ public class Application : IApplication
     private void HealthCheck()
     {
         // TODO: добавить отображение текущего состояния ботов
-        while (true)
-        {
-            Task.Delay(100);
-        }
+        while (true) Thread.Sleep(100);
         // ReSharper disable once FunctionNeverReturns
     }
 
@@ -40,13 +36,6 @@ public class Application : IApplication
         _logger.LogInformation("Bots initializing");
         _bots.ForEach(InitializeHandler);
         _logger.LogInformation("Bots initialized");
-    }
-
-    private void Start()
-    {
-        _bots.ForEach(StartHandlers);
-        _input.Start(_bots);
-        _logger.LogInformation("Application started");
     }
 
     private void InitializeHandler(IBotHandler handler)
@@ -59,6 +48,13 @@ public class Application : IApplication
         {
             _logger.LogError(e, "Initialize handlers");
         }
+    }
+
+    private void Start()
+    {
+        _bots.ForEach(StartHandlers);
+        _input.Start(_bots);
+        _logger.LogInformation("Application started");
     }
 
     private void StartHandlers(IBotHandler handler)

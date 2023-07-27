@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -11,15 +10,15 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorTotem : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/тотем",
     };
 
     public override string Description =>
-        $"Посмотреть за ширму вселенной и узнать что тебя сегодня ждет, для вызова используйте {string.Join(' ', keys)}";
+        $"Посмотреть за ширму вселенной и узнать что тебя сегодня ждет, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Тотем дня";
 

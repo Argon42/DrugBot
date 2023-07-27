@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -15,7 +14,7 @@ public class ProcessorHelp : AbstractProcessor
 {
     private IReadOnlyList<IProcessor>? _processors;
 
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/help",
         "!help",
@@ -26,7 +25,7 @@ public class ProcessorHelp : AbstractProcessor
     private readonly IServiceProvider _serviceProvider;
 
     public override string Description => "тутор со всеми командами";
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
     public override string Name => "Обучалка";
 
     public override bool VisiblyDescription => false;

@@ -5,8 +5,6 @@ internal class MessageText : Trigger
 {
     public string Message { get; init; } = null!;
 
-    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
-    {
-        return message.Text.ToLower().Trim() == Message.ToLower().Trim();
-    }
+    public override bool HasTrigger<TMessage>(TMessage message, string[] sentence) =>
+        message.Text.ToLower().Trim() == Message.ToLower().Trim();
 }

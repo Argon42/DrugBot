@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 using Memes;

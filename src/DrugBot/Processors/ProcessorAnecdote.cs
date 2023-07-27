@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Anecdotes;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 

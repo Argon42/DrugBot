@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -10,19 +9,20 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorBibasiks : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/бибасики",
     };
 
     public override string Description =>
-        $"Узнай размеры своих бибасиков, для вызова используйте {string.Join(' ', keys)}";
+        $"Узнай размеры своих бибасиков, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Бибасикометр";
 
-    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
+    protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
     {
         Random rnd = new(BotHandler.GetDayUserSeed(message.User.GetHashCode()));
 

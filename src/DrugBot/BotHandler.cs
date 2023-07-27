@@ -51,7 +51,8 @@ public class BotHandler
 
     public static bool IsBotTrigger(string s) => "@drugbot42," == s;
 
-    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot, CancellationToken token)
+    public async Task MessageProcessing<TUser, TMessage>(TMessage message, IBot<TUser, TMessage> bot,
+        CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {

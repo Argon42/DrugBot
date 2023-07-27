@@ -1,6 +1,4 @@
-﻿using CustomProcessors.Behaviours.Response;
-using CustomProcessors.Behaviours.Triggers;
-using DrugBot.Core;
+﻿using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -40,9 +38,7 @@ public static class CustomProcessorsServiceConfigurator
     {
         string? path = configuration[CustomProcessorsPath];
         if (path != default && !Path.IsPathRooted(path))
-        {
             path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, path));
-        }
 
         return path == default ? Array.Empty<string>() : Directory.GetFiles(path);
     }

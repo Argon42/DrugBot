@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -13,15 +12,15 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorDeadChinese : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/мудрец",
     };
 
     public override string Description =>
-        $"Пророчество от мудрого, но мертвого китайца, для вызова деда используйте {string.Join(' ', keys)}";
+        $"Пророчество от мудрого, но мертвого китайца, для вызова деда используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Мертвый китаец";
 

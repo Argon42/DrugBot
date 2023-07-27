@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Bot.Vk;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -14,7 +13,7 @@ namespace DrugBot.Processors.Vk;
 [Processor]
 public class ProcessorWho : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/who",
         "/кто",
@@ -23,9 +22,9 @@ public class ProcessorWho : AbstractProcessor
     private readonly IFactory<IVkApi> _factory;
 
     public override string Description =>
-        $"Бот знает все обо всех, для вызова используйте {string.Join(' ', keys)} вопрос";
+        $"Бот знает все обо всех, для вызова используйте {string.Join(' ', _keys)} вопрос";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Кто?";
 
@@ -34,7 +33,7 @@ public class ProcessorWho : AbstractProcessor
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
         return message is IVkMessage && sentence.Length > 0 &&
-               keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
+               _keys.Any(s => sentence[0].Equals(s, StringComparison.CurrentCultureIgnoreCase));
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,

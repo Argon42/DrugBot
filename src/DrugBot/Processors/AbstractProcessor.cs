@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core;
 using DrugBot.Core.Bot;
-using Microsoft.Extensions.Logging;
 
 namespace DrugBot.Processors;
 
@@ -47,7 +45,8 @@ public abstract class AbstractProcessor : IProcessor
         return true;
     }
 
-    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
+    protected virtual void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
+        CancellationToken token)
         where TUser : IUser
         where TMessage : IMessage<TMessage, TUser>
     {

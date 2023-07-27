@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Bot.Vk;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
@@ -14,7 +13,7 @@ namespace DrugBot.Processors.Vk;
 [Processor]
 public class ProcessorStatus : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/статус",
     };
@@ -22,9 +21,9 @@ public class ProcessorStatus : AbstractProcessor
     private readonly IFactory<IVkApi> _vkApi;
 
     public override string Description =>
-        $"Хочешь получить случайный статус участника, для вызова используйте {string.Join(' ', keys)}";
+        $"Хочешь получить случайный статус участника, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Случайный статус";
 

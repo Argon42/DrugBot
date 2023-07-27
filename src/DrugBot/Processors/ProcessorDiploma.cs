@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -10,15 +9,15 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorDiploma : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/диплом",
     };
 
     public override string Description =>
-        $"Экстрасенсорный анализ диплома и бонус, для вызова используйте {string.Join(' ', keys)}";
+        $"Экстрасенсорный анализ диплома и бонус, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "дИПЛОМОЗИТОР";
 

@@ -19,7 +19,7 @@ using VkNet.Model.RequestParams;
 
 namespace DrugBot.Bot.Vk;
 
-public class VkBot : IVkBot, IBotHandler
+public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 {
     private const string ResetErrorCounterDeltaTime = "VkBot.ResetErrorCounter.Seconds";
     private const string ResetErrorCounterErrors = "VkBot.ResetErrorCounter.ErrorCount";
@@ -38,7 +38,7 @@ public class VkBot : IVkBot, IBotHandler
     private string? _currentTs;
     private CancellationTokenSource? _cts;
 
-    private int _errors = 0;
+    private int _errors;
     private DateTime _lastError = DateTime.MinValue;
 
     public bool IsWork { get; private set; }
@@ -57,16 +57,32 @@ public class VkBot : IVkBot, IBotHandler
         _botHandler = botHandler;
         _vkApiFactory = vkApiFactory;
         _longPoolServerFactory = longPoolServerFactory;
-        
+
         _resetErrorCounterDeltaTime = TimeSpan.FromSeconds(
             int.TryParse(configuration[ResetErrorCounterDeltaTime], out int seconds) ? seconds : DefaultSeconds);
-        
-        _maxErrorsPerDeltaTime = 
+
+        _maxErrorsPerDeltaTime =
             int.TryParse(configuration[ResetErrorCounterErrors], out int errorCount) ? errorCount : DefaultErrorCount;
     }
 
     public void Initialize()
     {
+    }
+
+    public void SendMessage(IVkMessage message)
+    {
+        if (IsWork == false || _api == null)
+            throw new InvalidOperationException("Bot not working, messages unavailable");
+
+        bool needForward = false;
+        _api.Messages.Send(new MessagesSendParams
+        {
+            PeerId = message.User.PeerId,
+            Message = message.Text,
+            RandomId = new Random().Next(),
+            ReplyTo = needForward ? message.TriggerMessage.ConversationMessageId.GetValueOrDefault() : default,
+            Attachments = CreateMedia(message),
+        });
     }
 
     public void Start()
@@ -83,30 +99,9 @@ public class VkBot : IVkBot, IBotHandler
         _cts = null;
     }
 
-    public void SendMessage(IVkMessage message)
-    {
-        if (IsWork == false || _api == null)
-        {
-            throw new InvalidOperationException("Bot not working, messages unavailable");
-        }
-
-        bool needForward = false;
-        _api.Messages.Send(new MessagesSendParams
-        {
-            PeerId = message.User.PeerId,
-            Message = message.Text,
-            RandomId = new Random().Next(),
-            ReplyTo = needForward ? message.TriggerMessage.ConversationMessageId.GetValueOrDefault() : default,
-            Attachments = CreateMedia(message),
-        });
-    }
-
     private async void BootLoop(object? o)
     {
-        if (IsWork)
-        {
-            throw new InvalidOperationException("Bot already working");
-        }
+        if (IsWork) throw new InvalidOperationException("Bot already working");
         CancellationToken token = (CancellationToken)(o ?? throw new ArgumentNullException(nameof(o)));
         try
         {
@@ -119,7 +114,7 @@ public class VkBot : IVkBot, IBotHandler
                 token.ThrowIfCancellationRequested();
                 try
                 {
-                    if(Update(longPollServer, _botHandler, token))
+                    if (Update(longPollServer, _botHandler, token))
                         continue;
                 }
                 catch (LongPollException exception)
@@ -147,22 +142,8 @@ public class VkBot : IVkBot, IBotHandler
         {
             IsWork = false;
         }
-        token.ThrowIfCancellationRequested();
-    }
 
-    private void ErrorCounting()
-    {
-        if (DateTime.Now - _lastError > _resetErrorCounterDeltaTime)
-        {
-            _errors = 0;
-            _lastError = DateTime.Now;
-        }
-        _errors++;
-        
-        if (_errors > _maxErrorsPerDeltaTime)
-        {
-            throw new Exception($"From {_lastError} to {DateTime.Now} bot handled {_errors}. Stop working");
-        }
+        token.ThrowIfCancellationRequested();
     }
 
     private IEnumerable<MediaAttachment> CreateMedia(IVkMessage vkMessage)
@@ -174,6 +155,20 @@ public class VkBot : IVkBot, IBotHandler
             if (messagesPhoto.FirstOrDefault() != null)
                 yield return messagesPhoto.First();
         }
+    }
+
+    private void ErrorCounting()
+    {
+        if (DateTime.Now - _lastError > _resetErrorCounterDeltaTime)
+        {
+            _errors = 0;
+            _lastError = DateTime.Now;
+        }
+
+        _errors++;
+
+        if (_errors > _maxErrorsPerDeltaTime)
+            throw new Exception($"From {_lastError} to {DateTime.Now} bot handled {_errors}. Stop working");
     }
 
     private LongPollServerResponse TryUpdateLongPollServer(
@@ -198,7 +193,7 @@ public class VkBot : IVkBot, IBotHandler
     }
 
     private bool Update(
-        LongPollServerResponse longPollServer, 
+        LongPollServerResponse longPollServer,
         BotHandler botHandler,
         CancellationToken token)
     {
@@ -211,26 +206,24 @@ public class VkBot : IVkBot, IBotHandler
         });
         _currentTs = poll.Ts;
 
-        if (poll?.Updates == null || !poll.Updates.Any()) 
+        if (poll?.Updates == null || !poll.Updates.Any())
             return true;
 
         foreach (GroupUpdate? a in poll.Updates)
         {
             _currentTs = poll.Ts;
             Message? message = a.Instance as Message ?? (a.Instance as MessageNew)?.Message;
-            if (message == null) 
+            if (message == null)
                 continue;
 
-            if (message.Date <= _lastData && _lastData != null) 
+            if (message.Date <= _lastData && _lastData != null)
                 continue;
-            
+
             _lastData = message.Date;
 
             botHandler.MessageProcessing(new VkMessage(message), this, token)
-                .ContinueWith(task =>
-                {
-                    _logger.LogError(task.Exception, "Bot handler message processing was wrong");
-                }, TaskContinuationOptions.OnlyOnFaulted);
+                .ContinueWith(task => { _logger.LogError(task.Exception, "Bot handler message processing was wrong"); },
+                    TaskContinuationOptions.OnlyOnFaulted);
         }
 
         return false;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -10,7 +9,7 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorBiba : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/биба",
         "/biba",
@@ -19,9 +18,9 @@ public class ProcessorBiba : AbstractProcessor
     };
 
     public override string Description =>
-        $"Узнай размеры своей бибы, для вызова используйте {string.Join(' ', keys)}";
+        $"Узнай размеры своей бибы, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Бибометр";
 

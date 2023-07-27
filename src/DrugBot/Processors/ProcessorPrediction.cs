@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -10,16 +9,16 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorPrediction : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/8",
         "!8",
     };
 
     public override string Description =>
-        $"Хочешь получить ответ на вопрос, напиши: {string.Join(" | ", keys)} вопрос";
+        $"Хочешь получить ответ на вопрос, напиши: {string.Join(" | ", _keys)} вопрос";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Волшебный шар";
 

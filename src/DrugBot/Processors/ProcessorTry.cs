@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using DrugBot.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -10,7 +9,7 @@ namespace DrugBot.Processors;
 [Processor]
 public class ProcessorTry : AbstractProcessor
 {
-    private readonly List<string> keys = new()
+    private readonly List<string> _keys = new()
     {
         "/try",
         "/попробовать",
@@ -18,9 +17,9 @@ public class ProcessorTry : AbstractProcessor
     };
 
     public override string Description =>
-        $"Если нужно бросить или попробовать что то сделать, для вызова используйте {string.Join(' ', keys)}";
+        $"Если нужно бросить или попробовать что то сделать, для вызова используйте {string.Join(' ', _keys)}";
 
-    public override IReadOnlyList<string> Keys => keys;
+    public override IReadOnlyList<string> Keys => _keys;
 
     public override string Name => "Пробователь";
 

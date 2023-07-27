@@ -17,7 +17,7 @@ public abstract class VkFactory
 
         public VkApi Create()
         {
-            VkApi api = new VkApi();
+            VkApi api = new();
             api.Authorize(new ApiAuthParams { AccessToken = _config.Token });
             return api;
         }
