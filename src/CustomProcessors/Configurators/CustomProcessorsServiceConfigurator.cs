@@ -40,6 +40,12 @@ public static class CustomProcessorsServiceConfigurator
         if (path != default && !Path.IsPathRooted(path))
             path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, path));
 
-        return path == default ? Array.Empty<string>() : Directory.GetFiles(path);
+        if (path == default)
+            return Array.Empty<string>();
+        
+        if(Directory.Exists(path))
+            return Directory.GetFiles(path);
+
+        return Array.Empty<string>();
     }
 }

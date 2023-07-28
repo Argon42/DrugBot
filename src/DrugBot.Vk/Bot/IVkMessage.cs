@@ -1,6 +1,6 @@
 using DrugBot.Core.Bot;
 
-namespace DrugBot.Bot.Vk;
+namespace DrugBot.Vk.Bot;
 
 public interface IVkMessage : IMessage<IVkMessage, IVkUser>
 {

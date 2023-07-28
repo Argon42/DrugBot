@@ -8,8 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using VkNet;
 using VkNet.Abstractions;
 using VkNet.Exception;
 using VkNet.Model;
@@ -17,56 +17,50 @@ using VkNet.Model.Attachments;
 using VkNet.Model.GroupUpdate;
 using VkNet.Model.RequestParams;
 
-namespace DrugBot.Bot.Vk;
+namespace DrugBot.Vk.Bot;
 
 public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 {
-    private const string ResetErrorCounterDeltaTime = "VkBot.ResetErrorCounter.Seconds";
-    private const string ResetErrorCounterErrors = "VkBot.ResetErrorCounter.ErrorCount";
-    private const int DefaultErrorCount = 20;
-    private const int DefaultSeconds = 10;
-
     private readonly ILogger<VkBot> _logger;
     private readonly BotHandler _botHandler;
-    private readonly IFactory<IVkApi> _vkApiFactory;
-    private readonly IFactory<LongPollServerResponse> _longPoolServerFactory;
-    private readonly TimeSpan _resetErrorCounterDeltaTime;
-    private readonly int _maxErrorsPerDeltaTime;
+    private readonly IVkApi _api;
 
     private DateTime? _lastData;
-    private IVkApi? _api;
     private string? _currentTs;
     private CancellationTokenSource? _cts;
 
     private int _errors;
     private DateTime _lastError = DateTime.MinValue;
+    private readonly VkBotConfiguration _config;
 
     public bool IsWork { get; private set; }
     public string Name => nameof(VkBot);
     private static HttpClient Client { get; } = new();
+    private bool IsInitialized { get; set; }
 
 
     public VkBot(
         ILogger<VkBot> logger,
         BotHandler botHandler,
-        IFactory<IVkApi> vkApiFactory,
-        IFactory<LongPollServerResponse> longPoolServerFactory,
-        IConfiguration configuration)
+        VkBotConfiguration configuration, 
+        IVkApi api)
     {
         _logger = logger;
         _botHandler = botHandler;
-        _vkApiFactory = vkApiFactory;
-        _longPoolServerFactory = longPoolServerFactory;
-
-        _resetErrorCounterDeltaTime = TimeSpan.FromSeconds(
-            int.TryParse(configuration[ResetErrorCounterDeltaTime], out int seconds) ? seconds : DefaultSeconds);
-
-        _maxErrorsPerDeltaTime =
-            int.TryParse(configuration[ResetErrorCounterErrors], out int errorCount) ? errorCount : DefaultErrorCount;
+        _config = configuration;
+        _api = api;
     }
 
     public void Initialize()
     {
+        IsInitialized = false;
+        _config.Initialize();
+
+        if(_api.IsAuthorized)
+            _api.LogOut();
+
+        _api.Authorize(new ApiAuthParams { AccessToken = _config.Token });
+        IsInitialized = true;
     }
 
     public void SendMessage(IVkMessage message)
@@ -87,6 +81,9 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
     public void Start()
     {
+        if (IsInitialized == false)
+            throw new InvalidOperationException("Bot not initialized");
+
         _cts = new CancellationTokenSource();
         Thread thread = new(BootLoop);
         thread.Start(_cts.Token);
@@ -101,13 +98,17 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
     private async void BootLoop(object? o)
     {
-        if (IsWork) throw new InvalidOperationException("Bot already working");
+        if (IsWork)
+            throw new InvalidOperationException("Bot already working");
+        if(_api == null || IsInitialized == false)
+            throw new InvalidOperationException("Bot not initialized");
+
         CancellationToken token = (CancellationToken)(o ?? throw new ArgumentNullException(nameof(o)));
+
         try
         {
             IsWork = true;
-            _api = _vkApiFactory.Create();
-            LongPollServerResponse longPollServer = _longPoolServerFactory.Create();
+            LongPollServerResponse longPollServer = CreateLongPool(_api);
             _currentTs = longPollServer.Ts;
             while (IsWork)
             {
@@ -119,7 +120,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
                 }
                 catch (LongPollException exception)
                 {
-                    longPollServer = TryUpdateLongPollServer(exception, longPollServer);
+                    longPollServer = TryUpdateLongPollServer(exception, longPollServer, _api);
                 }
                 catch (Exception e)
                 {
@@ -159,7 +160,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
     private void ErrorCounting()
     {
-        if (DateTime.Now - _lastError > _resetErrorCounterDeltaTime)
+        if (DateTime.Now - _lastError > _config.ErrorDeltaTime)
         {
             _errors = 0;
             _lastError = DateTime.Now;
@@ -167,26 +168,26 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
         _errors++;
 
-        if (_errors > _maxErrorsPerDeltaTime)
+        if (_errors > _config.MaxError)
             throw new Exception($"From {_lastError} to {DateTime.Now} bot handled {_errors}. Stop working");
     }
 
     private LongPollServerResponse TryUpdateLongPollServer(
         LongPollException exception,
-        LongPollServerResponse s)
+        LongPollServerResponse s, IVkApi api)
     {
         try
         {
-            if (exception is LongPollOutdateException outdateException)
-                s.Ts = outdateException.Ts;
+            if (exception is LongPollOutdateException outdatedException)
+                s.Ts = outdatedException.Ts;
             else
-                s = _longPoolServerFactory.Create();
+                s = CreateLongPool(api);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "can't find LongPoolServer");
 
-            s = _longPoolServerFactory.Create();
+            s = CreateLongPool(api);
         }
 
         return s;
@@ -206,7 +207,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         });
         _currentTs = poll.Ts;
 
-        if (poll?.Updates == null || !poll.Updates.Any())
+        if (poll.Updates == null || !poll.Updates.Any())
             return true;
 
         foreach (GroupUpdate? a in poll.Updates)
@@ -238,5 +239,10 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
             Client.PostAsync(uploadServer.UploadUrl, content).GetAwaiter().GetResult();
         byte[] responseRaw = responseMessage.Content.ReadAsByteArrayAsync().GetAwaiter().GetResult();
         return Encoding.GetEncoding(1251).GetString(responseRaw);
+    }
+
+    private LongPollServerResponse CreateLongPool(IVkApi vkApi)
+    {
+        return vkApi.Groups.GetLongPollServer(_config.Id);
     }
 }

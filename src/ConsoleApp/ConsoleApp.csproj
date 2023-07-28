@@ -12,6 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\CustomProcessors\CustomProcessors.csproj" />
+        <ProjectReference Include="..\DrugBot.Vk\DrugBot.Vk.csproj" />
         <ProjectReference Include="..\DrugBot\DrugBot.csproj" />
     </ItemGroup>
 
@@ -27,6 +28,12 @@
         <None Update="appsettings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>
