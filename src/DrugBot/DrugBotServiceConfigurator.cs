@@ -3,18 +3,19 @@ using System.Linq;
 using DrugBot.Core;
 using DrugBot.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace DrugBot;
 
-public static class DrugBotServiceConfigurator
+public class DrugBotServiceConfigurator
 {
-    public static void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services, ILogger<DrugBotServiceConfigurator> logger)
     {
-        AddProcessors(services);
+        AddProcessors(services, logger);
         services.AddSingleton<BotHandler, BotHandler>();
     }
 
-    private static void AddProcessors(IServiceCollection services)
+    private static void AddProcessors(IServiceCollection services, ILogger<DrugBotServiceConfigurator> logger)
     {
         var typesWithMyAttribute = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes(), (assembly, type) => new { assembly, type })
@@ -25,7 +26,10 @@ public static class DrugBotServiceConfigurator
         {
             Type? interfaceOfProcessor = x1.Type.GetInterface(nameof(IProcessor));
             if (interfaceOfProcessor != default)
-                services.AddScoped(typeof(IProcessor), x1.Type);
+            {
+                services.AddSingleton(typeof(IProcessor), x1.Type);
+                logger.LogInformation("IProcessor added, type: {Type}", x1.Type);
+            }
         }
     }
 }

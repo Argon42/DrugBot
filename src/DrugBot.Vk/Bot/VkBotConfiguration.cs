@@ -49,7 +49,7 @@ public class VkBotConfiguration
         string? token = _configuration.GetValue<string?>(GroupToken, null);
         uint? id = _configuration.GetValue<uint?>(AppId, null);
 
-        if (token == null)
+        if (string.IsNullOrEmpty(token))
         {
             _logger.LogInformation($"Environment variables {GroupToken} is incorrect");
             _logger.LogDebug("Token: {Token}", _groupToken);

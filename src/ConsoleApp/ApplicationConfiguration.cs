@@ -19,8 +19,11 @@ public static class ApplicationConfiguration
         
         services.AddLogging(builder => builder.AddConsole());
         
-        DrugBotServiceConfigurator.ConfigureServices(services);
-        CustomProcessorsServiceConfigurator.ConfigureServices(services, configuration);
+        var loggerBot = services.BuildServiceProvider().GetRequiredService<ILogger<DrugBotServiceConfigurator>>();
+        DrugBotServiceConfigurator.ConfigureServices(services, loggerBot);
+        
+        var loggerCustomProcessors = services.BuildServiceProvider().GetRequiredService<ILogger<CustomProcessorsServiceConfigurator>>();
+        CustomProcessorsServiceConfigurator.ConfigureServices(services, configuration, loggerCustomProcessors);
         VkServiceConfigurator.ConfigureVk(services);
     }
 

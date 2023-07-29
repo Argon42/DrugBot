@@ -16,6 +16,6 @@ public static class VkServiceConfigurator
         services
             .AddSingleton<IBotHandler, VkBot>()
             .AddSingleton<IVkApi, VkApi>(provider => new VkApi(provider.GetRequiredService<ILogger<VkApi>>()))
-            .AddTransient<VkBotConfiguration>();
+            .AddSingleton<VkBotConfiguration>();
     }
 }

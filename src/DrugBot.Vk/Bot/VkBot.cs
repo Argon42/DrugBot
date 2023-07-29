@@ -151,8 +151,8 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     {
         foreach (byte[] messageImage in vkMessage.Images)
         {
-            string response = UploadPhoto(_api!, messageImage);
-            ReadOnlyCollection<Photo>? messagesPhoto = _api!.Photo.SaveMessagesPhoto(response);
+            string response = UploadPhoto(_api, messageImage);
+            ReadOnlyCollection<Photo>? messagesPhoto = _api.Photo.SaveMessagesPhoto(response);
             if (messagesPhoto.FirstOrDefault() != null)
                 yield return messagesPhoto.First();
         }
