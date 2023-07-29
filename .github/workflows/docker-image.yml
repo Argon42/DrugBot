@@ -37,5 +37,9 @@ jobs:
           MESSAGE="build_complete"
   
           if [ "$NEED_UPDATE_SERVER" = "true" ]; then
-            echo "$MESSAGE" | nc "$SERVER_IP" "$SERVER_PORT"
+            echo "Try connect to $SERVER_IP:$SERVER_PORT"
+            echo "$MESSAGE" | nc -w 5 "$SERVER_IP" "$SERVER_PORT"
+            echo "Message sended"
+          else
+            echo "Skip message send"
           fi
