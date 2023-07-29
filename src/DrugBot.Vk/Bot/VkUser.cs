@@ -1,4 +1,4 @@
-namespace DrugBot.Bot.Vk;
+namespace DrugBot.Vk.Bot;
 
 internal class VkUser : IVkUser
 {

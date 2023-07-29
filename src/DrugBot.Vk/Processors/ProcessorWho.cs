@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using DrugBot.Bot.Vk;
+using DrugBot.Vk.Bot;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 using VkNet.Abstractions;
@@ -10,16 +10,24 @@ using VkNet.Exception;
 
 namespace DrugBot.Processors.Vk;
 
+public abstract class VkProcessor : AbstractProcessor
+{
+    protected IVkApi Api { get; }
+
+    protected VkProcessor(IVkApi api)
+    {
+        Api = api;
+    }
+}
+
 [Processor]
-public class ProcessorWho : AbstractProcessor
+internal class ProcessorWho : VkProcessor
 {
     private readonly List<string> _keys = new()
     {
         "/who",
         "/кто",
     };
-
-    private readonly IFactory<IVkApi> _factory;
 
     public override string Description =>
         $"Бот знает все обо всех, для вызова используйте {string.Join(' ', _keys)} вопрос";
@@ -28,7 +36,7 @@ public class ProcessorWho : AbstractProcessor
 
     public override string Name => "Кто?";
 
-    public ProcessorWho(IFactory<IVkApi> factory) => _factory = factory;
+    public ProcessorWho(IVkApi api) : base(api) { }
 
     public override bool HasTrigger<TMessage>(TMessage message, string[] sentence)
     {
@@ -42,7 +50,7 @@ public class ProcessorWho : AbstractProcessor
         List<string> names;
         try
         {
-            names = _factory.Create().Messages
+            names = Api.Messages
                 .GetConversationMembers(((IVkMessage)message).User.PeerId ?? -1, new[] { "" })
                 .Profiles
                 .Select(user => $"{user.FirstName} {user.LastName}")

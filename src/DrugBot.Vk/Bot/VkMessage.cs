@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using VkNet.Model;
 
-namespace DrugBot.Bot.Vk;
+namespace DrugBot.Vk.Bot;
 
 internal class VkMessage : IVkMessage
 {

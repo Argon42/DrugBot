@@ -1,29 +1,42 @@
-﻿using DrugBot.Core;
+﻿using System.Text;
+using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace CustomProcessors;
 
-public static class CustomProcessorsServiceConfigurator
+public class CustomProcessorsServiceConfigurator
 {
     private const string CustomProcessorsPath = "CustomProcessorsPath";
 
-    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration, ILogger<CustomProcessorsServiceConfigurator> logger)
     {
         services.AddTransient<CustomProcessor>();
         BehaviourConfigurator.ConfigureBehaviours(services);
-        IEnumerable<string> files = GetFiles(configuration);
-        ConfigureFiles(services, files);
+        string[] files = GetFiles(configuration, logger);
+        ConfigureFiles(services, files, logger);
     }
 
-    private static void ConfigureFiles(IServiceCollection services, IEnumerable<string> files)
+    private static void ConfigureFiles(IServiceCollection services, string[] files,
+        ILogger<CustomProcessorsServiceConfigurator> logger)
     {
+        logger.LogInformation("Start loading custom processors, files founded: {Count}", files.Length);
         foreach (string file in files)
         {
             string json = File.ReadAllText(file);
-            services.AddScoped<IProcessor>(serviceProvider => CreateProcessor(json, serviceProvider));
+            try
+            {
+                logger.LogDebug("Loading custom processor from {File}, json:{Json}", file, json);
+                services.AddSingleton<IProcessor>(serviceProvider => CreateProcessor(json, serviceProvider));
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Loading custom processors from files");
+            }
         }
+        logger.LogInformation("End loading custom processors");
     }
 
     private static IProcessor CreateProcessor(string json, IServiceProvider serviceProvider)
@@ -34,12 +47,21 @@ public static class CustomProcessorsServiceConfigurator
                throw new InvalidOperationException($"Json can't deserialize to CustomProcessor\n{json}");
     }
 
-    private static IEnumerable<string> GetFiles(IConfiguration configuration)
+    private static string[] GetFiles(IConfiguration configuration, ILogger<CustomProcessorsServiceConfigurator> logger)
     {
         string? path = configuration[CustomProcessorsPath];
+        logger.LogDebug("Path from configuration: {Path}", path);
         if (path != default && !Path.IsPathRooted(path))
             path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, path));
+        logger.LogDebug("Full path from configuration: {Path}", path);
 
-        return path == default ? Array.Empty<string>() : Directory.GetFiles(path);
+        if (path == default)
+            return Array.Empty<string>();
+        
+        if(Directory.Exists(path))
+            return Directory.GetFiles(path);
+
+        logger.LogDebug("Dictionary in path not exist");
+        return Array.Empty<string>();
     }
 }

@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using DrugBot.Bot.Vk;
 using DrugBot.Core;
-using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
-using VkNet.Abstractions;
-using VkNet.Model;
+using Microsoft.Extensions.Logging;
 
 namespace DrugBot;
 
-public static class DrugBotServiceConfigurator
+public class DrugBotServiceConfigurator
 {
-    public static void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services, ILogger<DrugBotServiceConfigurator> logger)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        ConfigureVk(services);
-        AddProcessors(services);
+        AddProcessors(services, logger);
         services.AddSingleton<BotHandler, BotHandler>();
     }
 
-    private static void AddProcessors(IServiceCollection services)
+    private static void AddProcessors(IServiceCollection services, ILogger<DrugBotServiceConfigurator> logger)
     {
         var typesWithMyAttribute = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes(), (assembly, type) => new { assembly, type })
@@ -32,17 +26,10 @@ public static class DrugBotServiceConfigurator
         {
             Type? interfaceOfProcessor = x1.Type.GetInterface(nameof(IProcessor));
             if (interfaceOfProcessor != default)
-                services.AddScoped(typeof(IProcessor), x1.Type);
+            {
+                services.AddSingleton(typeof(IProcessor), x1.Type);
+                logger.LogInformation("IProcessor added, type: {Type}", x1.Type);
+            }
         }
-    }
-
-    private static void ConfigureVk(IServiceCollection services)
-    {
-        services.AddSingleton<IBotHandler, VkBot>();
-        services.AddSingleton<IFactory<IVkApi>, VkFactory.Api>();
-        services.AddSingleton<IFactory<LongPollServerResponse>, VkFactory.LongPollServer>();
-        // TODO: change to Binder with services.Add(vkConfig) from configuration.Get<VkConfig>() 
-        services.AddSingleton<IFactory<VkConfigs>, VkFactory.Config>();
-        services.AddScopeFromFactory<VkConfigs, IFactory<VkConfigs>>();
     }
 }
