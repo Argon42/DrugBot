@@ -1,4 +1,4 @@
-name: Build and push docker image
+name: Build and push docker image + deploy
 
 on:
   push:
@@ -30,20 +30,12 @@ jobs:
 
       - name: Notify Server via Netcat
         run: |
-          # Здесь мы используем значения из секретов, чтобы передать их скрипту или команде.
-          # Замените "YOUR_SERVER_IP" и "YOUR_SERVER_PORT" на названия секретов, которые вы создадите в настройках вашего репозитория.
-          # Например, если вы назвали секрет с IP "SERVER_IP", используйте ${{ secrets.SERVER_IP }}.
-          SERVER_IP="${{ secrets.YOUR_SERVER_IP }}"
-          SERVER_PORT="${{ secrets.YOUR_SERVER_PORT }}"
+          SERVER_IP="${{ secrets.DEPLOY_SERVER_IP }}"
+          SERVER_PORT="${{ secrets.DEPLOY_SERVER_PORT }}"
+          NEED_UPDATE_SERVER=${{ secrets.NEED_UPDATE_SERVER }}
           
-          # Здесь предполагается, что ваш сервер ожидает сообщение в формате "build_complete",
-          # иначе замените на то, что требуется вашему серверу.
           MESSAGE="build_complete"
-
-          UPDATE_SERVER=${{ secrets.UPDATE_SERVER }}
   
-          if [ "$UPDATE_SERVER" = "true" ]; then
-            # Отправляем сообщение на сервер с помощью утилиты netcat (nc).
-            # Предварительно убедитесь, что у вас установлен netcat на сервере.
+          if [ "$NEED_UPDATE_SERVER" = "true" ]; then
             echo "$MESSAGE" | nc "$SERVER_IP" "$SERVER_PORT"
           fi
