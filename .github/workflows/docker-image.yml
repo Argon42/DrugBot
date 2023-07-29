@@ -38,8 +38,8 @@ jobs:
   
           if [ "$NEED_UPDATE_SERVER" = "true" ]; then
             echo "Try connect to $SERVER_IP:$SERVER_PORT"
-            echo "$MESSAGE" | nc -w 5 "$SERVER_IP" "$SERVER_PORT"
-            echo "Message sended"
+            echo "$MESSAGE" | nc -w 5 "$SERVER_IP" "$SERVER_PORT" && echo "Message sended"
+            echo "End message sending"
           else
             echo "Skip message send"
           fi
