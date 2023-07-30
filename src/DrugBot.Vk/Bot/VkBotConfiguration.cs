@@ -8,8 +8,10 @@ public class VkBotConfiguration
 {
     private const string ResetErrorCounterDeltaTime = "VkBot.ResetErrorCounter.Seconds";
     private const string ResetErrorCounterErrors = "VkBot.ResetErrorCounter.ErrorCount";
+    private const string ResetNeedForward = "VkBot.NeedForward";
     private const int DefaultErrorCount = 20;
     private const int DefaultSeconds = 10;
+    private const bool DefaultForward = false;
     private const string AppId = "VK_APP_ID";
     private const string GroupToken = "VK_GROUP_TOKEN";
 
@@ -17,12 +19,14 @@ public class VkBotConfiguration
     private readonly IConfiguration _configuration;
     private TimeSpan _errorDeltaTime;
     private int _maxError;
+    private bool _needForward;
 
     private string _groupToken;
     private uint _appId;
 
     public TimeSpan ErrorDeltaTime => _errorDeltaTime;
     public int MaxError => _maxError;
+    public bool NeedForward => _needForward;
     public string Token => _groupToken;
     public uint Id => _appId;
 
@@ -38,6 +42,7 @@ public class VkBotConfiguration
         int seconds = _configuration.GetValue(ResetErrorCounterDeltaTime, DefaultSeconds);
         _errorDeltaTime = TimeSpan.FromSeconds(seconds);
         _maxError = _configuration.GetValue(ResetErrorCounterErrors, DefaultErrorCount);
+        _needForward = _configuration.GetValue(ResetNeedForward, DefaultForward);
 
         if (TryConfigureAuth(out _groupToken, out _appId) == false)
             throw new ConfigurationErrorsException($"{nameof(GroupToken)} or {AppId} incorrect");
