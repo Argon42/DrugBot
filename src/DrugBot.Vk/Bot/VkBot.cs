@@ -67,14 +67,18 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     {
         if (IsWork == false || _api == null)
             throw new InvalidOperationException("Bot not working, messages unavailable");
-
-        bool needForward = false;
+        
         _api.Messages.Send(new MessagesSendParams
         {
             PeerId = message.User.PeerId,
             Message = message.Text,
             RandomId = new Random().Next(),
-            ReplyTo = needForward ? message.TriggerMessage.ConversationMessageId.GetValueOrDefault() : default,
+            Forward = _config.NeedForward ? new MessageForward
+            {
+                IsReply = true,
+                PeerId = message.User.PeerId,
+                ConversationMessageIds = new[] { (long)message.ConversationMessageId }
+            } : default,
             Attachments = CreateMedia(message),
         });
     }
