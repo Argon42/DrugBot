@@ -8,6 +8,13 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/BlazorServerApp/BlazorServerApp.csproj", "src/BlazorServerApp/"]
+COPY ["src/DrugBot.Infrastructure/DrugBot.Infrastructure.csproj", "src/DrugBot.Infrastructure/"]
+COPY ["src/CustomProcessors/CustomProcessors.csproj", "src/CustomProcessors/"]
+COPY ["src/DrugBot.Abstraction/DrugBot.Abstraction.csproj", "src/DrugBot.Abstraction/"]
+COPY ["src/DrugBot/DrugBot.csproj", "src/DrugBot/"]
+COPY ["src/Anecdotes/Anecdotes.csproj", "src/Anecdotes/"]
+COPY ["src/Memes/Memes.csproj", "src/Memes/"]
+COPY ["src/DrugBot.Vk/DrugBot.Vk.csproj", "src/DrugBot.Vk/"]
 RUN dotnet restore "src/BlazorServerApp/BlazorServerApp.csproj"
 COPY . .
 WORKDIR "/src/src/BlazorServerApp"
