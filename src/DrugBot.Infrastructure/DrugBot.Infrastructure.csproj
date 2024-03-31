@@ -1,22 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>DrugBotApp</AssemblyName>
-        <RootNamespace>DrugBotApp</RootNamespace>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CustomProcessors\CustomProcessors.csproj" />
-        <ProjectReference Include="..\DrugBot.Vk\DrugBot.Vk.csproj" />
-        <ProjectReference Include="..\DrugBot\DrugBot.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-preview.2.23128.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0-preview.2.23128.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0-preview.2.23128.3" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0-preview.2.23128.3" />
@@ -25,15 +16,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+      <ProjectReference Include="..\CustomProcessors\CustomProcessors.csproj" />
+      <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
+      <ProjectReference Include="..\DrugBot.Vk\DrugBot.Vk.csproj" />
+      <ProjectReference Include="..\DrugBot\DrugBot.csproj" />
     </ItemGroup>
 
 </Project>

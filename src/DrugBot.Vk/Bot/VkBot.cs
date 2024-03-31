@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Collections.ObjectModel;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using DrugBot.Core.Bot;
-using DrugBot.Core.Common;
 using Microsoft.Extensions.Logging;
-using VkNet;
 using VkNet.Abstractions;
 using VkNet.Exception;
 using VkNet.Model;
@@ -38,7 +30,6 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     private static HttpClient Client { get; } = new();
     private bool IsInitialized { get; set; }
 
-
     public VkBot(
         ILogger<VkBot> logger,
         BotHandler botHandler,
@@ -65,6 +56,8 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
     public void SendMessage(IVkMessage message)
     {
+        if(message == null)
+            throw new ArgumentNullException(nameof(message));
         if (IsWork == false || _api == null)
             throw new InvalidOperationException("Bot not working, messages unavailable");
         
@@ -77,7 +70,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
             {
                 IsReply = true,
                 PeerId = message.User.PeerId,
-                ConversationMessageIds = new[] { (long)message.ConversationMessageId }
+                ConversationMessageIds = new[] { (long)message.ConversationMessageId },
             } : default,
             Attachments = CreateMedia(message),
         });
@@ -121,6 +114,10 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
                 {
                     if (Update(longPollServer, _botHandler, token))
                         continue;
+                }
+                catch (TaskCanceledException)
+                {
+                    throw;
                 }
                 catch (LongPollException exception)
                 {
