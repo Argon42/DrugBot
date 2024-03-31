@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyName>DrugBotApp</AssemblyName>
@@ -11,7 +11,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\BlazorServerApp\BlazorServerApp.csproj" />
         <ProjectReference Include="..\CustomProcessors\CustomProcessors.csproj" />
+        <ProjectReference Include="..\DrugBot.Infrastructure\DrugBot.Infrastructure.csproj" />
         <ProjectReference Include="..\DrugBot.Vk\DrugBot.Vk.csproj" />
         <ProjectReference Include="..\DrugBot\DrugBot.csproj" />
     </ItemGroup>
@@ -33,6 +35,11 @@
     <ItemGroup>
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
+      </Content>
+      <Content Update="appsettings.Development.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
     </ItemGroup>
 

@@ -1,11 +1,24 @@
 ﻿using DrugBotApp;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 
 IHost host = Host.CreateDefaultBuilder()
-    .ConfigureServices(ApplicationConfiguration.ConfigureServices)
+    .ConfigureServices(services =>
+        {
+            string environmentVariable = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{environmentVariable}.json", true)
+                .AddEnvironmentVariables()
+                .Build();
+            services.AddLogging(builder => builder.AddConsole());
+            ApplicationConfiguration.ConfigureServices(services, configuration);
+        }
+    )
     .Build();
 
-IApplication app = host.Services.GetRequiredService<IApplication>();
-app.Run();
+await host.StartAsync();

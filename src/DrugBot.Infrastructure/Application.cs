@@ -1,33 +1,43 @@
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace DrugBotApp;
 
-public class Application : IApplication
+public class Application : BackgroundService
 {
     private readonly ILogger<Application> _logger;
     private readonly IEnumerable<IBotHandler> _bots;
-    private readonly IApplicationInput _input;
+    private readonly IBotsHandlerController _input;
 
-    public Application(ILogger<Application> logger, IEnumerable<IBotHandler> bots, IApplicationInput input)
+    public Application(ILogger<Application> logger, IEnumerable<IBotHandler> bots, IBotsHandlerController input)
     {
         _logger = logger;
         _bots = bots;
         _input = input;
     }
 
-    public void Run()
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        Run();
+        return Task.CompletedTask;
+    }
+
+    private void Run()
     {
         Initialize();
         Start();
         HealthCheck();
     }
 
-    private void HealthCheck()
+    private async void HealthCheck()
     {
         // TODO: добавить отображение текущего состояния ботов
-        while (true) Thread.Sleep(100);
+        while (true)
+        {
+            await Task.Delay(100);
+        }
         // ReSharper disable once FunctionNeverReturns
     }
 
@@ -53,7 +63,7 @@ public class Application : IApplication
     private void Start()
     {
         _bots.ForEach(StartHandlers);
-        _input.Start(_bots);
+        _input.Initialize();
         _logger.LogInformation("Application started");
     }
 

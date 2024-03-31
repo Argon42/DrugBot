@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿
 using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -52,9 +52,9 @@ public class CustomProcessorsServiceConfigurator
         string? path = configuration[CustomProcessorsPath];
         logger.LogDebug("Path from configuration: {Path}", path);
         if (path != default && !Path.IsPathRooted(path))
-            path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, path));
+            path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, path));
         logger.LogDebug("Full path from configuration: {Path}", path);
-
+        
         if (path == default)
             return Array.Empty<string>();
         

@@ -115,6 +115,10 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
                     if (Update(longPollServer, _botHandler, token))
                         continue;
                 }
+                catch (TaskCanceledException)
+                {
+                    throw;
+                }
                 catch (LongPollException exception)
                 {
                     longPollServer = TryUpdateLongPollServer(exception, longPollServer, _api);
