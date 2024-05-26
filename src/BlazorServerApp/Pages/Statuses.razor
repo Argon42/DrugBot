@@ -8,7 +8,11 @@
 <ul>
     @foreach (BotStatus bot in _bots)
     {
-        <li>@bot.Name: @bot.IsWork</li>
+        <li>@bot.Name: @bot.IsWork | @if (bot.IsWork == false)
+                                     {
+                                         <button @onclick="@(e => Start(@bot))">Start</button>
+                                     }
+        </li>
     }
 </ul>
 
@@ -26,6 +30,10 @@
             TimeSpan.FromSeconds(30));
     }
 
+    private void Start(BotStatus bot)
+    {
+        BotsHandlerController.StartHandler(bot.Name);
+    }
     private async Task UpdateBotList()
     {
         _bots = BotsHandlerController.GetStatus();

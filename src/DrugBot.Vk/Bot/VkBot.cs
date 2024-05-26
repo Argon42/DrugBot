@@ -144,8 +144,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         {
             IsWork = false;
         }
-
-        token.ThrowIfCancellationRequested();
+        
     }
 
     private IEnumerable<MediaAttachment> CreateMedia(IVkMessage vkMessage)
