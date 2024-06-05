@@ -25,29 +25,35 @@ internal class RandomFunction
 
         if (IsRandomByUser)
         {
-            seed += GetHash(fromId);
+            seed ^= (int)(fromId >> 32);
         }
 
         if (IsRandomByDay)
         {
-            seed += GetHash(DateTime.Today);
+            seed ^= DateTime.Today.GetHashCode();
         }
 
         if (IsRandomByMessage)
         {
-            seed += GetHash(messageText);
+            seed ^= Fnv1A32Hash(messageText);
         }
 
-        return seed + GetHash(index);
+        seed ^= index;
+        return seed;
     }
 
-    private static int GetHash(object start)
+    private static int Fnv1A32Hash(string str)
     {
-        var hash = start.GetHashCode();
-        var countOfHashing = start.GetHashCode();
+        const int fnvOffsetBasis = unchecked((int)2166136261);
+        const int fnvPrime = 16777619;
 
-        for (var i = 0; i < Math.Abs(countOfHashing) % 10; i++)
-            hash = hash.GetHashCode();
+        var hash = fnvOffsetBasis;
+
+        foreach (var c in str)
+        {
+            hash ^= c;
+            hash *= fnvPrime;
+        }
 
         return hash;
     }
