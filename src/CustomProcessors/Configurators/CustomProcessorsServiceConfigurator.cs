@@ -1,11 +1,11 @@
-﻿
+﻿using CustomProcessors.Converters;
 using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace CustomProcessors;
+namespace CustomProcessors.Configurators;
 
 public class CustomProcessorsServiceConfigurator
 {

@@ -1,5 +1,7 @@
-﻿using DrugBot.Core.Bot;
-using DrugBotApp;
+﻿using DrugBot.Core;
+using DrugBot.Core.Bot;
+
+namespace DrugBot.Infrastructure;
 
 public class BotsHandlerController : IBotsHandlerController
 {

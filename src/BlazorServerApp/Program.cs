@@ -1,6 +1,6 @@
 using BlazorServerApp.Areas.Identity;
 using BlazorServerApp.Data;
-using DrugBotApp;
+using DrugBot.Infrastructure;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

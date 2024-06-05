@@ -2,7 +2,7 @@
 using CustomProcessors.Behaviours.Triggers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace CustomProcessors;
+namespace CustomProcessors.Configurators;
 
 public static class BehaviourConfigurator
 {
