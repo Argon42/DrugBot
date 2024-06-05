@@ -9,10 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="Data\app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true"/>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.6"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6"/>
@@ -26,6 +22,11 @@
       <Content Update="app_secrets.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
+      <ProjectReference Include="..\DrugBot.Infrastructure\DrugBot.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

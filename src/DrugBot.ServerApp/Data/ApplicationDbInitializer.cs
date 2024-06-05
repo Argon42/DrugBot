@@ -27,11 +27,7 @@ public class ApplicationDbInitializer
 
     public async Task Initialize()
     {
-        if (await _context.Database.EnsureCreatedAsync() == false)
-        {
-            await _context.Database.MigrateAsync();
-        }
-
+        await _context.Database.MigrateAsync();
         await CreateDefaultRolesAndUsers();
     }
 

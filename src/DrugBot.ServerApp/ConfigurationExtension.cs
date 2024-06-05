@@ -24,7 +24,7 @@ public static class ConfigurationExtension
             .AddIdentityCookies();
 
         services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-        
+
         return services;
     }
 
@@ -78,12 +78,10 @@ public static class ConfigurationExtension
         // Add additional endpoints required by the Identity /Account Razor components.
         app.MapAdditionalIdentityEndpoints();
     }
-    
+
     public static IServiceCollection AddProjectServices(this IServiceCollection services)
     {
-        services.AddTransient<ApplicationDbInitializer>()
-        .AddHostedService<ApplicationDbInitializerService>();
+        services.AddTransient<ApplicationDbInitializer>();
         return services;
     }
-    
 }

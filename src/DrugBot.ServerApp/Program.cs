@@ -1,6 +1,5 @@
+using DrugBot.Infrastructure;
 using DrugBot.ServerApp;
-using Microsoft.AspNetCore.Identity;
-using DrugBot.ServerApp.Components.Account;
 using DrugBot.ServerApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +15,15 @@ builder.Services.AddIdentityAndAuthentication();
 builder.Services.AddDb(builder.Configuration);
 builder.Services.AddIdentityDb();
 
+ApplicationConfiguration.ConfigureServices(builder.Services, builder.Configuration);
+
 builder.Services.AddProjectServices();
 
 var app = builder.Build();
 
 app.ConfigurateHttpRequestPipeline();
 app.ConfigurateComponents();
+
+await app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbInitializer>().Initialize();
 
 app.Run();
