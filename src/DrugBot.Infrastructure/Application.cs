@@ -1,9 +1,10 @@
+using DrugBot.Core;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace DrugBotApp;
+namespace DrugBot.Infrastructure;
 
 public class Application : BackgroundService
 {

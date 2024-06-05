@@ -1,11 +1,11 @@
-﻿
+﻿using CustomProcessors.Converters;
 using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace CustomProcessors;
+namespace CustomProcessors.Configurators;
 
 public class CustomProcessorsServiceConfigurator
 {
@@ -43,7 +43,11 @@ public class CustomProcessorsServiceConfigurator
     {
         JsonConverter behaviourConverter = new BehaviourConverter(serviceProvider);
         JsonConverter processorConverter = new ProcessorConverter(serviceProvider);
-        return JsonConvert.DeserializeObject<CustomProcessor>(json, behaviourConverter, processorConverter) ??
+        JsonConverter objectWithTypeConverter = new ObjectWithTypeConverter(serviceProvider);
+        return JsonConvert.DeserializeObject<CustomProcessor>(json, 
+                   behaviourConverter, 
+                   processorConverter, 
+                   objectWithTypeConverter) ??
                throw new InvalidOperationException($"Json can't deserialize to CustomProcessor\n{json}");
     }
 

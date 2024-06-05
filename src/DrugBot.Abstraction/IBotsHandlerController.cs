@@ -1,4 +1,6 @@
-﻿namespace DrugBotApp;
+﻿using DrugBot.Core.Bot;
+
+namespace DrugBot.Core;
 
 public interface IBotsHandlerController
 {

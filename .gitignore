@@ -482,4 +482,4 @@ fabric.properties
 
 # Project files
 *.db
-src/BlazorServerApp/app_secrets.json
+*_secrets.json

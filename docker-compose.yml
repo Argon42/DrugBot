@@ -1,0 +1,6 @@
+﻿services:
+  drugbot:
+    image: drugbot
+    build:
+      context: .
+      dockerfile: ./Dockerfile

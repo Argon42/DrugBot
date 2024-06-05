@@ -33,7 +33,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     public VkBot(
         ILogger<VkBot> logger,
         BotHandler botHandler,
-        VkBotConfiguration configuration, 
+        VkBotConfiguration configuration,
         IVkApi api)
     {
         _logger = logger;
@@ -47,33 +47,63 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         IsInitialized = false;
         _config.Initialize();
 
-        if(_api.IsAuthorized)
+        if (_api.IsAuthorized)
             _api.LogOut();
 
         _api.Authorize(new ApiAuthParams { AccessToken = _config.Token });
         IsInitialized = true;
     }
 
-    public void SendMessage(IVkMessage message)
+    public long SendMessage(IVkMessage message)
     {
-        if(message == null)
+        if (message == null)
             throw new ArgumentNullException(nameof(message));
         if (IsWork == false || _api == null)
             throw new InvalidOperationException("Bot not working, messages unavailable");
-        
-        _api.Messages.Send(new MessagesSendParams
+
+        var messageId = _api.Messages.Send(new MessagesSendParams
         {
             PeerId = message.User.PeerId,
             Message = message.Text,
             RandomId = new Random().Next(),
-            Forward = _config.NeedForward ? new MessageForward
-            {
-                IsReply = true,
-                PeerId = message.User.PeerId,
-                ConversationMessageIds = new[] { (long)message.ConversationMessageId },
-            } : default,
+            Forward = _config.NeedForward
+                ? new MessageForward
+                {
+                    IsReply = true,
+                    PeerId = message.User.PeerId,
+                    ConversationMessageIds = message.ConversationMessageId != null
+                        ? new[] { message.ConversationMessageId ?? 0 }
+                        : null,
+                }
+                : default,
             Attachments = CreateMedia(message),
         });
+
+        return messageId;
+    }
+
+    public long EditMessage(long messageId, IVkMessage message)
+    {
+        if (message == null)
+            throw new ArgumentNullException(nameof(message));
+        if (IsWork == false || _api == null)
+            throw new InvalidOperationException("Bot not working, messages unavailable");
+
+        var isEdited = _api.Messages.Edit(new MessageEditParams
+        {
+            PeerId = message.User.PeerId ?? 0,
+            Message = message.Text,
+            MessageId = messageId,
+            KeepForwardMessages = _config.NeedForward,
+            Attachments = CreateMedia(message),
+        });
+
+        if (!isEdited)
+        {
+            _logger.LogError($"Can't edit message {messageId} from {message.User.PeerId}");
+        }
+
+        return messageId;
     }
 
     public void Start()
@@ -97,7 +127,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     {
         if (IsWork)
             throw new InvalidOperationException("Bot already working");
-        if(_api == null || IsInitialized == false)
+        if (_api == null || IsInitialized == false)
             throw new InvalidOperationException("Bot not initialized");
 
         CancellationToken token = (CancellationToken)(o ?? throw new ArgumentNullException(nameof(o)));
@@ -144,7 +174,6 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         {
             IsWork = false;
         }
-        
     }
 
     private IEnumerable<MediaAttachment> CreateMedia(IVkMessage vkMessage)
@@ -198,7 +227,7 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         BotHandler botHandler,
         CancellationToken token)
     {
-        BotsLongPollHistoryResponse? poll = _api!.Groups.GetBotsLongPollHistory(new BotsLongPollHistoryParams
+        BotsLongPollHistoryResponse? poll = _api.Groups.GetBotsLongPollHistory(new BotsLongPollHistoryParams
         {
             Server = longPollServer.Server,
             Ts = _currentTs,
@@ -241,8 +270,5 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         return Encoding.GetEncoding(1251).GetString(responseRaw);
     }
 
-    private LongPollServerResponse CreateLongPool(IVkApi vkApi)
-    {
-        return vkApi.Groups.GetLongPollServer(_config.Id);
-    }
+    private LongPollServerResponse CreateLongPool(IVkApi vkApi) => vkApi.Groups.GetLongPollServer(_config.Id);
 }

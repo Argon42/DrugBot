@@ -1,0 +1,19 @@
+﻿{
+  "Name": "Волшебный шар",
+  "Description": "Хочешь получить ответ на вопрос, напиши: /8 и_какой_то_свой_вопрос",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Message": "/8"
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.RandomResponseMessage",
+    "PathToFile": "Local/8.txt",
+    "RandomFunction": {
+      "IsRandom": false,
+      "IsRandomByUser": true,
+      "IsRandomByDay": true,
+      "IsRandomByMessage": true
+    }
+  }
+} 

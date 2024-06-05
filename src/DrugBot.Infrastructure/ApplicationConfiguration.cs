@@ -1,11 +1,11 @@
-﻿using CustomProcessors;
-using DrugBot;
+﻿using CustomProcessors.Configurators;
+using DrugBot.Core;
 using DrugBot.Vk;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace DrugBotApp;
+namespace DrugBot.Infrastructure;
 
 public static class ApplicationConfiguration
 {

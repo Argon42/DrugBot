@@ -4,5 +4,6 @@ public interface IBot<TUser, TMessage>
     where TUser : IUser
     where TMessage : IMessage<TMessage, TUser>
 {
-    void SendMessage(TMessage message);
+    long SendMessage(TMessage message);
+    long EditMessage(long messageId, TMessage message);
 }
