@@ -43,7 +43,11 @@ public class CustomProcessorsServiceConfigurator
     {
         JsonConverter behaviourConverter = new BehaviourConverter(serviceProvider);
         JsonConverter processorConverter = new ProcessorConverter(serviceProvider);
-        return JsonConvert.DeserializeObject<CustomProcessor>(json, behaviourConverter, processorConverter) ??
+        JsonConverter objectWithTypeConverter = new ObjectWithTypeConverter(serviceProvider);
+        return JsonConvert.DeserializeObject<CustomProcessor>(json, 
+                   behaviourConverter, 
+                   processorConverter, 
+                   objectWithTypeConverter) ??
                throw new InvalidOperationException($"Json can't deserialize to CustomProcessor\n{json}");
     }
 

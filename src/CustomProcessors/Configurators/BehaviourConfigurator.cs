@@ -10,15 +10,22 @@ public static class BehaviourConfigurator
     {
         ConfigureResponses(services);
         ConfigureTriggers(services);
+        ConfigureOthers(services);
     }
 
     private static void ConfigureResponses(IServiceCollection services)
     {
         services.AddTransient<SendResponseMessage>();
+        services.AddTransient<RandomResponseMessage>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
     {
         services.AddTransient<MessageText>();
+        services.AddTransient<MessageTextStartFrom>();
+    }
+
+    private static void ConfigureOthers(IServiceCollection services)
+    {
     }
 }
