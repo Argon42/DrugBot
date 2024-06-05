@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorServerApp", "src\Blaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugBot.Infrastructure", "src\DrugBot.Infrastructure\DrugBot.Infrastructure.csproj", "{30BF0744-5385-4439-A646-4467E1EF96C7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{F3263A10-6B49-4D7E-98F1-77ABFE28E691}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugBot.Tests", "tests\DrugBot.Tests\DrugBot.Tests.csproj", "{C02A78D6-5A04-454C-8644-47363F4B609D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,10 @@ Global
 		{30BF0744-5385-4439-A646-4467E1EF96C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30BF0744-5385-4439-A646-4467E1EF96C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30BF0744-5385-4439-A646-4467E1EF96C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C02A78D6-5A04-454C-8644-47363F4B609D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C02A78D6-5A04-454C-8644-47363F4B609D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C02A78D6-5A04-454C-8644-47363F4B609D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C02A78D6-5A04-454C-8644-47363F4B609D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +80,7 @@ Global
 		{2E63FA22-8138-40B9-B09B-78600585E7DB} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{057928CE-DD5E-40F6-B724-E7AF0010930F} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{30BF0744-5385-4439-A646-4467E1EF96C7} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
+		{C02A78D6-5A04-454C-8644-47363F4B609D} = {F3263A10-6B49-4D7E-98F1-77ABFE28E691}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C51964D-8896-451C-A8C7-3A7B66C187FF}
