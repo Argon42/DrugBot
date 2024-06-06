@@ -44,3 +44,14 @@ docker run \
 - В случае если вы хотите переопределить настройки приложения, вы можете указать в переменные среды новые значения
   - пример json'а `{"ConnectionStrings": { "DefaultConnection": "DataSource=Data/app.db;Cache=Shared" }}`
   - который будет в перменной `ConnectionStrings:DefaultConnection=DataSource=Data/app.db;Cache=Shared`
+
+## Возможные проблемы и их исправления
+
+### Readonly db
+Если при запуске приложение в папке указанной через -v база данных не создаётся,
+или не может открыться существующая и сыпится ошибка что база данных только для чтения
+То возможным решением будет
+- `cmod 777 pathToFolder` и такой же на файл
+- `sudo chgrp www-data app.db` и так же на папку, я не знаю что это 
+  но [Zipp](https://stackoverflow.com/questions/3319112/sqlite-error-attempt-to-write-a-readonly-database-during-insert) написал что ему помогло, и мне тоже
+

@@ -27,8 +27,25 @@ public class ApplicationDbInitializer
 
     public async Task Initialize()
     {
-        await _context.Database.MigrateAsync();
+        await CreateDb();
         await CreateDefaultRolesAndUsers();
+    }
+
+    private async Task CreateDb()
+    {
+        try
+        {
+            await _context.Database.EnsureCreatedAsync();
+
+            if((await _context.Database.GetPendingMigrationsAsync()).Any())
+            {
+                await _context.Database.MigrateAsync();
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Database migration failed");
+        }
     }
 
     internal async Task CreateDefaultRolesAndUsers()
