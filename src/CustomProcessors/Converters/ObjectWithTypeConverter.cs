@@ -1,10 +1,8 @@
-﻿using System.Reflection;
-using CustomProcessors.Converters;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace CustomProcessors.Configurators;
+namespace CustomProcessors.Converters;
 
 internal class ObjectWithTypeConverter : JsonConverter
 {
@@ -23,7 +21,10 @@ internal class ObjectWithTypeConverter : JsonConverter
     {
         JObject jo = JObject.Load(reader);
         string typeName = (string)jo[TypePropertyName]!;
-        Type? type = Assembly.GetExecutingAssembly().GetType(typeName);
+        Type? type = AppDomain.CurrentDomain
+            .GetAssemblies()
+            .Select(assembly => assembly.GetType(typeName))
+            .FirstOrDefault(type => type != null);
         if (type == null) throw new Exception($"Unknown type: {typeName}");
 
         if (_serviceProvider.GetServices(type).Any())
