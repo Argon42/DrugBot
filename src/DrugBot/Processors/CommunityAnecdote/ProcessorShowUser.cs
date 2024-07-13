@@ -19,11 +19,11 @@ public class ProcessorShowUser : AbstractProcessor
 
     public override IReadOnlyList<string> Keys => _keys;
     
-    private IAnecdoteRepository _anecdoteRepository;
+    private IAnecdoteController _anecdoteController;
 
-    public ProcessorShowUser(IAnecdoteRepository anecdoteRepository)
+    public ProcessorShowUser(IAnecdoteController anecdoteController)
     {
-        _anecdoteRepository = anecdoteRepository;
+        _anecdoteController = anecdoteController;
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)

@@ -7,6 +7,7 @@ using DrugBot.Vk;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace DrugBotApp;
@@ -36,8 +37,8 @@ public static class ApplicationConfiguration
     private static void ConfigureDb(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<CommunityAnecdoteDbContext>(options => options.UseNpgsql(connectionString));
-        services.AddSingleton<IAnecdoteRepository, CommunityAnecdoteRepository>();
+        services.AddSingleton<CommunityAnecdoteDbContext>(s=> new CommunityAnecdoteDbContext(connectionString));
+        services.AddSingleton<IAnecdoteController, CommunityAnecdoteController>();
     }
 
     private static IConfigurationRoot ConfigureConfiguration() =>

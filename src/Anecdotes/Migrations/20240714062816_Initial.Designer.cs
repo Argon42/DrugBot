@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Anecdotes.Migrations
 {
     [DbContext(typeof(CommunityAnecdoteDbContext))]
-    [Migration("20240713090146_Initial")]
+    [Migration("20240714062816_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,24 +23,28 @@ namespace Anecdotes.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Anecdotes.CommunityAnecdotes.Data.CommulityAnecdoteData", b =>
+            modelBuilder.Entity("Anecdotes.CommunityAnecdotes.Data.CommunityAnecdoteData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Anecdote")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("anecdote");
 
-                    b.Property<decimal>("User")
-                        .HasColumnType("numeric(20,0)");
+                    b.Property<decimal>("UserId")
+                        .HasColumnType("numeric(20,0)")
+                        .HasColumnName("user_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_anecdotes");
 
-                    b.ToTable("CommulityAnecdoteData");
+                    b.ToTable("anecdotes", (string)null);
                 });
 #pragma warning restore 612, 618
         }

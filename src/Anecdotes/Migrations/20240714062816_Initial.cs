@@ -10,24 +10,24 @@ namespace Anecdotes.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CommulityAnecdoteData",
+                name: "anecdotes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    User = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
-                    Anecdote = table.Column<string>(type: "text", nullable: false)
+                    user_id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
+                    anecdote = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommulityAnecdoteData", x => x.Id);
+                    table.PrimaryKey("pk_anecdotes", x => x.id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CommulityAnecdoteData");
+                name: "anecdotes");
         }
     }
 }

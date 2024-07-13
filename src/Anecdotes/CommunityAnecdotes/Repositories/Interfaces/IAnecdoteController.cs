@@ -2,7 +2,7 @@
 
 namespace Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 
-public interface IAnecdoteRepository
+public interface IAnecdoteController
 {
     public CommunityAnecdoteData? GetRandomAnecdote();
     public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId);

@@ -19,16 +19,16 @@ public class ProcessorCreate : AbstractProcessor
     public override string Name  => "Создание своей хохмы";
     public override IReadOnlyList<string> Keys => _keys;
 
-    private IAnecdoteRepository _anecdoteRepository;
+    private IAnecdoteController _anecdoteController;
 
-    public ProcessorCreate(IAnecdoteRepository anecdoteRepository)
+    public ProcessorCreate(IAnecdoteController anecdoteController)
     {
-        _anecdoteRepository = anecdoteRepository;
+        _anecdoteController = anecdoteController;
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        _anecdoteRepository.CreateNewAnecdote(1, message.Text);
+        _anecdoteController.CreateNewAnecdote(1, message.Text);
         
         bot.SendMessage(message.CreateResponse("Анекдот успешно добавлен"));
     }
