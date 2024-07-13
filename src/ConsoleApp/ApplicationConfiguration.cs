@@ -1,6 +1,8 @@
-﻿using CustomProcessors;
+﻿using Anecdotes.CommunityAnecdotes.Data;
+using CustomProcessors;
 using DrugBot;
 using DrugBot.Vk;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,12 +21,20 @@ public static class ApplicationConfiguration
         
         services.AddLogging(builder => builder.AddConsole());
         
+        ConfigureDb(services, configuration);
+
         var loggerBot = services.BuildServiceProvider().GetRequiredService<ILogger<DrugBotServiceConfigurator>>();
         DrugBotServiceConfigurator.ConfigureServices(services, loggerBot);
         
         var loggerCustomProcessors = services.BuildServiceProvider().GetRequiredService<ILogger<CustomProcessorsServiceConfigurator>>();
         CustomProcessorsServiceConfigurator.ConfigureServices(services, configuration, loggerCustomProcessors);
         VkServiceConfigurator.ConfigureVk(services);
+    }
+
+    private static void ConfigureDb(IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        services.AddDbContext<AnecdoteDbContext>(options => options.UseNpgsql(connectionString));
     }
 
     private static IConfigurationRoot ConfigureConfiguration() =>

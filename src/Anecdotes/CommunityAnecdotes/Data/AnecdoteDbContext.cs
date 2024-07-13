@@ -4,7 +4,9 @@ namespace Anecdotes.CommunityAnecdotes.Data;
 
 public class AnecdoteDbContext : DbContext
 {
-    public DbSet<CommulityAnecdoteData> AnecdoteDatas;
+    public DbSet<CommulityAnecdoteData> Anecdotes;
+
+    public AnecdoteDbContext(DbContextOptions<AnecdoteDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
