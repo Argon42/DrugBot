@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -17,9 +18,24 @@ public class ProcessorShow : AbstractProcessor
     public override string Name  => "Лучшие хохмы от сообщества";
 
     public override IReadOnlyList<string> Keys => _keys;
+    
+    private IAnecdoteRepository _anecdoteRepository;
+
+    public ProcessorShow(IAnecdoteRepository anecdoteRepository)
+    {
+        _anecdoteRepository = anecdoteRepository;
+    }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
+        var anecdote = _anecdoteRepository.GetRandomAnecdote();
+
+        if (anecdote == null)
+        {
+            bot.SendMessage(message.CreateResponse("Никто еще не создал анекдот. Будьте первым!"));
+            return;
+        }
         
+        bot.SendMessage(message.CreateResponse(anecdote.Anecdote));
     }
 }

@@ -6,4 +6,5 @@ public interface IAnecdoteRepository
 {
     public CommunityAnecdoteData? GetRandomAnecdote();
     public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId);
+    public void CreateNewAnecdote(ulong userId, string anecdote);
 }

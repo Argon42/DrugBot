@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
+using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
 
@@ -17,6 +18,13 @@ public class ProcessorShowUser : AbstractProcessor
     public override string Name  => "Лучшие хохмы от \"вставте имя юмориста\"";
 
     public override IReadOnlyList<string> Keys => _keys;
+    
+    private IAnecdoteRepository _anecdoteRepository;
+
+    public ProcessorShowUser(IAnecdoteRepository anecdoteRepository)
+    {
+        _anecdoteRepository = anecdoteRepository;
+    }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {

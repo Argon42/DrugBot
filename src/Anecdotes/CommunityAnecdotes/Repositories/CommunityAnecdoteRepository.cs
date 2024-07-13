@@ -16,16 +16,30 @@ public class CommunityAnecdoteRepository : IAnecdoteRepository
     
     public CommunityAnecdoteData? GetRandomAnecdote()
     {
-        var data = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM Anecdotes ORDER BY RANDOM() LIMIT 1").ToArray();
+        var rawData = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM Anecdotes ORDER BY RANDOM() LIMIT 1");
 
-        return data.Length == 0 ? null : data[0];
+        if (rawData == null || !rawData.Any())
+        {
+            return null;
+        }
+        
+        var data = rawData.ToArray();
+
+        return data[0];
     }
 
     public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId)
     {
-        var data = _dbContext.Anecdotes.FromSqlRaw($"SELECT * FROM Anecdotes WHERE `User` = {userId}  ORDER BY RANDOM() LIMIT 1").ToArray();
+        var rawData = _dbContext.Anecdotes.FromSqlRaw($"SELECT * FROM Anecdotes WHERE `User` = {userId}  ORDER BY RANDOM() LIMIT 1");
 
-        return data.Length == 0 ? null : data[0];
+        if (!rawData.Any())
+        {
+            return null;
+        }
+        
+        var data = rawData.ToArray();
+
+        return data[0];
     }
 
     public void CreateNewAnecdote(ulong userId, string anecdote)
