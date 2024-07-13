@@ -1,4 +1,6 @@
 ﻿using Anecdotes.CommunityAnecdotes.Data;
+using Anecdotes.CommunityAnecdotes.Repositories;
+using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 using CustomProcessors;
 using DrugBot;
 using DrugBot.Vk;
@@ -34,7 +36,8 @@ public static class ApplicationConfiguration
     private static void ConfigureDb(IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<AnecdoteDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddDbContext<CommunityAnecdoteDbContext>(options => options.UseNpgsql(connectionString));
+        services.AddSingleton<IAnecdoteRepository, CommunityAnecdoteRepository>();
     }
 
     private static IConfigurationRoot ConfigureConfiguration() =>
