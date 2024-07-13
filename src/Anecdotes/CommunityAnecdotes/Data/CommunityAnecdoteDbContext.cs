@@ -4,9 +4,9 @@ namespace Anecdotes.CommunityAnecdotes.Data;
 
 public class CommunityAnecdoteDbContext : DbContext
 {
-    public DbSet<CommulityAnecdoteData> Anecdotes;
+    internal DbSet<CommunityAnecdoteData> Anecdotes;
 
-    public CommunityAnecdoteDbContext(DbContextOptions<CommunityAnecdoteDbContext> options) : base(options) { }
+    internal CommunityAnecdoteDbContext(DbContextOptions<CommunityAnecdoteDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,6 +17,6 @@ public class CommunityAnecdoteDbContext : DbContext
 
     private void BuildAnecdotes(ModelBuilder modelBuilder)
     {
-        var configuration = modelBuilder.Entity<CommulityAnecdoteData>();
+        var configuration = modelBuilder.Entity<CommunityAnecdoteData>();
     }
 }

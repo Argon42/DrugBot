@@ -4,6 +4,6 @@ namespace Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 
 public interface IAnecdoteRepository
 {
-    public CommulityAnecdoteData? GetRandomAnecdote();
-    public CommulityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId);
+    public CommunityAnecdoteData? GetRandomAnecdote();
+    public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId);
 }

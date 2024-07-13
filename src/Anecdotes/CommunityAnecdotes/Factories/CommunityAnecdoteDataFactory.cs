@@ -2,9 +2,9 @@
 
 namespace Anecdotes.CommunityAnecdotes.Factories;
 
-public static class CommunityAnecdoteDataFactory
+internal static class CommunityAnecdoteDataFactory
 {
-    public static CommulityAnecdoteData Create(ulong userId, string anecdote) => new()
+    internal static CommunityAnecdoteData Create(ulong userId, string anecdote) => new()
     {
         UserId = userId,
         Anecdote = anecdote

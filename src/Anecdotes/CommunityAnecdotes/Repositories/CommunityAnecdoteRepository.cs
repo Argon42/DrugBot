@@ -14,14 +14,14 @@ public class CommunityAnecdoteRepository : IAnecdoteRepository
         _dbContext = dbContext;
     }
     
-    public CommulityAnecdoteData? GetRandomAnecdote()
+    public CommunityAnecdoteData? GetRandomAnecdote()
     {
         var data = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM Anecdotes ORDER BY RANDOM() LIMIT 1").ToArray();
 
         return data.Length == 0 ? null : data[0];
     }
 
-    public CommulityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId)
+    public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId)
     {
         var data = _dbContext.Anecdotes.FromSqlRaw($"SELECT * FROM Anecdotes WHERE `User` = {userId}  ORDER BY RANDOM() LIMIT 1").ToArray();
 
