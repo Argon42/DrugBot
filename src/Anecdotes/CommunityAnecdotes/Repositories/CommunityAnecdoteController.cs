@@ -16,9 +16,9 @@ public class CommunityAnecdoteController : IAnecdoteController
     
     public CommunityAnecdoteData? GetRandomAnecdote()
     {
-        var rawData = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM anecdotes");
+        var rawData = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM anecdotes ORDER BY RANDOM() LIMIT 1");
 
-        if (rawData == null || rawData.Count() == 0) //Нельзя использовать !rawData.Any() вместо rawData.Count() == 0
+        if (rawData.Count() == 0) //Нельзя использовать !rawData.Any()
         {
             return null;
         }
@@ -30,9 +30,11 @@ public class CommunityAnecdoteController : IAnecdoteController
 
     public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId)
     {
-        var rawData = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM Anecdotes WHERE `User` = {0}  ORDER BY RANDOM() LIMIT 1", userId);
+        var rawData =
+            _dbContext.Anecdotes.FromSqlRaw(
+                "SELECT * FROM anecdotes WHERE user_id IN ({0}) ORDER BY RANDOM() LIMIT 1", userId);
 
-        if (!rawData.Any())
+        if (rawData.Count() == 0) //Нельзя использовать !rawData.Any()
         {
             return null;
         }
