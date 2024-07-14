@@ -1,19 +1,20 @@
-﻿using Anecdotes.CommunityAnecdotes.Data;
+﻿using System.Configuration;
+using Anecdotes.CommunityAnecdotes.Data;
 using Anecdotes.CommunityAnecdotes.Repositories;
 using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 using CustomProcessors;
 using DrugBot;
 using DrugBot.Vk;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace DrugBotApp;
 
 public static class ApplicationConfiguration
 {
+    private const string DbConnectionString = "DB_CONNECTION_STRING";
+    
     public static void ConfigureServices(IServiceCollection services)
     {
         IConfiguration configuration = ConfigureConfiguration();
@@ -36,7 +37,8 @@ public static class ApplicationConfiguration
 
     private static void ConfigureDb(IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetValue<string?>(DbConnectionString, null);
+        
         services.AddSingleton<CommunityAnecdoteDbContext>(s=> new CommunityAnecdoteDbContext(connectionString));
         services.AddSingleton<IAnecdoteController, CommunityAnecdoteController>();
     }
