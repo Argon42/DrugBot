@@ -12,14 +12,16 @@ public class ProcessorCreate : AbstractProcessor
     private readonly List<string> _keys = new()
     {
         "/анек-с", //с русская
-        "/анек-c" //c английская
+        "/анек-c", //c английская
+        "/anek-с", //с русская
+        "/anek-c" //c английская
     };
     
     public override string Description => $"Создание скоего анекдота. Команды: {string.Join(' ', _keys)}";
     public override string Name  => "Создание своей хохмы";
     public override IReadOnlyList<string> Keys => _keys;
 
-    private IAnecdoteController _anecdoteController;
+    private readonly IAnecdoteController _anecdoteController;
 
     public ProcessorCreate(IAnecdoteController anecdoteController)
     {
@@ -28,8 +30,11 @@ public class ProcessorCreate : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        _anecdoteController.CreateNewAnecdote(1, message.Text);
+        const ulong userId = 1; //TODO Найти способ достать Id пользователя
+        var anecdote = message.Text.Remove(0, message.Text.IndexOf(' ') + 1);
         
-        bot.SendMessage(message.CreateResponse("Анекдот успешно добавлен"));
+        _anecdoteController.CreateNewAnecdote(userId, anecdote);
+        
+        bot.SendMessage(message.CreateResponse("Анекдот успешно создан"));
     }
 }

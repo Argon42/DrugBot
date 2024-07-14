@@ -19,7 +19,7 @@ public class ProcessorShowUser : AbstractProcessor
 
     public override IReadOnlyList<string> Keys => _keys;
     
-    private IAnecdoteController _anecdoteController;
+    private readonly IAnecdoteController _anecdoteController;
 
     public ProcessorShowUser(IAnecdoteController anecdoteController)
     {
@@ -28,6 +28,15 @@ public class ProcessorShowUser : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
+        const int userId = 1; //TODO Найти способ достать Id пользователя
+        var anecdote = _anecdoteController.GetRandomAnecdoteFromUser(userId);
+
+        if (anecdote == null)
+        {
+            bot.SendMessage(message.CreateResponse("Этот юморист еще не создал ни одного анекдота."));
+            return;
+        }
         
+        bot.SendMessage(message.CreateResponse(anecdote.Anecdote));
     }
 }
