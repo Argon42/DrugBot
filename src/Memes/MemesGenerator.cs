@@ -43,8 +43,8 @@ public class MemesGenerator
 
     private Image CropImage(Image img)
     {
-        int imageHeight = img.Size().Height;
-        int imageWidth = img.Size().Width;
+        int imageHeight = img.Size.Height;
+        int imageWidth = img.Size.Width;
         img.Mutate(
             i => i.Crop(new Rectangle(0, 0, imageWidth, imageHeight - 14)));
         return img;
@@ -73,7 +73,7 @@ public class MemesGenerator
     private byte[] ImageToByte(Image image)
     {
         using MemoryStream memoryStream = new();
-        IImageEncoder? imageEncoder = image.GetConfiguration().ImageFormatsManager.FindEncoder(JpegFormat.Instance);
+        IImageEncoder imageEncoder = image.Configuration.ImageFormatsManager.GetEncoder(JpegFormat.Instance);
         image.Save(memoryStream, imageEncoder);
         return memoryStream.ToArray();
     }

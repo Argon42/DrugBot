@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using DrugBot.Vk.Bot;
-using DrugBot.Core.Bot;
+﻿using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
+using DrugBot.Vk.Bot;
 using VkNet.Abstractions;
 using VkNet.Exception;
 
-namespace DrugBot.Processors.Vk;
+namespace DrugBot.Vk.Processors;
 
 [Processor]
 public class ProcessorStatus : VkProcessor

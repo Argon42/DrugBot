@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace CustomProcessors;
+namespace CustomProcessors.Converters;
 
 internal class BehaviourConverter : JsonConverter
 {

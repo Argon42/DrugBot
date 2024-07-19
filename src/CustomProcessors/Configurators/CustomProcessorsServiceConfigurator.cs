@@ -1,11 +1,11 @@
-﻿using System.Text;
+﻿using CustomProcessors.Converters;
 using DrugBot.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace CustomProcessors;
+namespace CustomProcessors.Configurators;
 
 public class CustomProcessorsServiceConfigurator
 {
@@ -43,7 +43,11 @@ public class CustomProcessorsServiceConfigurator
     {
         JsonConverter behaviourConverter = new BehaviourConverter(serviceProvider);
         JsonConverter processorConverter = new ProcessorConverter(serviceProvider);
-        return JsonConvert.DeserializeObject<CustomProcessor>(json, behaviourConverter, processorConverter) ??
+        JsonConverter objectWithTypeConverter = new ObjectWithTypeConverter(serviceProvider);
+        return JsonConvert.DeserializeObject<CustomProcessor>(json, 
+                   behaviourConverter, 
+                   processorConverter, 
+                   objectWithTypeConverter) ??
                throw new InvalidOperationException($"Json can't deserialize to CustomProcessor\n{json}");
     }
 
@@ -52,9 +56,9 @@ public class CustomProcessorsServiceConfigurator
         string? path = configuration[CustomProcessorsPath];
         logger.LogDebug("Path from configuration: {Path}", path);
         if (path != default && !Path.IsPathRooted(path))
-            path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, path));
+            path = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, path));
         logger.LogDebug("Full path from configuration: {Path}", path);
-
+        
         if (path == default)
             return Array.Empty<string>();
         
