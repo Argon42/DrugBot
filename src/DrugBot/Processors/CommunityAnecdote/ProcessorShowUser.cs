@@ -19,16 +19,16 @@ public class ProcessorShowUser : AbstractProcessor
 
     public override IReadOnlyList<string> Keys => _keys;
     
-    private readonly IAnecdoteController _anecdoteController;
+    private readonly IAnecdoteProvider _anecdoteProvider;
 
-    public ProcessorShowUser(IAnecdoteController anecdoteController)
+    public ProcessorShowUser(IAnecdoteProvider anecdoteProvider)
     {
-        _anecdoteController = anecdoteController;
+        _anecdoteProvider = anecdoteProvider;
     }
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        var anecdote = _anecdoteController.GetRandomAnecdoteFromUser(message.User.Id);
+        var anecdote = _anecdoteProvider.GetRandomAnecdoteFromUser(message.User.Id);
 
         if (anecdote == null)
         {

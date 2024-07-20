@@ -87,7 +87,7 @@ public static class ConfigurationExtension
     {
         services.AddTransient<ApplicationDbInitializer>();
         services.AddTransient<CommunityAnecdoteDbInitializer>();
-        services.AddSingleton<IAnecdoteController, CommunityAnecdoteController>();
+        services.AddSingleton<IAnecdoteProvider, CommunityAnecdoteProvider>();
         return services;
     }
     

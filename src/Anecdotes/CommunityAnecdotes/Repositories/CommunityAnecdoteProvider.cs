@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Anecdotes.CommunityAnecdotes.Repositories;
 
-public class CommunityAnecdoteController : IAnecdoteController
+public class CommunityAnecdoteProvider : IAnecdoteProvider
 {
     private readonly CommunityAnecdoteDbContext _dbContext;
     
-    public CommunityAnecdoteController(CommunityAnecdoteDbContext dbContext)
+    public CommunityAnecdoteProvider(CommunityAnecdoteDbContext dbContext)
     {
         _dbContext = dbContext;
     }
