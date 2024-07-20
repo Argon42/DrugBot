@@ -32,6 +32,12 @@ public class ProcessorCreate : AbstractProcessor
     {
         var anecdote = message.Text.Remove(0, message.Text.IndexOf(' ') + 1);
         
+        if (string.IsNullOrWhiteSpace(anecdote))
+        {
+            bot.SendMessage(message.CreateResponse("Ты где анек потерял?"));
+            return;
+        }
+        
         _anecdoteProvider.CreateNewAnecdote(message.User.Id, anecdote);
         
         bot.SendMessage(message.CreateResponse("Анекдот успешно создан"));

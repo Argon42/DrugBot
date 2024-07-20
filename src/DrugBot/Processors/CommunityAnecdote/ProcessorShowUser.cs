@@ -28,9 +28,21 @@ public class ProcessorShowUser : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        if (!int.TryParse(message.Text.Remove(0, message.Text.IndexOf(' ') + 1), out var userId))
+        var rawQuery = message.Text.Split(' ');
+
+        if (rawQuery.Length != 1)
         {
-            bot.SendMessage(message.CreateResponse("На данный момент можно искать только по ID"));
+            bot.SendMessage(
+                message.CreateResponse("Некорректный запрос. \n Пример правильного запроса: \"/анек-п-п 12345678\""));
+            return;
+        }
+
+        var query = rawQuery[0];
+        
+        if (!int.TryParse(query, out var userId))
+        {
+            bot.SendMessage(message.CreateResponse(
+                "На данный момент можно искать только по ID. \n Пример правильного запроса: \"/анек-п-п 12345678\""));
             return;
         }
         
