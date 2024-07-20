@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DrugBot.DataBase.Initializers;
 
-public class MagicBallDbInitializer(
-    ILogger<MagicBallDbInitializer> logger,
-    MagicBallDbContext context)
+public class WisdomDbInitializer(
+    ILogger<WisdomDbInitializer> logger,
+    WisdomDbContext context)
 {
     public async Task Initialize()
     {
@@ -26,7 +26,7 @@ public class MagicBallDbInitializer(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Magic ball database migration failed");
+            logger.LogError(e, "Wisdom database migration failed");
         }
     }
 }

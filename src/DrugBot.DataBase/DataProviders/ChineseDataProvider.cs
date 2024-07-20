@@ -6,7 +6,7 @@ namespace DrugBot.DataBase.DataProviders;
 
 public class ChineseDataProvider(ChineseDbContext dbContext) : IChineseDataProvider
 {
-    public string GetRandomChineseString(int userId)
+    public string GetRandomWisdom(int userId)
     {
         if (!dbContext.ChineseSymbols.Any())
         {

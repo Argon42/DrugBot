@@ -1,6 +1,6 @@
 ﻿namespace DrugBot.DataBase.DataProviders.Interfaces;
 
-public interface IChineseDataProvider
+public interface IWisdomDataProvider
 {
     public string GetRandomWisdom(int userId);
 }

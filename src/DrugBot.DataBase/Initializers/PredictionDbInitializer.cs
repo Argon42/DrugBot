@@ -26,7 +26,7 @@ public class PredictionDbInitializer(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Chinese database migration failed");
+            logger.LogError(e, "Prediction database migration failed");
         }
     }
 }

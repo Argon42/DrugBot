@@ -91,11 +91,13 @@ public static class ConfigurationExtension
         services.AddTransient<ChineseDbInitializer>();
         services.AddTransient<EmojiDbInitializer>();
         services.AddTransient<PredictionDbInitializer>();
+        services.AddTransient<WisdomDbInitializer>();
         
         services.AddSingleton<IMagicBallDataProvider, MagicBallDataProvider>();
         services.AddSingleton<IChineseDataProvider, ChineseDataProvider>();
         services.AddSingleton<IEmojiDataProvider, EmojiDataProvider>();
         services.AddSingleton<IPredictionDataProvider, PredictionDataProvider>();
+        services.AddSingleton<IWisdomDataProvider, WisdomDataProvider>();
         return services;
     }
     
@@ -137,6 +139,17 @@ public static class ConfigurationExtension
         var connectionString = configuration.GetConnectionString("PredictionConnection") ??
                                throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
         services.AddDbContext<PredictionDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddWisdomDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("WisdomConnection") ??
+                               throw new InvalidOperationException("Connection string 'WisdomConnection' not found.");
+        services.AddDbContext<WisdomDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
 
