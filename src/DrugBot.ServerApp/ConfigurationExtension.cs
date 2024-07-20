@@ -86,10 +86,10 @@ public static class ConfigurationExtension
     public static IServiceCollection AddProjectServices(this IServiceCollection services)
     {
         services.AddTransient<ApplicationDbInitializer>();
-        services.AddTransient<PredictionDbInitializer>();
+        services.AddTransient<MagicBallDbInitializer>();
         services.AddTransient<ChineseDbInitializer>();
         
-        services.AddSingleton<IPredictionDataProvider, PredictionDataProvider>();
+        services.AddSingleton<IMagicBallDataProvider, MagicBallDataProvider>();
         services.AddSingleton<IChineseDataProvider, ChineseDataProvider>();
         return services;
     }
@@ -98,7 +98,7 @@ public static class ConfigurationExtension
     {
         var connectionString = configuration.GetConnectionString("PredictionConnection") ??
                                throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
-        services.AddDbContext<PredictionDbContext>(options =>
+        services.AddDbContext<MagicBallDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
 

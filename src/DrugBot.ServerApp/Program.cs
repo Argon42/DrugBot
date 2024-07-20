@@ -28,7 +28,7 @@ app.ConfigurateHttpRequestPipeline();
 app.ConfigurateComponents();
 
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbInitializer>().Initialize();
-await app.Services.CreateScope().ServiceProvider.GetRequiredService<PredictionDbInitializer>().Initialize();
+await app.Services.CreateScope().ServiceProvider.GetRequiredService<MagicBallDbInitializer>().Initialize();
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<ChineseDbInitializer>().Initialize();
 
 app.Run();

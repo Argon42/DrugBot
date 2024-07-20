@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DrugBot.DataBase.Initializers;
 
-public class PredictionDbInitializer(
-    ILogger<PredictionDbInitializer> logger,
-    PredictionDbContext context)
+public class MagicBallDbInitializer(
+    ILogger<MagicBallDbInitializer> logger,
+    MagicBallDbContext context)
 {
     public async Task Initialize()
     {

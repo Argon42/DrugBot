@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DrugBot.DataBase.Migrations.Prediction
 {
-    [DbContext(typeof(PredictionDbContext))]
+    [DbContext(typeof(MagicBallDbContext))]
     partial class PredictionDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

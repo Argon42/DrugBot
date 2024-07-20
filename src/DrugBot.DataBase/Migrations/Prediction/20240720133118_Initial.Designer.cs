@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DrugBot.DataBase.Migrations.Prediction
 {
-    [DbContext(typeof(PredictionDbContext))]
+    [DbContext(typeof(MagicBallDbContext))]
     [Migration("20240720133118_Initial")]
     partial class Initial
     {

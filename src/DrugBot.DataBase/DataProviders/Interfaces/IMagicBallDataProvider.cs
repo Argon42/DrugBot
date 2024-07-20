@@ -1,6 +1,6 @@
 ﻿namespace DrugBot.DataBase.DataProviders.Interfaces;
 
-public interface IPredictionDataProvider
+public interface IMagicBallDataProvider
 {
     public string GetRandomPrediction();
 }
