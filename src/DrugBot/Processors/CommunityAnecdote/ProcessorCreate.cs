@@ -30,7 +30,7 @@ public class ProcessorCreate : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        var anecdote = message.Text.Remove(0, message.Text.IndexOf(' ') + 1);
+        var anecdote = message.Text.Remove(0, message.Text.IndexOf(' ') + 1).Trim();
         
         if (string.IsNullOrWhiteSpace(anecdote))
         {

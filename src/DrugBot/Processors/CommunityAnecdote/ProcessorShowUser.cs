@@ -28,25 +28,25 @@ public class ProcessorShowUser : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        var rawQuery = message.Text.Split(' ');
+        var rawQuery = message.Text.Remove(0, message.Text.IndexOf(' ') + 1).Trim().Split(' ');
 
         if (rawQuery.Length != 1)
         {
             bot.SendMessage(
-                message.CreateResponse("Некорректный запрос. \n Пример правильного запроса: \"/анек-п-п 12345678\""));
+                message.CreateResponse("Некорректный запрос. \n Пример правильного запроса: \"/анек-п-п bertad\""));
             return;
         }
 
         var query = rawQuery[0];
-        
-        if (!int.TryParse(query, out var userId))
+        var user = bot.GetUser(query);
+
+        if (user == null)
         {
-            bot.SendMessage(message.CreateResponse(
-                "На данный момент можно искать только по ID. \n Пример правильного запроса: \"/анек-п-п 12345678\""));
+            bot.SendMessage(message.CreateResponse($"Юморист с именем {query} не найден"));
             return;
         }
         
-        var anecdote = _anecdoteProvider.GetRandomAnecdoteFromUser(userId);
+        var anecdote = _anecdoteProvider.GetRandomAnecdoteFromUser(user.Id);
 
         if (anecdote == null)
         {
