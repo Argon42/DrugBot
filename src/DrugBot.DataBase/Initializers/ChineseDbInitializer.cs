@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace DrugBot.DataBase.Initializers;
 
-public class PredictionDbInitializer(
-    ILogger<PredictionDbInitializer> logger,
-    PredictionDbContext context)
+public class ChineseDbInitializer(
+    ILogger<ChineseDbInitializer> logger,
+    ChineseDbContext context)
 {
     public async Task Initialize()
     {
@@ -26,7 +26,7 @@ public class PredictionDbInitializer(
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Prediction database migration failed");
+            logger.LogError(e, "Chinese database migration failed");
         }
     }
 }

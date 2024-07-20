@@ -87,7 +87,10 @@ public static class ConfigurationExtension
     {
         services.AddTransient<ApplicationDbInitializer>();
         services.AddTransient<PredictionDbInitializer>();
+        services.AddTransient<ChineseDbInitializer>();
+        
         services.AddSingleton<IPredictionDataProvider, PredictionDataProvider>();
+        services.AddSingleton<IChineseDataProvider, ChineseDataProvider>();
         return services;
     }
     
@@ -96,6 +99,17 @@ public static class ConfigurationExtension
         var connectionString = configuration.GetConnectionString("PredictionConnection") ??
                                throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
         services.AddDbContext<PredictionDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddChineseDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("ChineseConnection") ??
+                               throw new InvalidOperationException("Connection string 'ChineseConnection' not found.");
+        services.AddDbContext<ChineseDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
 
