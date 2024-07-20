@@ -15,32 +15,28 @@ public class CommunityAnecdoteProvider : IAnecdoteProvider
     
     public CommunityAnecdoteData? GetRandomAnecdote()
     {
-        var rawData = _dbContext.Anecdotes.FromSqlRaw("SELECT * FROM anecdotes ORDER BY RANDOM() LIMIT 1");
-
-        if (rawData.Count() == 0) //Нельзя использовать !rawData.Any()
+        if (!_dbContext.Anecdotes.Any()) 
         {
             return null;
         }
         
-        var data = rawData.ToArray();
+        var data = _dbContext.Anecdotes.ElementAt(new Random().Next(1, _dbContext.Anecdotes.Count()) - 1);
 
-        return data[0];
+        return data;
     }
 
     public CommunityAnecdoteData? GetRandomAnecdoteFromUser(long userId)
     {
-        var rawData =
-            _dbContext.Anecdotes.FromSqlRaw(
-                "SELECT * FROM anecdotes WHERE user_id IN ({0}) ORDER BY RANDOM() LIMIT 1", userId);
-
-        if (rawData.Count() == 0) //Нельзя использовать !rawData.Any()
+        var userRecords = _dbContext.Anecdotes.Where(x => x.UserId == userId);
+        
+        if (!userRecords.Any())
         {
             return null;
         }
         
-        var data = rawData.ToArray();
+        var data = userRecords.ElementAt(new Random().Next(1, userRecords.Count()) - 1);
 
-        return data[0];
+        return data;
     }
 
     public void CreateNewAnecdote(long userId, string anecdote)
@@ -50,6 +46,7 @@ public class CommunityAnecdoteProvider : IAnecdoteProvider
             UserId = userId,
             Anecdote = anecdote
         });
+        
         _dbContext.SaveChanges();
     }
 }
