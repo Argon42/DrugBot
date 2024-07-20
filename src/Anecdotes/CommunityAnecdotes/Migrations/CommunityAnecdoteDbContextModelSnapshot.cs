@@ -26,12 +26,12 @@ namespace Anecdotes.CommunityAnecdotes.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<ulong>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Anecdotes");
+                    b.ToTable("Anecdotes", (string)null);
                 });
 #pragma warning restore 612, 618
         }

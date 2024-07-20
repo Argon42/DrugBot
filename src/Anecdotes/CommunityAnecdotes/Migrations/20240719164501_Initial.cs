@@ -16,7 +16,7 @@ namespace Anecdotes.CommunityAnecdotes.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserId = table.Column<ulong>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<long>(type: "INTEGER", nullable: false),
                     Anecdote = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
