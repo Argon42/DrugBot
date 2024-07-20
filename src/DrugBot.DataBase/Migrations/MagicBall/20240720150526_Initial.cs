@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace DrugBot.DataBase.Migrations.Prediction
+namespace DrugBot.DataBase.Migrations.MagicBall
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -11,7 +11,7 @@ namespace DrugBot.DataBase.Migrations.Prediction
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Predictions",
+                name: "Answers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -20,7 +20,7 @@ namespace DrugBot.DataBase.Migrations.Prediction
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Predictions", x => x.Id);
+                    table.PrimaryKey("PK_Answers", x => x.Id);
                 });
         }
 
@@ -28,7 +28,7 @@ namespace DrugBot.DataBase.Migrations.Prediction
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Predictions");
+                name: "Answers");
         }
     }
 }

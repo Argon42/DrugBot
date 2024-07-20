@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DrugBot.DataBase.Migrations.Prediction
+namespace DrugBot.DataBase.Migrations.MagicBall
 {
     [DbContext(typeof(MagicBallDbContext))]
-    [Migration("20240720133118_Initial")]
+    [Migration("20240720150526_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -19,7 +19,7 @@ namespace DrugBot.DataBase.Migrations.Prediction
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
-            modelBuilder.Entity("DrugBot.DataBase.Data.PredictionData", b =>
+            modelBuilder.Entity("DrugBot.DataBase.Data.MagicBallData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +31,7 @@ namespace DrugBot.DataBase.Migrations.Prediction
 
                     b.HasKey("Id");
 
-                    b.ToTable("Predictions");
+                    b.ToTable("Answers");
                 });
 #pragma warning restore 612, 618
         }
