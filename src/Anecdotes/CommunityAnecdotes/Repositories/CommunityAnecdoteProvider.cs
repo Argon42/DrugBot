@@ -1,5 +1,4 @@
 ﻿using Anecdotes.CommunityAnecdotes.Data;
-using Anecdotes.CommunityAnecdotes.Factories;
 using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,7 +45,11 @@ public class CommunityAnecdoteProvider : IAnecdoteProvider
 
     public void CreateNewAnecdote(long userId, string anecdote)
     {
-        _dbContext.Anecdotes.Add(CommunityAnecdoteDataFactory.Create(userId, anecdote));
+        _dbContext.Anecdotes.Add(new CommunityAnecdoteData
+        {
+            UserId = userId,
+            Anecdote = anecdote
+        });
         _dbContext.SaveChanges();
     }
 }
