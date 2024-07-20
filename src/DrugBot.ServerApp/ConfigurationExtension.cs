@@ -86,20 +86,23 @@ public static class ConfigurationExtension
     public static IServiceCollection AddProjectServices(this IServiceCollection services)
     {
         services.AddTransient<ApplicationDbInitializer>();
+        
         services.AddTransient<MagicBallDbInitializer>();
         services.AddTransient<ChineseDbInitializer>();
         services.AddTransient<EmojiDbInitializer>();
+        services.AddTransient<PredictionDbInitializer>();
         
         services.AddSingleton<IMagicBallDataProvider, MagicBallDataProvider>();
         services.AddSingleton<IChineseDataProvider, ChineseDataProvider>();
         services.AddSingleton<IEmojiDataProvider, EmojiDataProvider>();
+        services.AddSingleton<IPredictionDataProvider, PredictionDataProvider>();
         return services;
     }
     
-    public static IServiceCollection AddPredictionDb(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMagicBallDb(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("PredictionConnection") ??
-                               throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
+        var connectionString = configuration.GetConnectionString("MagicBallConnection") ??
+                               throw new InvalidOperationException("Connection string 'MagicBallConnection' not found.");
         services.AddDbContext<MagicBallDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
@@ -123,6 +126,17 @@ public static class ConfigurationExtension
         var connectionString = configuration.GetConnectionString("EmojiConnection") ??
                                throw new InvalidOperationException("Connection string 'EmojiConnection' not found.");
         services.AddDbContext<EmojiDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddPredictionDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("PredictionConnection") ??
+                               throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
+        services.AddDbContext<PredictionDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
 

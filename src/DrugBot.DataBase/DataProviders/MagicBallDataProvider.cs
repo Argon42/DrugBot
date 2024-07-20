@@ -5,10 +5,10 @@ namespace DrugBot.DataBase.DataProviders;
 
 public class MagicBallDataProvider(MagicBallDbContext dbContext) : IMagicBallDataProvider
 {
-    public string GetRandomPrediction()
+    public string GetRandomAnswer()
     {
         return !dbContext.Answers.Any()
             ? "Хьюстон, у нас проблемы!"
-            : dbContext.Answers.ElementAt(new Random().Next(1, dbContext.Answers.Count()) - 1).Prediction;
+            : dbContext.Answers.ElementAt(new Random().Next(1, dbContext.Answers.Count()) - 1).Answer;
     }
 }

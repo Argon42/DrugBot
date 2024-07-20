@@ -14,9 +14,10 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddIdentityAndAuthentication();
 builder.Services.AddDb(builder.Configuration);
-builder.Services.AddPredictionDb(builder.Configuration);
+builder.Services.AddMagicBallDb(builder.Configuration);
 builder.Services.AddChineseDb(builder.Configuration);
 builder.Services.AddEmojiDb(builder.Configuration);
+builder.Services.AddPredictionDb(builder.Configuration);
 builder.Services.AddIdentityDb();
 
 ApplicationConfiguration.ConfigureServices(builder.Services, builder.Configuration);
@@ -32,5 +33,6 @@ await app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationD
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<MagicBallDbInitializer>().Initialize();
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<ChineseDbInitializer>().Initialize();
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<EmojiDbInitializer>().Initialize();
+await app.Services.CreateScope().ServiceProvider.GetRequiredService<PredictionDbInitializer>().Initialize();
 
 app.Run();

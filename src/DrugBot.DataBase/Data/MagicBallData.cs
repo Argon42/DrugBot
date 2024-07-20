@@ -3,5 +3,5 @@
 public class MagicBallData
 {
     public int Id { get; set; }
-    public string Prediction { get; set; }
+    public string Answer { get; set; } = string.Empty;
 }

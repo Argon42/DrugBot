@@ -8,6 +8,11 @@ public class EmojiDataProvider(EmojiDbContext dbContext) : IEmojiDataProvider
 {
     public string GetRandomEmojis(int userId)
     {
+        if (!dbContext.Emojis.Any())
+        {
+            return "Хьюстон, у нас проблемы!";
+        }
+        
         var  rnd = new Random(BotHandler.GetDayUserSeed(userId));
         var result = $"Сегодня вас ждет {GetPrediction(rnd, rnd.Next(3, 6), dbContext)}";
 
