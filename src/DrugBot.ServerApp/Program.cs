@@ -1,3 +1,4 @@
+using DrugBot.DataBase.Initializers;
 using DrugBot.Infrastructure;
 using DrugBot.ServerApp;
 using DrugBot.ServerApp.Data;
@@ -13,6 +14,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddIdentityAndAuthentication();
 builder.Services.AddDb(builder.Configuration);
+builder.Services.AddPredictionDb(builder.Configuration);
 builder.Services.AddIdentityDb();
 
 ApplicationConfiguration.ConfigureServices(builder.Services, builder.Configuration);
@@ -25,5 +27,6 @@ app.ConfigurateHttpRequestPipeline();
 app.ConfigurateComponents();
 
 await app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbInitializer>().Initialize();
+await app.Services.CreateScope().ServiceProvider.GetRequiredService<PredictionDbInitializer>().Initialize();
 
 app.Run();

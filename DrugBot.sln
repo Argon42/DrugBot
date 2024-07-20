@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrugBot.DataBase", "src\DrugBot.DataBase\DrugBot.DataBase.csproj", "{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{2DD4E9B1-06ED-4B64-B1AB-9D302334F995}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DD4E9B1-06ED-4B64-B1AB-9D302334F995}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DD4E9B1-06ED-4B64-B1AB-9D302334F995}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{30BF0744-5385-4439-A646-4467E1EF96C7} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 		{C02A78D6-5A04-454C-8644-47363F4B609D} = {F3263A10-6B49-4D7E-98F1-77ABFE28E691}
 		{2DD4E9B1-06ED-4B64-B1AB-9D302334F995} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
+		{891B64BE-F8AD-4FCB-BAC4-35B3AF77824B} = {DECA80E1-284B-4A80-8E34-DFE10108D778}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C51964D-8896-451C-A8C7-3A7B66C187FF}

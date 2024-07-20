@@ -31,6 +31,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
+      <ProjectReference Include="..\DrugBot.DataBase\DrugBot.DataBase.csproj" />
       <ProjectReference Include="..\DrugBot.Infrastructure\DrugBot.Infrastructure.csproj" />
     </ItemGroup>
 

@@ -1,4 +1,8 @@
-﻿using DrugBot.ServerApp.Components;
+﻿using DrugBot.DataBase.Data.DbContexts;
+using DrugBot.DataBase.DataProviders;
+using DrugBot.DataBase.DataProviders.Interfaces;
+using DrugBot.DataBase.Initializers;
+using DrugBot.ServerApp.Components;
 using DrugBot.ServerApp.Components.Account;
 using DrugBot.ServerApp.Data;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -82,6 +86,19 @@ public static class ConfigurationExtension
     public static IServiceCollection AddProjectServices(this IServiceCollection services)
     {
         services.AddTransient<ApplicationDbInitializer>();
+        services.AddTransient<PredictionDbInitializer>();
+        services.AddSingleton<IPredictionDataProvider, PredictionDataProvider>();
+        return services;
+    }
+    
+    public static IServiceCollection AddPredictionDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("PredictionConnection") ??
+                               throw new InvalidOperationException("Connection string 'PredictionConnection' not found.");
+        services.AddDbContext<PredictionDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
         return services;
     }
 }
