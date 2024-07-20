@@ -88,9 +88,11 @@ public static class ConfigurationExtension
         services.AddTransient<ApplicationDbInitializer>();
         services.AddTransient<MagicBallDbInitializer>();
         services.AddTransient<ChineseDbInitializer>();
+        services.AddTransient<EmojiDbInitializer>();
         
         services.AddSingleton<IMagicBallDataProvider, MagicBallDataProvider>();
         services.AddSingleton<IChineseDataProvider, ChineseDataProvider>();
+        services.AddSingleton<IEmojiDataProvider, EmojiDataProvider>();
         return services;
     }
     
@@ -110,6 +112,17 @@ public static class ConfigurationExtension
         var connectionString = configuration.GetConnectionString("ChineseConnection") ??
                                throw new InvalidOperationException("Connection string 'ChineseConnection' not found.");
         services.AddDbContext<ChineseDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
+        return services;
+    }
+    
+    public static IServiceCollection AddEmojiDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("EmojiConnection") ??
+                               throw new InvalidOperationException("Connection string 'EmojiConnection' not found.");
+        services.AddDbContext<EmojiDbContext>(options =>
             options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
         services.AddDatabaseDeveloperPageExceptionFilter();
 
