@@ -28,7 +28,13 @@ public class ProcessorShowUser : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        var anecdote = _anecdoteProvider.GetRandomAnecdoteFromUser(message.User.Id);
+        if (!int.TryParse(message.Text.Remove(0, message.Text.IndexOf(' ') + 1), out var userId))
+        {
+            bot.SendMessage(message.CreateResponse("На данный момент можно искать только по ID"));
+            return;
+        }
+        
+        var anecdote = _anecdoteProvider.GetRandomAnecdoteFromUser(userId);
 
         if (anecdote == null)
         {
