@@ -28,8 +28,7 @@ public class ProcessorShowUser : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        const int userId = 1; //TODO Найти способ достать Id пользователя
-        var anecdote = _anecdoteController.GetRandomAnecdoteFromUser(userId);
+        var anecdote = _anecdoteController.GetRandomAnecdoteFromUser(message.User.Id);
 
         if (anecdote == null)
         {

@@ -30,10 +30,9 @@ public class ProcessorCreate : AbstractProcessor
 
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message, CancellationToken token)
     {
-        const ulong userId = 1; //TODO Найти способ достать Id пользователя
         var anecdote = message.Text.Remove(0, message.Text.IndexOf(' ') + 1);
         
-        _anecdoteController.CreateNewAnecdote(userId, anecdote);
+        _anecdoteController.CreateNewAnecdote(message.User.Id, anecdote);
         
         bot.SendMessage(message.CreateResponse("Анекдот успешно создан"));
     }

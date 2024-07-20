@@ -28,7 +28,7 @@ public class CommunityAnecdoteController : IAnecdoteController
         return data[0];
     }
 
-    public CommunityAnecdoteData? GetRandomAnecdoteFromUser(ulong userId)
+    public CommunityAnecdoteData? GetRandomAnecdoteFromUser(long userId)
     {
         var rawData =
             _dbContext.Anecdotes.FromSqlRaw(
@@ -44,7 +44,7 @@ public class CommunityAnecdoteController : IAnecdoteController
         return data[0];
     }
 
-    public void CreateNewAnecdote(ulong userId, string anecdote)
+    public void CreateNewAnecdote(long userId, string anecdote)
     {
         _dbContext.Anecdotes.Add(CommunityAnecdoteDataFactory.Create(userId, anecdote));
         _dbContext.SaveChanges();
