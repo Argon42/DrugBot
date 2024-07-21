@@ -3,15 +3,15 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class WisdomDataProvider(WisdomDbContext dbContext) : IWisdomDataProvider
+public class WisdomDataProvider(WisdomDbContext dbContext) : IWisdomDataProvider, IDbCount
 {
-    public string GetRandomWisdom(int userId)
+    public string GetWisdom(int wisdomPosition)
     {
-        if (!dbContext.Wisdoms.Any())
-        {
-            return "Хьюстон, у нас проблемы!";
-        }
-        
-        return dbContext.Wisdoms.ElementAt(new Random().Next(1, dbContext.Wisdoms.Count()) - 1).Wisdom;
+        return dbContext.Wisdoms.ElementAt(wisdomPosition).Wisdom;
+    }
+
+    public int GetArrayCount()
+    {
+        return dbContext.Wisdoms.Count();
     }
 }

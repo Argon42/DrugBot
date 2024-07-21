@@ -2,5 +2,5 @@
 
 public interface IChineseDataProvider
 {
-    public string GetRandomWisdom(int userId);
+    public string GetChineseSymbol(int symbolPosition);
 }

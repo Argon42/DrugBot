@@ -2,5 +2,5 @@
 
 public interface IMagicBallDataProvider
 {
-    public string GetRandomAnswer();
+    public string GetAnswer(int answerPosition);
 }

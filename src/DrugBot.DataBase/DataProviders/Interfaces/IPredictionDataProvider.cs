@@ -2,5 +2,5 @@
 
 public interface IPredictionDataProvider
 {
-    public string GetRandomPrediction(int userId);
+    public string GetPrediction(int predictionPosition);
 }

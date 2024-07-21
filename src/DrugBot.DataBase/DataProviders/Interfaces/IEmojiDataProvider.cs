@@ -2,5 +2,5 @@
 
 public interface IEmojiDataProvider
 {
-    public string GetRandomEmojis(int userId);
+    public string GetEmoji(int emojiPosition);
 }

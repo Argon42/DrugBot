@@ -1,42 +1,17 @@
-﻿using System.Text;
-using DrugBot.DataBase.Data.DbContexts;
+﻿using DrugBot.DataBase.Data.DbContexts;
 using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class ChineseDataProvider(ChineseDbContext dbContext) : IChineseDataProvider
+public class ChineseDataProvider(ChineseDbContext dbContext) : IChineseDataProvider, IDbCount
 {
-    public string GetRandomWisdom(int userId)
+    public string GetChineseSymbol(int symbolPosition)
     {
-        if (!dbContext.ChineseSymbols.Any())
-        {
-            return "Хьюстон, у нас проблемы!";
-        }
-        
-        Random rnd = new(BotHandler.GetDayUserSeed(userId));
-
-        var predictionLength = (int)Math.Abs(15 + Math.Tan(0.5 * Math.PI * Math.Pow(2 * rnd.NextDouble() - 1, 5)));
-        var result = $"Мудрец видит что в будущем будет {GetPrediction(rnd, predictionLength, dbContext)}";
-
-        return result;
+        return dbContext.ChineseSymbols.ElementAt(symbolPosition).ChineseSymbol.ToString();
     }
-    
-    private static string GetPrediction(Random rnd, int count, ChineseDbContext dbContext)
-    {
-        try
-        {
-            StringBuilder builder = new();
 
-            for (var i = 0; i < count; i++)
-                builder.AppendJoin(' ',
-                    dbContext.ChineseSymbols.ElementAt(rnd.Next(1, dbContext.ChineseSymbols.Count()) - 1)
-                        .ChineseSymbol);
-            
-            return builder.ToString();
-        }
-        catch (Exception e)
-        {
-            return e.Message;
-        }
+    public int GetArrayCount()
+    {
+        return dbContext.ChineseSymbols.Count();
     }
 }

@@ -3,12 +3,15 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class MagicBallDataProvider(MagicBallDbContext dbContext) : IMagicBallDataProvider
+public class MagicBallDataProvider(MagicBallDbContext dbContext) : IMagicBallDataProvider, IDbCount
 {
-    public string GetRandomAnswer()
+    public string GetAnswer(int answerPosition)
     {
-        return !dbContext.Answers.Any()
-            ? "Хьюстон, у нас проблемы!"
-            : dbContext.Answers.ElementAt(new Random().Next(1, dbContext.Answers.Count()) - 1).Answer;
+        return dbContext.Answers.ElementAt(answerPosition).Answer;
+    }
+
+    public int GetArrayCount()
+    {
+        return dbContext.Answers.Count();
     }
 }

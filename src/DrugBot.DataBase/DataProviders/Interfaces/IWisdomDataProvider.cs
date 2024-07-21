@@ -2,5 +2,5 @@
 
 public interface IWisdomDataProvider
 {
-    public string GetRandomWisdom(int userId);
+    public string GetWisdom(int wisdomPosition);
 }
