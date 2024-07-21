@@ -3,4 +3,5 @@
 public interface IChineseDataProvider
 {
     public string GetChineseSymbol(int symbolPosition);
+    public int GetArrayCount();
 }

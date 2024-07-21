@@ -3,7 +3,7 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class EmojiDataProvider(EmojiDbContext dbContext) : IEmojiDataProvider, IDbCount
+public class EmojiDataProvider(EmojiDbContext dbContext) : IEmojiDataProvider
 {
     public string GetEmoji(int emojiPosition)
     {

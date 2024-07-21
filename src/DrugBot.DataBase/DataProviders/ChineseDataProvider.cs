@@ -3,7 +3,7 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class ChineseDataProvider(ChineseDbContext dbContext) : IChineseDataProvider, IDbCount
+public class ChineseDataProvider(ChineseDbContext dbContext) : IChineseDataProvider
 {
     public string GetChineseSymbol(int symbolPosition)
     {

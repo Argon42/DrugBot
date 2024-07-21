@@ -3,7 +3,7 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class WisdomDataProvider(WisdomDbContext dbContext) : IWisdomDataProvider, IDbCount
+public class WisdomDataProvider(WisdomDbContext dbContext) : IWisdomDataProvider
 {
     public string GetWisdom(int wisdomPosition)
     {

@@ -3,7 +3,7 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class MagicBallDataProvider(MagicBallDbContext dbContext) : IMagicBallDataProvider, IDbCount
+public class MagicBallDataProvider(MagicBallDbContext dbContext) : IMagicBallDataProvider
 {
     public string GetAnswer(int answerPosition)
     {

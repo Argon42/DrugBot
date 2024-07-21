@@ -3,7 +3,7 @@ using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.DataBase.DataProviders;
 
-public class PredictionDataProvider(PredictionDbContext dbContext) : IPredictionDataProvider, IDbCount
+public class PredictionDataProvider(PredictionDbContext dbContext) : IPredictionDataProvider
 {
     public string GetPrediction(int predictionPosition)
     {

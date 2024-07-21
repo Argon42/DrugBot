@@ -3,4 +3,5 @@
 public interface IMagicBallDataProvider
 {
     public string GetAnswer(int answerPosition);
+    public int GetArrayCount();
 }
