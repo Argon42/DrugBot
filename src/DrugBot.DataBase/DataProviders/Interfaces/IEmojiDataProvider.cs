@@ -1,7 +1,6 @@
 ﻿namespace DrugBot.DataBase.DataProviders.Interfaces;
 
-public interface IEmojiDataProvider
+public interface IEmojiDataProvider : IArrayCount
 {
     public string GetEmoji(int emojiPosition);
-    public int GetArrayCount();
 }

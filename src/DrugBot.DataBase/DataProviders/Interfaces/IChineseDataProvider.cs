@@ -1,7 +1,6 @@
 ﻿namespace DrugBot.DataBase.DataProviders.Interfaces;
 
-public interface IChineseDataProvider
+public interface IChineseDataProvider : IArrayCount
 {
     public string GetChineseSymbol(int symbolPosition);
-    public int GetArrayCount();
 }
