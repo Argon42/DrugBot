@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
+using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.Processors;
 
@@ -24,6 +25,13 @@ public class ProcessorDeadChinese : AbstractProcessor
 
     public override string Name => "Мертвый китаец";
 
+    private readonly IChineseDataProvider _chineseDataProvider;
+
+    public ProcessorDeadChinese(IChineseDataProvider chineseDataProvider)
+    {
+        _chineseDataProvider = chineseDataProvider;
+    }
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
         CancellationToken token)
     {
@@ -35,17 +43,17 @@ public class ProcessorDeadChinese : AbstractProcessor
         bot.SendMessage(message.CreateResponse(stringBuilder.ToString()));
     }
 
-    private static string GetPrediction(Random rnd, int count)
+    private string GetPrediction(Random rnd, int count)
     {
         try
         {
-            string path = "Local/chinese.txt";
-            StringBuilder builder = new();
-
-            List<string> predictions = File.ReadLines(path).ToList();
-            for (int i = 0; i < count; i++)
-                builder.AppendJoin(' ', predictions[rnd.Next(0, predictions.Count)]);
-
+            var arrayCount = _chineseDataProvider.GetArrayCount();
+            var builder = new StringBuilder();
+            
+            for (var i = 0; i < count; i++)
+                builder.AppendJoin(' ', _chineseDataProvider.GetChineseSymbol(rnd.Next(0, arrayCount - 1)));
+            //TODO Оптимизировать запрос: если пользователь уже набирал команду сегодня, выдавать сохраненный результат из отдельной таблицы
+            
             return builder.ToString();
         }
         catch (Exception e)

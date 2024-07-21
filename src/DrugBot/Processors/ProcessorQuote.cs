@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
+using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.Processors;
 
@@ -21,12 +22,20 @@ public class ProcessorQuote : AbstractProcessor
 
     public override string Name => "Рандомная цитата/фраза";
 
+    private readonly IWisdomDataProvider _wisdomDataProvider;
+
+    public ProcessorQuote(IWisdomDataProvider wisdomDataProvider)
+    {
+        _wisdomDataProvider = wisdomDataProvider;
+    }
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
         CancellationToken token)
     {
-        string path = "Local/wisdom.txt";
         Random random = new();
-        string randomLineFromFile = BotHandler.GetRandomLineFromFile(random, path);
-        bot.SendMessage(message.CreateResponse(randomLineFromFile));
+        var arrayCount = _wisdomDataProvider.GetArrayCount();
+        var wisdom = _wisdomDataProvider.GetWisdom(random.Next(0, arrayCount - 1));
+        
+        bot.SendMessage(message.CreateResponse(wisdom));
     }
 }

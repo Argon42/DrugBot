@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using DrugBot.Core.Bot;
 using DrugBot.Core.Common;
+using DrugBot.DataBase.DataProviders.Interfaces;
 
 namespace DrugBot.Processors;
 
@@ -21,6 +22,13 @@ public class ProcessorDiploma : AbstractProcessor
 
     public override string Name => "дИПЛОМОЗИТОР";
 
+    private readonly IPredictionDataProvider _predictionDataProvider;
+
+    public ProcessorDiploma(IPredictionDataProvider predictionDataProvider)
+    {
+        _predictionDataProvider = predictionDataProvider;
+    }
+
     protected override void OnProcessMessage<TUser, TMessage>(IBot<TUser, TMessage> bot, TMessage message,
         CancellationToken token)
     {
@@ -37,12 +45,14 @@ public class ProcessorDiploma : AbstractProcessor
         bot.SendMessage(message.CreateResponse(result));
     }
 
-    private static string GetPrediction(Random rnd)
+    private string GetPrediction(Random rnd)
     {
         try
         {
-            string path = "Local/predictions.txt";
-            return BotHandler.GetRandomLineFromFile(rnd, path);
+            var arrayCount = _predictionDataProvider.GetArrayCount();
+            var prediction = _predictionDataProvider.GetPrediction(rnd.Next(0, arrayCount - 1));
+            
+            return prediction;
         }
         catch (Exception e)
         {
