@@ -22,13 +22,65 @@ namespace DrugBot.DataBase.Migrations.MagicBall
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Prediction")
+                    b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Answers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Answer = "ДА"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Answer = "очень вероятно"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Answer = "безусловно"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Answer = "без сомнений"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Answer = "должно быть так"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Answer = "абсолютно точно"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Answer = "мне кажется да"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Answer = "духи говорят да"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Answer = "похоже, что да"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Answer = "НЕТ"
+                        });
                 });
 #pragma warning restore 612, 618
         }

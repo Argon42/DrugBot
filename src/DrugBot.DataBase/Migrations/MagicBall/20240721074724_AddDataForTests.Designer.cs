@@ -2,84 +2,87 @@
 using DrugBot.DataBase.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DrugBot.DataBase.Migrations.Emoji
+namespace DrugBot.DataBase.Migrations.MagicBall
 {
-    [DbContext(typeof(EmojiDbContext))]
-    partial class EmojiDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(MagicBallDbContext))]
+    [Migration("20240721074724_AddDataForTests")]
+    partial class AddDataForTests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
-            modelBuilder.Entity("DrugBot.DataBase.Data.EmojiData", b =>
+            modelBuilder.Entity("DrugBot.DataBase.Data.MagicBallData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Emoji")
+                    b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Emojis");
+                    b.ToTable("Answers");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Emoji = "&#128512;"
+                            Answer = "ДА"
                         },
                         new
                         {
                             Id = 2,
-                            Emoji = "&#128515;"
+                            Answer = "очень вероятно"
                         },
                         new
                         {
                             Id = 3,
-                            Emoji = "&#128516;"
+                            Answer = "безусловно"
                         },
                         new
                         {
                             Id = 4,
-                            Emoji = "&#128513;"
+                            Answer = "без сомнений"
                         },
                         new
                         {
                             Id = 5,
-                            Emoji = "&#128518;"
+                            Answer = "должно быть так"
                         },
                         new
                         {
                             Id = 6,
-                            Emoji = "&#128517;"
+                            Answer = "абсолютно точно"
                         },
                         new
                         {
                             Id = 7,
-                            Emoji = "&#129315;"
+                            Answer = "мне кажется да"
                         },
                         new
                         {
                             Id = 8,
-                            Emoji = "&#128514;"
+                            Answer = "духи говорят да"
                         },
                         new
                         {
                             Id = 9,
-                            Emoji = "&#128578;"
+                            Answer = "похоже, что да"
                         },
                         new
                         {
                             Id = 10,
-                            Emoji = "&#128579;"
+                            Answer = "НЕТ"
                         });
                 });
 #pragma warning restore 612, 618

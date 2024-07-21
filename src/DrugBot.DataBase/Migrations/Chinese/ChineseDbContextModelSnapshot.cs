@@ -28,6 +28,58 @@ namespace DrugBot.DataBase.Migrations.Chinese
                     b.HasKey("Id");
 
                     b.ToTable("ChineseSymbols");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ChineseSymbol = '安'
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ChineseSymbol = '吧'
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ChineseSymbol = '八'
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ChineseSymbol = '爸'
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ChineseSymbol = '百'
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ChineseSymbol = '北'
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ChineseSymbol = '不'
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ChineseSymbol = '大'
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ChineseSymbol = '岛'
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ChineseSymbol = '的'
+                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -2,84 +2,86 @@
 using DrugBot.DataBase.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DrugBot.DataBase.Migrations.Emoji
+namespace DrugBot.DataBase.Migrations.Chinese
 {
-    [DbContext(typeof(EmojiDbContext))]
-    partial class EmojiDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ChineseDbContext))]
+    [Migration("20240721074749_AddDataForTests")]
+    partial class AddDataForTests
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.6");
 
-            modelBuilder.Entity("DrugBot.DataBase.Data.EmojiData", b =>
+            modelBuilder.Entity("DrugBot.DataBase.Data.ChineseData", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Emoji")
-                        .IsRequired()
+                    b.Property<char>("ChineseSymbol")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Emojis");
+                    b.ToTable("ChineseSymbols");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Emoji = "&#128512;"
+                            ChineseSymbol = '安'
                         },
                         new
                         {
                             Id = 2,
-                            Emoji = "&#128515;"
+                            ChineseSymbol = '吧'
                         },
                         new
                         {
                             Id = 3,
-                            Emoji = "&#128516;"
+                            ChineseSymbol = '八'
                         },
                         new
                         {
                             Id = 4,
-                            Emoji = "&#128513;"
+                            ChineseSymbol = '爸'
                         },
                         new
                         {
                             Id = 5,
-                            Emoji = "&#128518;"
+                            ChineseSymbol = '百'
                         },
                         new
                         {
                             Id = 6,
-                            Emoji = "&#128517;"
+                            ChineseSymbol = '北'
                         },
                         new
                         {
                             Id = 7,
-                            Emoji = "&#129315;"
+                            ChineseSymbol = '不'
                         },
                         new
                         {
                             Id = 8,
-                            Emoji = "&#128514;"
+                            ChineseSymbol = '大'
                         },
                         new
                         {
                             Id = 9,
-                            Emoji = "&#128578;"
+                            ChineseSymbol = '岛'
                         },
                         new
                         {
                             Id = 10,
-                            Emoji = "&#128579;"
+                            ChineseSymbol = '的'
                         });
                 });
 #pragma warning restore 612, 618
