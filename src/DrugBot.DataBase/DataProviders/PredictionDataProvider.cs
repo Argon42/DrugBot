@@ -7,7 +7,7 @@ public class PredictionDataProvider(PredictionDbContext dbContext) : IPrediction
 {
     public string GetPrediction(int predictionPosition)
     {
-        return dbContext.Predictions.ElementAt(new Random().Next(1, dbContext.Predictions.Count()) - 1).Prediction;
+        return dbContext.Predictions.ElementAt(predictionPosition).Prediction;
     }
 
     public int GetArrayCount()
