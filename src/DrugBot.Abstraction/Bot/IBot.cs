@@ -8,5 +8,5 @@ public interface IBot<TUser, TMessage>
 {
     long SendMessage(TMessage message);
     long EditMessage(long messageId, TMessage message);
-    User? GetUser(string userName);
+    TUser? GetUser(string userName);
 }
