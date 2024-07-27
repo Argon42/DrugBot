@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Бибометр",
+  "Description": "Узнай размеры своей бибы",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/биба", "/biba", "/bebra", "/бебра"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.BibaResponse"
+  }
+} 

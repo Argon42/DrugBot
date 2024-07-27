@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Кости",
+  "Description": "Бросок костей, для вызова используйте \"/Кость XdY Z\" где где X число костей, Y колличество граней, Z модификатор который будет добавлен к числу, например: -2 | 6 (по стандарту 0)",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/dice", "/d", "/кости", "/кость", "/к"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.DiceResponse"
+  }
+} 

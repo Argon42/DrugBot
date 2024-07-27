@@ -272,6 +272,16 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
 
     private LongPollServerResponse CreateLongPool(IVkApi vkApi) => vkApi.Groups.GetLongPollServer(_config.Id);
 
+
+    public IEnumerable<IVkUser> GetConversationMembers(IVkMessage message)
+    {
+        var result = _api.Messages
+            .GetConversationMembers(message.User.PeerId.Value).Profiles.Select(x =>
+                new VkUser(x.Id, message.User.PeerId, x.Status, x.FirstName, x.LastName));
+
+        return result;
+    }
+
     public IVkUser? GetUser(string userName)
     {
         var users = _api.Users.Get(new []{userName});
@@ -280,9 +290,10 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
         {
             return null;
         }
-        
-        var user = new VkUser(users[0].Id, null);
 
-        return user;
+        var user = users[0];
+        var vkUser = new VkUser(user.Id, null, user.Status, user.FirstName, user.LastName);
+
+        return vkUser;
     }
 }

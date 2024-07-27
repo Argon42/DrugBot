@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Выдать случайный мем",
+  "Description": "Сборник баянов",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/мем", "/mem", "/memes", "/мемы", "/кек"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.MemesResponse"
+  }
+} 

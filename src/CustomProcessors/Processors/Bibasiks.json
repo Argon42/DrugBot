@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Бибасикометр",
+  "Description": "Узнай размеры своих бибасиков",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/бибасики"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.BibasiksResponse"
+  }
+} 
