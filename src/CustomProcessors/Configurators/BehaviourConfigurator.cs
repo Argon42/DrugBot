@@ -1,4 +1,5 @@
 ﻿using CustomProcessors.Behaviours.Response;
+using CustomProcessors.Behaviours.Response.CommunityAnecdote;
 using CustomProcessors.Behaviours.Triggers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +31,7 @@ public static class BehaviourConfigurator
         services.AddTransient<HelpResponse>();
         services.AddTransient<StatusResponse>();
         services.AddTransient<WhoResponse>();
+        services.AddTransient<CreateResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
