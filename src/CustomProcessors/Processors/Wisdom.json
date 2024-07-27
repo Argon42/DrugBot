@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Великие мудрости",
+  "Description": "Спроси у бота великую мудрость",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/мудрость", "/цитата", "/бред", "!бред"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.WisdomResponse"
+  }
+} 
