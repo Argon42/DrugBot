@@ -271,4 +271,18 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     }
 
     private LongPollServerResponse CreateLongPool(IVkApi vkApi) => vkApi.Groups.GetLongPollServer(_config.Id);
+
+    public IVkUser? GetUser(string userName)
+    {
+        var users = _api.Users.Get(new []{userName});
+
+        if (!users.Any())
+        {
+            return null;
+        }
+        
+        var user = new VkUser(users[0].Id, null);
+
+        return user;
+    }
 }

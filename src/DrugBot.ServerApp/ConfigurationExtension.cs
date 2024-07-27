@@ -1,4 +1,8 @@
-﻿using DrugBot.ServerApp.Components;
+﻿using Anecdotes.CommunityAnecdotes;
+using Anecdotes.CommunityAnecdotes.Data;
+using Anecdotes.CommunityAnecdotes.Repositories;
+using Anecdotes.CommunityAnecdotes.Repositories.Interfaces;
+using DrugBot.ServerApp.Components;
 using DrugBot.ServerApp.Components.Account;
 using DrugBot.ServerApp.Data;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -82,6 +86,19 @@ public static class ConfigurationExtension
     public static IServiceCollection AddProjectServices(this IServiceCollection services)
     {
         services.AddTransient<ApplicationDbInitializer>();
+        services.AddTransient<CommunityAnecdoteDbInitializer>();
+        services.AddSingleton<IAnecdoteProvider, CommunityAnecdoteProvider>();
+        return services;
+    }
+    
+    public static IServiceCollection AddCommunityAnecdoteDb(this IServiceCollection services, IConfiguration configuration)
+    {
+        var connectionString = configuration.GetConnectionString("CommunityAnecdoteConnection") ??
+                               throw new InvalidOperationException("Connection string 'CommunityAnecdoteConnection' not found.");
+        services.AddDbContext<CommunityAnecdoteDbContext>(options =>
+            options.UseSqlite(connectionString), contextLifetime: ServiceLifetime.Singleton);
+        services.AddDatabaseDeveloperPageExceptionFilter();
+
         return services;
     }
 }
