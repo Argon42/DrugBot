@@ -33,6 +33,7 @@ public static class BehaviourConfigurator
         services.AddTransient<WhoResponse>();
         services.AddTransient<CreateResponse>();
         services.AddTransient<ShowResponse>();
+        services.AddTransient<ShowUserResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)

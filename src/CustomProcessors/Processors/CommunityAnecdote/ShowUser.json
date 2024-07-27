@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Лучшие хохмы от \"вставте имя юмориста\"",
+  "Description": "Показать анекдот от кого-то конкретного",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/анек-п-п"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.ShowUserResponse"
+  }
+} 
