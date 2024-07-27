@@ -4,7 +4,7 @@
   "VisiblyDescription": true,
   "Trigger": {
     "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
-    "Message": "/8"
+    "Messages": ["/8", "/шар"]
   },
   "Response": {
     "Type": "CustomProcessors.Behaviours.Response.RandomResponseMessage",
