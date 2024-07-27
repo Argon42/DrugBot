@@ -16,6 +16,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Anecdotes\Anecdotes.csproj" />
         <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
+        <ProjectReference Include="..\DrugBot.Vk\DrugBot.Vk.csproj" />
         <ProjectReference Include="..\DrugBot\DrugBot.csproj" />
     </ItemGroup>
 

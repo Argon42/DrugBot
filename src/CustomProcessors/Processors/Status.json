@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Случайный статус",
+  "Description": "Хочешь получить случайный статус участника",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/статус"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.StatusResponse"
+  }
+} 
