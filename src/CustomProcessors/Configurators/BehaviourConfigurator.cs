@@ -19,6 +19,7 @@ public static class BehaviourConfigurator
         services.AddTransient<RandomResponseMessage>();
         services.AddTransient<AnecdoteResponse>();
         services.AddTransient<BibaResponse>();
+        services.AddTransient<BibasiksResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
