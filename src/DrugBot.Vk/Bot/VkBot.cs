@@ -275,7 +275,8 @@ public class VkBot : IBot<IVkUser, IVkMessage>, IBotHandler
     public IEnumerable<IVkUser> GetConversationMembers(IVkMessage message)
     {
         var result = _api.Messages
-            .GetConversationMembers(message.User.PeerId.Value).Profiles.Select(x => new VkUser(x.Id, message.User.PeerId, x.Status));
+            .GetConversationMembers(message.User.PeerId.Value).Profiles.Select(x =>
+                new VkUser(x.Id, message.User.PeerId, x.Status, x.FirstName, x.LastName));
 
         return result;
     }
