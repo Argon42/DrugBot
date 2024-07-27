@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Пробователь",
+  "Description": "Если нужно бросить или попробовать что то сделать",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/try", "/попробовать", "/монетка"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.TryResponse"
+  }
+} 
