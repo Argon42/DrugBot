@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Anecdotes\Anecdotes.csproj" />
         <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
     </ItemGroup>
 

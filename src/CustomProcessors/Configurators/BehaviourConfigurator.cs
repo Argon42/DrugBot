@@ -17,6 +17,7 @@ public static class BehaviourConfigurator
     {
         services.AddTransient<SendResponseMessage>();
         services.AddTransient<RandomResponseMessage>();
+        services.AddTransient<AnecdoteResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
