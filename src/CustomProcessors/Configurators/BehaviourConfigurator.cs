@@ -23,6 +23,7 @@ public static class BehaviourConfigurator
         services.AddTransient<DeadChineseResponse>();
         services.AddTransient<DiceResponse>();
         services.AddTransient<DiplomaResponse>();
+        services.AddTransient<MemesResponse>();
         services.AddTransient<TotemResponse>();
         services.AddTransient<TryResponse>();
         services.AddTransient<WisdomResponse>();
