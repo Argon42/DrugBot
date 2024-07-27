@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace DrugBot.Core.Bot;
 
 public interface IBot<TUser, TMessage>
@@ -6,4 +8,5 @@ public interface IBot<TUser, TMessage>
 {
     long SendMessage(TMessage message);
     long EditMessage(long messageId, TMessage message);
+    IEnumerable<TUser> GetConversationMembers(TMessage message);
 }

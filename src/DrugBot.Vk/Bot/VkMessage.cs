@@ -18,13 +18,13 @@ internal class VkMessage : IVkMessage
     {
         Images = ArraySegment<byte[]>.Empty;
         Text = "";
-        User = new VkUser(null, null);
+        User = new VkUser(null, null, null);
     }
 
     public VkMessage(Message message)
     {
         Text = message.Text;
-        User = new VkUser(message.FromId, message.PeerId);
+        User = new VkUser(message.FromId, message.PeerId, null);
         Images = ArraySegment<byte[]>.Empty;
         TriggerMessage = null;
         ConversationMessageId = message.ConversationMessageId;
