@@ -26,6 +26,7 @@ public static class BehaviourConfigurator
         services.AddTransient<TotemResponse>();
         services.AddTransient<TryResponse>();
         services.AddTransient<WisdomResponse>();
+        services.AddTransient<HelpResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
