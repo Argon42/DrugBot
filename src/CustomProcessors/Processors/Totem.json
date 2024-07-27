@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Тотем дня",
+  "Description": "Посмотреть за ширму вселенной и узнать что тебя сегодня ждет",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/тотем"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.TotemResponse"
+  }
+} 
