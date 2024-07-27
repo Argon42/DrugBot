@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Кто?",
+  "Description": "Бот знает все обо всех",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/who", "/кто"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.WhoResponse"
+  }
+} 
