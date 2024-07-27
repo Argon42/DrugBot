@@ -22,6 +22,7 @@ public static class BehaviourConfigurator
         services.AddTransient<BibasiksResponse>();
         services.AddTransient<DeadChineseResponse>();
         services.AddTransient<DiceResponse>();
+        services.AddTransient<DiplomaResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)
