@@ -2,6 +2,7 @@
 @using DrugBot.Core
 @using DrugBot.Core.Bot
 @inject IBotsHandlerController BotsHandlerController
+@rendermode InteractiveServer
 
 <PageTitle>Bot statuses</PageTitle>
 
@@ -17,27 +18,3 @@
     }
 </ul>
 
-@code {
-    private IEnumerable<BotStatus> _bots = ArraySegment<BotStatus>.Empty;
-    private Timer? _timer;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await UpdateBotList();
-        _timer = new Timer(
-            _ => UpdateBotList().GetAwaiter().GetResult(),
-            null,
-            TimeSpan.Zero,
-            TimeSpan.FromSeconds(30));
-    }
-
-    private void Start(BotStatus bot)
-    {
-        BotsHandlerController.StartHandler(bot.Name);
-    }
-    private async Task UpdateBotList()
-    {
-        _bots = BotsHandlerController.GetStatus();
-        await InvokeAsync(StateHasChanged);
-    }
-}
