@@ -32,6 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
+
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
         <ProjectReference Include="..\Anecdotes\Anecdotes.csproj" />
         <ProjectReference Include="..\DrugBot.Abstraction\DrugBot.Abstraction.csproj" />
         <ProjectReference Include="..\Memes\Memes.csproj" />
