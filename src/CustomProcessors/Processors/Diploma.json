@@ -1,0 +1,12 @@
+﻿{
+  "Name": "дИПЛОМОЗИТОР",
+  "Description": "Экстрасенсорный анализ диплома и бонус",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/диплом"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.DiplomaResponse"
+  }
+} 

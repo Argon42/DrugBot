@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Создание своей хохмы",
+  "Description": "Создание скоего анекдота",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/анек-с", "/анек-c", "/anek-с", "/anek-c"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.CreateResponse"
+  }
+} 

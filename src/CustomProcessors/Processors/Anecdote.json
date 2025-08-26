@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Сборник баянов",
+  "Description": "Выдать случайный анекдот",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/анек", "/анекдот", "/юмор", "/anek", "/хех"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.AnecdoteResponse"
+  }
+} 

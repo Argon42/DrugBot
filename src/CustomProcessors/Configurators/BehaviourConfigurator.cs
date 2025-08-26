@@ -1,4 +1,5 @@
 ﻿using CustomProcessors.Behaviours.Response;
+using CustomProcessors.Behaviours.Response.CommunityAnecdote;
 using CustomProcessors.Behaviours.Triggers;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,6 +18,22 @@ public static class BehaviourConfigurator
     {
         services.AddTransient<SendResponseMessage>();
         services.AddTransient<RandomResponseMessage>();
+        services.AddTransient<AnecdoteResponse>();
+        services.AddTransient<BibaResponse>();
+        services.AddTransient<BibasiksResponse>();
+        services.AddTransient<DeadChineseResponse>();
+        services.AddTransient<DiceResponse>();
+        services.AddTransient<DiplomaResponse>();
+        services.AddTransient<MemesResponse>();
+        services.AddTransient<TotemResponse>();
+        services.AddTransient<TryResponse>();
+        services.AddTransient<WisdomResponse>();
+        services.AddTransient<HelpResponse>();
+        services.AddTransient<StatusResponse>();
+        services.AddTransient<WhoResponse>();
+        services.AddTransient<CreateResponse>();
+        services.AddTransient<ShowResponse>();
+        services.AddTransient<ShowUserResponse>();
     }
 
     private static void ConfigureTriggers(IServiceCollection services)

@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Обучалка",
+  "Description": "Тутор со всеми командами",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/help", "!help", "/помощь", "!помощь"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.HelpResponse"
+  }
+} 

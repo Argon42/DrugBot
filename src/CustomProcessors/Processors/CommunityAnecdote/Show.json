@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Лучшие хохмы от сообщества",
+  "Description": "Показать анекдот от сообщества",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/анек-п"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.ShowResponse"
+  }
+} 

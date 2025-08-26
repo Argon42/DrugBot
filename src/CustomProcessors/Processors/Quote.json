@@ -1,0 +1,19 @@
+﻿{
+  "Name": "Рандомная цитата/фраза",
+  "Description": "Спроси у бота посредственную фразу",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/фраза"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.RandomResponseMessage",
+    "PathToFile": "Local/wisdom.txt",
+    "RandomFunction": {
+      "IsRandom": true,
+      "IsRandomByUser": false,
+      "IsRandomByDay": false,
+      "IsRandomByMessage": false
+    }
+  }
+} 

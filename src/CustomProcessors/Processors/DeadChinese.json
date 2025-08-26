@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Мертвый китаец",
+  "Description": "Пророчество от мудрого, но мертвого китайца",
+  "VisiblyDescription": true,
+  "Trigger": {
+    "Type": "CustomProcessors.Behaviours.Triggers.MessageTextStartFrom",
+    "Messages": ["/мудрец"]
+  },
+  "Response": {
+    "Type": "CustomProcessors.Behaviours.Response.DeadChineseResponse"
+  }
+} 
